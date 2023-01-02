@@ -1,0 +1,67 @@
+{
+    "animations":[
+        {
+            "offsets": [
+				-5,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "idle"
+        },
+        {
+            "offsets": [
+				-5,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "up"
+        },
+        {
+            "offsets": [
+				-5,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "down"
+        },
+        {
+            "offsets": [
+				-5,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "right"
+        },
+        {
+            "offsets": [
+				-5,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "left"
+        }
+    ],
+    "defaultIdle":"idle",
+    "isGf":false,
+    "flipX":false,
+    "antialiasing":true,
+	"singDuration":4,
+    "scale":1.2,
+    "cameraPos":[0,0],
+    "charPos":[60,420]
+}
