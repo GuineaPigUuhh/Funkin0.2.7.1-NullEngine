@@ -15,7 +15,6 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import io.newgrounds.NG;
 import lime.app.Application;
 
 using StringTools;
@@ -122,6 +121,12 @@ class MainMenuState extends MusicBeatState
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
+			}
+
+			if (controls.RIGHT_P)
+			{
+				selectedSomethin = true;
+				FlxG.switchState(new customState.CreditsState());
 			}
 
 			if (controls.BACK)

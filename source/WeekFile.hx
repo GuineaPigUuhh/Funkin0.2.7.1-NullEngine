@@ -17,5 +17,7 @@ class WeekFile
 
 		var path:String = Assets.getText(Paths.json(local)); // ignora man
 		var file:WeekCustom = Json.parse(path); // ignora man
+
+		return cast file;
 	}
 }

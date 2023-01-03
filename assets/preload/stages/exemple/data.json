@@ -1,0 +1,15 @@
+{
+    "objects":[
+        {
+            "image":"baller",
+            "position":[0,0],
+            "scrollFactor":[1,1],
+            "scaleSet":1,
+            "antialiasing":true
+        }
+    ],
+    "boyfriend":[0,0],
+    "dad":[0,0],
+    "gf":[0,0],
+    "defaultZoom":1
+}

@@ -119,6 +119,7 @@ class ChartingState extends MusicBeatState
 				needsVoices: true,
 				player1: 'bf',
 				player2: 'dad',
+				stage: 'stage',
 				speed: 1,
 				validScore: false,
 				hasDialogue: false
@@ -225,6 +226,7 @@ class ChartingState extends MusicBeatState
 		stepperBPM.name = 'song_bpm';
 
 		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
+		var stages:Array<String> = CoolUtil.coolTextFile(Paths.txt('stageList'));
 
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
@@ -232,12 +234,19 @@ class ChartingState extends MusicBeatState
 		});
 		player1DropDown.selectedLabel = _song.player1;
 
-		var player2DropDown = new FlxUIDropDownMenu(140, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
-		{
-			_song.player2 = characters[Std.parseInt(character)];
-		});
+		var player2DropDown = new FlxUIDropDownMenu(player1DropDown.x, player1DropDown.y + 25, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true),
+			function(character:String)
+			{
+				_song.player2 = characters[Std.parseInt(character)];
+			});
 
-		var check_hasDialogue:FlxUICheckBox = new FlxUICheckBox(loadAutosaveBtn.x, loadAutosaveBtn.y + 60, _song.hasDialogue, null, "has Dialogue", 100);
+		var stageDropDown = new FlxUIDropDownMenu(player2DropDown.x, player2DropDown.y + 25, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true),
+			function(character:String)
+			{
+				_song.stage = stages[Std.parseInt(character)];
+			});
+
+		var check_hasDialogue:FlxUICheckBox = new FlxUICheckBox(loadAutosaveBtn.x, loadAutosaveBtn.y + 40, _song.hasDialogue, null, "has Dialogue", 100);
 		check_hasDialogue.name = 'check_hasDialogue';
 
 		player2DropDown.selectedLabel = _song.player2;
@@ -254,10 +263,12 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(loadAutosaveBtn);
 		tab_group_song.add(stepperBPM);
 		tab_group_song.add(stepperSpeed);
-		tab_group_song.add(player1DropDown);
-		tab_group_song.add(player2DropDown);
 
 		tab_group_song.add(check_hasDialogue);
+
+		tab_group_song.add(stageDropDown);
+		tab_group_song.add(player2DropDown);
+		tab_group_song.add(player1DropDown);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.scrollFactor.set();
@@ -269,7 +280,9 @@ class ChartingState extends MusicBeatState
 	var check_mustHitSection:FlxUICheckBox;
 	var check_changeBPM:FlxUICheckBox;
 	var stepperSectionBPM:FlxUINumericStepper;
-	var check_altAnim:FlxUICheckBox;
+
+	var check_altAnimDad:FlxUICheckBox;
+	var check_altAnimBf:FlxUICheckBox;
 
 	function addSectionUI():Void
 	{
@@ -309,8 +322,11 @@ class ChartingState extends MusicBeatState
 		check_mustHitSection.checked = true;
 		// _song.needsVoices = check_mustHit.checked;
 
-		check_altAnim = new FlxUICheckBox(10, 400, null, null, "Alt Animation", 100);
-		check_altAnim.name = 'check_altAnim';
+		check_altAnimDad = new FlxUICheckBox(10, 400, null, null, "Alt Animation - Dad", 100);
+		check_altAnimDad.name = 'check_altAnimDad';
+
+		check_altAnimBf = new FlxUICheckBox(10, check_altAnimDad.y + 25, null, null, "Alt Animation - Bf", 100);
+		check_altAnimBf.name = 'check_altAnimBf';
 
 		check_changeBPM = new FlxUICheckBox(10, 60, null, null, 'Change BPM', 100);
 		check_changeBPM.name = 'check_changeBPM';
@@ -319,7 +335,10 @@ class ChartingState extends MusicBeatState
 		tab_group_section.add(stepperSectionBPM);
 		tab_group_section.add(stepperCopy);
 		tab_group_section.add(check_mustHitSection);
-		tab_group_section.add(check_altAnim);
+
+		tab_group_section.add(check_altAnimDad);
+		tab_group_section.add(check_altAnimBf);
+
 		tab_group_section.add(check_changeBPM);
 		tab_group_section.add(copyButton);
 		tab_group_section.add(clearSectionButton);
@@ -413,8 +432,10 @@ class ChartingState extends MusicBeatState
 				case "has Dialogue":
 					_song.hasDialogue = check.checked;
 
-				case "Alt Animation":
-					_song.notes[curSection].altAnim = check.checked;
+				case "Alt Animation - DAD":
+					_song.notes[curSection].altAnimDAD = check.checked;
+				case "Alt Animation - Bf":
+					_song.notes[curSection].altAnimBF = check.checked;
 			}
 		}
 		else if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper))
@@ -790,7 +811,10 @@ class ChartingState extends MusicBeatState
 
 		stepperLength.value = sec.lengthInSteps;
 		check_mustHitSection.checked = sec.mustHitSection;
-		check_altAnim.checked = sec.altAnim;
+
+		check_altAnimDad.checked = sec.altAnimDAD;
+		check_altAnimBf.checked = sec.altAnimBF;
+
 		check_changeBPM.checked = sec.changeBPM;
 		stepperSectionBPM.value = sec.bpm;
 
@@ -893,7 +917,8 @@ class ChartingState extends MusicBeatState
 			mustHitSection: true,
 			sectionNotes: [],
 			typeOfSection: 0,
-			altAnim: false
+			altAnimDAD: false,
+			altAnimBF: false
 		};
 
 		_song.notes.push(sec);

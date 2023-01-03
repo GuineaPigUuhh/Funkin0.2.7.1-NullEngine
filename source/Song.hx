@@ -17,6 +17,7 @@ typedef SwagSong =
 
 	var player1:String;
 	var player2:String;
+	var stage:String;
 	var validScore:Bool;
 	var hasDialogue:Bool;
 }
@@ -31,6 +32,7 @@ class Song
 
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
+	public var stage:String = 'stage';
 
 	public var hasDialogue:Bool = false;
 
@@ -43,7 +45,7 @@ class Song
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var rawJson = Assets.getText(Paths.json('charts/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
+		var rawJson = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
 
 		while (!rawJson.endsWith("}"))
 		{

@@ -40,6 +40,9 @@ class Character extends FlxSprite
 	public var debugMode:Bool = false;
 
 	public var isPlayer:Bool = false;
+
+	var isJson:Bool = false;
+
 	public var curCharacter:String = 'bf';
 
 	public var holdTimer:Float = 0;
@@ -533,9 +536,12 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			default:
-				frames = Paths.getSparrowAtlas('characters/' + curCharacter.toLowerCase());
+				isJson = true;
 
-				var file:CharacterFile = Json.parse(Assets.getText(Paths.json('characters/' + curCharacter.toLowerCase()))); // KKKKKKKKKK QUE MERDA é ESSA
+				frames = FlxAtlasFrames.fromSparrow(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.png'),
+					Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.xml')));
+
+				var file:CharacterFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
 
 				flipX = file.flipX;
 
@@ -577,9 +583,6 @@ class Character extends FlxSprite
 					}
 				}
 
-				if (isPlayer)
-					flipAnimations();
-
 				playAnim(file.defaultIdle);
 		}
 
@@ -588,7 +591,6 @@ class Character extends FlxSprite
 		if (isPlayer)
 		{
 			flipX = !flipX;
-
 			/*
 				// Doesn't flip for BF, since his are already in the right place???
 				if (!curCharacter.startsWith('bf'))

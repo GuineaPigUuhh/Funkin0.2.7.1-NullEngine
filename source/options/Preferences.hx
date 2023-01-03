@@ -20,7 +20,9 @@ class Preferences extends MusicBeatSubstate
 
 	var curSelected:Int = 0;
 	var optionsCool:Alphabet;
-	private var options:Array<Array<Dynamic>> = [['GhostTapping', Save.ghostTapping], ['Flashing', Save.flashing]];
+
+	public var options:Array<String> = ["GhostTapping", "Flashing"];
+	public var optionsFunction:Array<Dynamic> = [Save.ghostTapping, Save.flashing];
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 
@@ -28,13 +30,19 @@ class Preferences extends MusicBeatSubstate
 	{
 		super();
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		menuBG.color = 0xFFea71fd;
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuEngine'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;
 		add(menuBG);
+
+		var other:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuEngine'));
+		other.setGraphicSize(Std.int(other.width * 1.1));
+		other.updateHitbox();
+		other.screenCenter();
+		other.antialiasing = true;
+		// add(other);
 
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
@@ -49,7 +57,7 @@ class Preferences extends MusicBeatSubstate
 
 	function addOptions(idddd:Int)
 	{
-		optionsCool = new Alphabet(0, 50 + (idddd * 50), options[idddd][0] + " - " + options[idddd][1], true, false);
+		optionsCool = new Alphabet(0, 50 + (idddd * 50), options[idddd] + " - " + optionsFunction[idddd], true, false);
 		optionsCool.isMenuItem = true;
 		optionsCool.targetY = idddd;
 		grpOptions.add(optionsCool);
@@ -65,7 +73,15 @@ class Preferences extends MusicBeatSubstate
 			changeSelection(-1);
 
 		if (controls.BACK)
+		{
+			Save.ghostTapping = optionsFunction[0];
+			Save.flashing = optionsFunction[1];
+			Save.saveSettings();
+
+			Save.loadSettings();
+
 			FlxG.state.closeSubState();
+		}
 
 		if (controls.ACCEPT)
 		{
@@ -79,15 +95,11 @@ class Preferences extends MusicBeatSubstate
 		{
 			if (item.targetY == 0)
 			{
-				item.text = options[curSelected][0] + " - " + options[curSelected][1];
+				item.text = options[curSelected] + " - " + optionsFunction[curSelected];
 			}
 		}
 
-		if (options[curSelected][1] == true)
-			options[curSelected][1] = false;
-
-		if (options[curSelected][1] == false)
-			options[curSelected][1] = true;
+		optionsFunction[curSelected] = !optionsFunction[curSelected];
 	}
 
 	function changeSelection(change:Int = 0)

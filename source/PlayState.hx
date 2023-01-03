@@ -5,6 +5,7 @@ import Discord.DiscordClient;
 #end
 import Section.SwagSection;
 import Song.SwagSong;
+import StageFile;
 import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
@@ -44,6 +45,11 @@ import openfl.filters.ShaderFilter;
 import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
+
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 class PlayState extends MusicBeatState
 {
@@ -92,7 +98,7 @@ class PlayState extends MusicBeatState
 	public var camGame:FlxCamera;
 	public var camNotes:FlxCamera;
 
-	var noteName:Array<String> = ['LEFT', 'DOWN', 'UP', 'RIGHT'];
+	var singAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
 	var cameraFocus:String = '';
@@ -211,32 +217,24 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
-		switch (SONG.song.toLowerCase())
-		{
-			case 'spookeez' | 'south' | 'monster':
-				curStage = 'spooky';
-
-			case 'pico' | 'blammed' | 'philly':
-				curStage = 'philly';
-
-			case 'milf' | 'satin-panties' | 'high':
-				curStage = 'limo';
-
-			case 'cocoa' | 'eggnog':
-				curStage = 'mall';
-
-			case 'winter-horrorland':
-				curStage = 'mallEvil';
-
-			case 'senpai' | 'roses':
-				curStage = 'school';
-
-			case 'thorns':
-				curStage = 'schoolEvil';
-
-			default:
-				curStage = 'stage';
-		}
+		if (SONG.stage == null || SONG.stage.length < 1)
+			switch (SONG.song.toLowerCase())
+			{
+				case 'spookeez' | 'south' | 'monster':
+					curStage = 'spooky';
+				case 'pico' | 'blammed' | 'philly':
+					curStage = 'philly';
+				case 'milf' | 'satin-panties' | 'high':
+					curStage = 'limo';
+				case 'cocoa' | 'eggnog':
+					curStage = 'mall';
+				case 'winter-horrorland':
+					curStage = 'mallEvil';
+				case 'senpai' | 'roses':
+					curStage = 'school';
+				case 'thorns':
+					curStage = 'schoolEvil';
+			}
 
 		switch (curStage)
 		{
@@ -501,38 +499,46 @@ class PlayState extends MusicBeatState
 					bg.scale.set(6, 6);
 					add(bg);
 				}
-			case 'stage':
-				{
-					defaultCamZoom = 0.9;
-					curStage = 'stage';
-					var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
-					bg.antialiasing = true;
-					bg.scrollFactor.set(0.9, 0.9);
-					bg.active = false;
-					add(bg);
-
-					var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stagefront'));
-					stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-					stageFront.updateHitbox();
-					stageFront.antialiasing = true;
-					stageFront.scrollFactor.set(0.9, 0.9);
-					stageFront.active = false;
-					add(stageFront);
-
-					var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains'));
-					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-					stageCurtains.updateHitbox();
-					stageCurtains.antialiasing = true;
-					stageCurtains.scrollFactor.set(1.3, 1.3);
-					stageCurtains.active = false;
-
-					add(stageCurtains);
-				}
 
 			default:
-				// vai ser como da yoshicrafter engine essa merda
-		}
+				curStage = SONG.stage;
+				if (FileSystem.exists(StageFile.getPath(curStage)))
+				{
+					var json:StageFile = StageFile.getFile(curStage);
+					defaultCamZoom = json.defaultZoom;
 
+					GF_POS[0] = json.gf[0];
+					GF_POS[1] = json.gf[1];
+
+					BF_POS[0] = json.boyfriend[0];
+					BF_POS[1] = json.boyfriend[1];
+
+					DAD_POS[0] = json.dad[0];
+					DAD_POS[1] = json.dad[1];
+
+					if (json.objects != null && json.objects.length > 0)
+					{
+						for (object in json.objects)
+						{
+							var customObject:FlxSprite = new FlxSprite(object.position[0],
+								object.position[1]).loadGraphic(StageFile.getPathImage(curStage, object.image));
+
+							if (object.scaleSet != 1)
+							{
+								customObject.setGraphicSize(Std.int(customObject.width * object.scaleSet));
+								customObject.updateHitbox();
+							}
+
+							customObject.antialiasing = object.antialiasing;
+							customObject.scrollFactor.set(object.scrollFactor[0], object.scrollFactor[1]);
+							add(customObject);
+						}
+					}
+				}
+				else
+					generateDefaultStage();
+				SONG.stage = curStage;
+		}
 		var gfVersion:String = 'gf';
 
 		switch (curStage)
@@ -854,6 +860,34 @@ class PlayState extends MusicBeatState
 				remove(black);
 			}
 		});
+	}
+
+	function generateDefaultStage()
+	{
+		defaultCamZoom = 0.9;
+		curStage = 'stage';
+		var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
+		bg.antialiasing = true;
+		bg.scrollFactor.set(0.9, 0.9);
+		bg.active = false;
+		add(bg);
+
+		var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stagefront'));
+		stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+		stageFront.updateHitbox();
+		stageFront.antialiasing = true;
+		stageFront.scrollFactor.set(0.9, 0.9);
+		stageFront.active = false;
+		add(stageFront);
+
+		var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains'));
+		stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
+		stageCurtains.updateHitbox();
+		stageCurtains.antialiasing = true;
+		stageCurtains.scrollFactor.set(1.3, 1.3);
+		stageCurtains.active = false;
+
+		add(stageCurtains);
 	}
 
 	function characterPosition(character:Character)
@@ -2101,7 +2135,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 
-		boyfriend.playAnim('sing' + noteName[direction] + 'miss', false);
+		boyfriend.playAnim(singAnimations[direction] + 'miss', false);
 
 		updateAccuracy();
 	}
@@ -2150,7 +2184,15 @@ class PlayState extends MusicBeatState
 
 			updateIcons();
 
-			boyfriend.playAnim('sing' + noteName[note.noteData], true);
+			var altAnim:String = "";
+
+			if (SONG.notes[Math.floor(curStep / 16)] != null)
+			{
+				if (SONG.notes[Math.floor(curStep / 16)].altAnimBF)
+					altAnim = '-alt';
+			}
+
+			boyfriend.playAnim(singAnimations[note.noteData] + altAnim, true);
 
 			playerStrums.forEach(function(spr:FlxSprite)
 			{
@@ -2179,15 +2221,17 @@ class PlayState extends MusicBeatState
 	{
 		camZooming = true;
 
+		updateIcons();
+
 		var altAnim:String = "";
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
 		{
-			if (SONG.notes[Math.floor(curStep / 16)].altAnim)
+			if (SONG.notes[Math.floor(curStep / 16)].altAnimDAD)
 				altAnim = '-alt';
 		}
 
-		dad.playAnim('sing' + noteName[note.noteData] + altAnim, true);
+		dad.playAnim(singAnimations[note.noteData] + altAnim, true);
 
 		dad.holdTimer = 0;
 
