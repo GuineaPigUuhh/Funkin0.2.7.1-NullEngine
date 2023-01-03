@@ -1,4 +1,4 @@
-package;
+package editors;
 
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -12,7 +12,7 @@ import flixel.util.FlxColor;
 /**
 	*DEBUG MODE
  */
-class AnimationDebug extends MusicBeatState
+class CharacterEditor extends MusicBeatState
 {
 	var bf:Boyfriend;
 	var dad:Character;
@@ -27,6 +27,8 @@ class AnimationDebug extends MusicBeatState
 	var isDad:Bool = true;
 	var daAnim:String = 'dad';
 	var camFollow:FlxObject;
+
+	var exportJson:String = 'json amongus olololol';
 
 	public function new(daAnim:String = 'dad', isDad:Bool)
 	{
@@ -80,6 +82,7 @@ class AnimationDebug extends MusicBeatState
 		add(dumbTexts);
 
 		textAnim = new FlxText(300, 16);
+		textAnim.color = FlxColor.LIME;
 		textAnim.size = 26;
 		textAnim.scrollFactor.set();
 		add(textAnim);
@@ -154,10 +157,12 @@ class AnimationDebug extends MusicBeatState
 
 		if (FlxG.keys.justPressed.G)
 		{
-			if (ghost.visible == true)
-				ghost.visible = false
-			else if (ghost.visible == false)
-				ghost.visible = true;
+			ghost.visible = !ghost.visible;
+		}
+
+		if (FlxG.keys.justPressed.H)
+		{
+			char.antialiasing = !char.antialiasing;
 		}
 
 		if (FlxG.keys.justPressed.W)

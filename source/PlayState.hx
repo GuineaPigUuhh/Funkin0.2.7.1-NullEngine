@@ -1467,7 +1467,7 @@ class PlayState extends MusicBeatState
 		{
 			if (FlxG.keys.justPressed.SEVEN)
 			{
-				FlxG.switchState(new ChartingState());
+				FlxG.switchState(new editors.ChartingState());
 
 				#if desktop
 				DiscordClient.changePresence("Chart Editor", null, null, true);
@@ -1476,16 +1476,16 @@ class PlayState extends MusicBeatState
 
 			if (FlxG.keys.justPressed.EIGHT)
 			{
-				FlxG.switchState(new AnimationDebug(SONG.player2, true));
+				FlxG.switchState(new editors.CharacterEditor(SONG.player2, true));
 				#if desktop
-				DiscordClient.changePresence("Character Offsets Editor - " + SONG.player2.toUpperCase(), null, null, true);
+				DiscordClient.changePresence("Character Editor - " + SONG.player2.toUpperCase(), null, null, true);
 				#end
 			}
 			else if (FlxG.keys.justPressed.NINE)
 			{
-				FlxG.switchState(new AnimationDebug(SONG.player1, false));
+				FlxG.switchState(new editors.CharacterEditor(SONG.player1, false));
 				#if desktop
-				DiscordClient.changePresence("Character Offsets Editor - " + SONG.player1.toUpperCase(), null, null, true);
+				DiscordClient.changePresence("Character Editor - " + SONG.player1.toUpperCase(), null, null, true);
 				#end
 			}
 		}
