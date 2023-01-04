@@ -82,7 +82,7 @@ class CharacterEditor extends MusicBeatState
 		add(dumbTexts);
 
 		textAnim = new FlxText(300, 16);
-		textAnim.color = FlxColor.LIME;
+		textAnim.color = FlxColor.BLUE;
 		textAnim.size = 26;
 		textAnim.scrollFactor.set();
 		add(textAnim);

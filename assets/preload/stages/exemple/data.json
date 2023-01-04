@@ -1,15 +1,16 @@
 {
-    "objects":[
+    "sprites":[
         {
             "image":"baller",
             "position":[0,0],
             "scrollFactor":[1,1],
             "scaleSet":1,
-            "antialiasing":true
+            "antialiasing":true,
+            "alpha":1
         }
     ],
-    "boyfriend":[0,0],
-    "dad":[0,0],
-    "gf":[0,0],
+    "boyfriend_pos":[0,0],
+    "gf_pos":[0,0],
+    "dad_pos":[0,0],
     "defaultZoom":1
 }

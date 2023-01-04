@@ -34,17 +34,14 @@ class CreditsState extends MusicBeatState
 	var massagg:FlxText;
 
 	var creditsJson:Credits;
-	var userLegth:Int = 0;
 
 	var menuBG:FlxSprite;
 
-	public var curSelected:Int = 0;
+	var curSelected:Int = 0;
 
 	override function create()
 	{
 		creditsJson = Json.parse(Assets.getText(Paths.json('credits')));
-
-		userLegth = creditsJson.users.length;
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -121,7 +118,11 @@ class CreditsState extends MusicBeatState
 		credits.text = creditsJson.users[curSelected].name;
 		credits.screenCenter(X);
 
-		massagg.text = '"' + creditsJson.users[curSelected].message + '"';
+		if (creditsJson.users[curSelected].message == null)
+			massagg.text = "";
+		else
+			massagg.text = '"' + creditsJson.users[curSelected].message + '"';
+
 		massagg.screenCenter(X);
 
 		role.text = creditsJson.users[curSelected].role;
@@ -135,8 +136,8 @@ class CreditsState extends MusicBeatState
 		curSelected += change;
 
 		if (curSelected < 0)
-			curSelected = userLegth - 1;
-		if (curSelected >= userLegth)
+			curSelected = creditsJson.users.length - 1;
+		if (curSelected >= creditsJson.users.length)
 			curSelected = 0;
 	}
 }
