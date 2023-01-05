@@ -1,7 +1,7 @@
 package;
 
 #if desktop
-import Discord.DiscordClient;
+import DiscordClient;
 #end
 import Section.SwagSection;
 import Song.SwagSong;
@@ -142,7 +142,8 @@ class PlayState extends MusicBeatState
 	public static var campaignScore:Int = 0;
 	public static var campaignMisses:Int = 0;
 
-	public static var defaultCamZoom:Float = 1.05;
+	public static var defaultCamZoom:Float;
+	public static var defaultCamSpeed:Int;
 
 	// how big to stretch the pixel art assets
 	public static var daPixelZoom:Float = 6;
@@ -162,12 +163,19 @@ class PlayState extends MusicBeatState
 	var DAD_POS:Array<Float> = [100, 100];
 	var BOYFRIEND_POS:Array<Float> = [770, 450];
 
-	var hscriptPlaystate:Interp = new Interp();
-	var scriptLocal:String = 'NO SCRIPT';
+	var script:hscript.Interp = new hscript.Interp();
+	var scriptLocal:String = 'NO SCRIPT FILE';
+
+	var customStage:hscript.Interp = new hscript.Interp();
+	var stageLocal:String = 'NO STAGE FILE';
+	var behindItems:FlxTypedGroup<FlxSprite>;
+	var frontItems:FlxTypedGroup<FlxSprite>;
+	var isCustomStage:Bool = false;
 
 	function resetStaticsVar()
 	{
 		defaultCamZoom = 1.05;
+		defaultCamSpeed = 1;
 	}
 
 	override public function create()
@@ -248,8 +256,6 @@ class PlayState extends MusicBeatState
 					curStage = 'school';
 				case 'thorns':
 					curStage = 'schoolEvil';
-				default:
-					curStage = 'stage';
 			}
 
 		switch (curStage)
@@ -516,31 +522,8 @@ class PlayState extends MusicBeatState
 					add(bg);
 				}
 
-			case "stage":
-				defaultCamZoom = 0.9;
-
-				var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
-				bg.antialiasing = true;
-				bg.scrollFactor.set(0.9, 0.9);
-				bg.active = false;
-				add(bg);
-
-				var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stagefront'));
-				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-				stageFront.updateHitbox();
-				stageFront.antialiasing = true;
-				stageFront.scrollFactor.set(0.9, 0.9);
-				stageFront.active = false;
-				add(stageFront);
-
-				var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains'));
-				stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-				stageCurtains.updateHitbox();
-				stageCurtains.antialiasing = true;
-				stageCurtains.scrollFactor.set(1.3, 1.3);
-				stageCurtains.active = false;
-
-				add(stageCurtains);
+			default:
+				getStageFile('data');
 		}
 		var gfVersion:String = 'gf';
 
@@ -564,6 +547,9 @@ class PlayState extends MusicBeatState
 
 		dad = new Character(DAD_POS[0], DAD_POS[1], SONG.player2);
 		characterPosition(dad);
+
+		boyfriend = new Boyfriend(BOYFRIEND_POS[0], BOYFRIEND_POS[1], SONG.player1);
+		characterPosition(boyfriend);
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -599,9 +585,6 @@ class PlayState extends MusicBeatState
 				dad.y += 100;
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 		}
-
-		boyfriend = new Boyfriend(BOYFRIEND_POS[0], BOYFRIEND_POS[1], SONG.player1);
-		characterPosition(boyfriend);
 
 		// REPOSITIONING PER STAGE
 		switch (curStage)
@@ -639,12 +622,18 @@ class PlayState extends MusicBeatState
 				gf.y += 300;
 		}
 
+		if (isCustomStage)
+		{
+			behindItems = new FlxTypedGroup<FlxSprite>();
+			add(behindItems);
+		}
+
 		add(gf);
-
-		// Shitty layering but whatev it works LOL
-
 		add(dad);
 		add(boyfriend);
+
+		frontItems = new FlxTypedGroup<FlxSprite>();
+		add(frontItems);
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
 		// doof.x += 70;
@@ -783,131 +772,250 @@ class PlayState extends MusicBeatState
 		}
 
 		#if hscript
-		if (FileSystem.exists(Paths.getPreloadPath('data/${PlayState.SONG.song.toLowerCase()}/script.hx')))
-		{
-			reloadScript();
-			var parser = new hscript.Parser();
-			parser.allowTypes = true;
-			parser.allowJSON = true;
-			parser.allowMetadata = true;
-			addHscriptVariables();
-			hscriptPlaystate.execute(parser.parseString(scriptLocal));
-		}
+		getHScriptFile('modchart');
 		#end
 
-		hscriptApply('create');
+		#if hscript
+		hscriptApply('create', null, script);
+		hscriptApply('create', null, customStage);
+		#end
 
 		super.create();
 	}
 
-	public function addHscriptVariables()
+	#if hscript
+	function getStageFile(fileName:String)
 	{
-		hscriptPlaystate.variables.set("add", add);
-		hscriptPlaystate.variables.set("remove", remove);
-		hscriptPlaystate.variables.set("destroy", destroy);
-
-		hscriptPlaystate.variables.set("dad", dad);
-		hscriptPlaystate.variables.set("boyfriend", boyfriend);
-		hscriptPlaystate.variables.set("gf", gf);
-
-		hscriptPlaystate.variables.set("Note", Note);
-
-		hscriptPlaystate.variables.set("health", health);
-		hscriptPlaystate.variables.set("iconP1", iconP1);
-		hscriptPlaystate.variables.set("iconP2", iconP2);
-		hscriptPlaystate.variables.set("curBeat", curBeat);
-		hscriptPlaystate.variables.set("curStep", curStep);
-		hscriptPlaystate.variables.set("curSection", curSection);
-		hscriptPlaystate.variables.set("MusicBeatState", MusicBeatState);
-		hscriptPlaystate.variables.set("PlayState", PlayState);
-		hscriptPlaystate.variables.set("inCutscene", this.inCutscene);
-		hscriptPlaystate.variables.set("PlayState", PlayState);
-		hscriptPlaystate.variables.set("DiscordClient", DiscordClient);
-		hscriptPlaystate.variables.set("WiggleEffectType", WiggleEffect.WiggleEffectType);
-		hscriptPlaystate.variables.set("FlxBasic", flixel.FlxBasic);
-		hscriptPlaystate.variables.set("FlxCamera", flixel.FlxCamera);
-		hscriptPlaystate.variables.set("FlxG", flixel.FlxG);
-		hscriptPlaystate.variables.set("FlxGame", flixel.FlxGame);
-		hscriptPlaystate.variables.set("FlxSprite", flixel.FlxSprite);
-		hscriptPlaystate.variables.set("FlxState", flixel.FlxState);
-		hscriptPlaystate.variables.set("FlxSubState", flixel.FlxSubState);
-		hscriptPlaystate.variables.set("FlxGridOverlay", flixel.addons.display.FlxGridOverlay);
-		hscriptPlaystate.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
-		hscriptPlaystate.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
-		hscriptPlaystate.variables.set("FlxEffectSprite", flixel.addons.effects.chainable.FlxEffectSprite);
-		hscriptPlaystate.variables.set("FlxWaveEffect", flixel.addons.effects.chainable.FlxWaveEffect);
-		hscriptPlaystate.variables.set("FlxTransitionableState", flixel.addons.transition.FlxTransitionableState);
-		hscriptPlaystate.variables.set("FlxAtlas", flixel.graphics.atlas.FlxAtlas);
-		hscriptPlaystate.variables.set("FlxAtlasFrames", flixel.graphics.frames.FlxAtlasFrames);
-		hscriptPlaystate.variables.set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
-		hscriptPlaystate.variables.set("FlxMath", flixel.math.FlxMath);
-		hscriptPlaystate.variables.set("FlxText", flixel.text.FlxText);
-		hscriptPlaystate.variables.set("FlxEase", flixel.tweens.FlxEase);
-		hscriptPlaystate.variables.set("FlxTween", flixel.tweens.FlxTween);
-		hscriptPlaystate.variables.set("FlxBar", flixel.ui.FlxBar);
-		hscriptPlaystate.variables.set("FlxCollision", flixel.util.FlxCollision);
-		hscriptPlaystate.variables.set("FlxSort", flixel.util.FlxSort);
-		hscriptPlaystate.variables.set("FlxStringUtil", flixel.util.FlxStringUtil);
-		hscriptPlaystate.variables.set("FlxTimer", flixel.util.FlxTimer);
-		hscriptPlaystate.variables.set("FlxRect", flixel.math.FlxRect);
-		hscriptPlaystate.variables.set("FlxObject", flixel.FlxObject);
-		hscriptPlaystate.variables.set("FlxSound", flixel.system.FlxSound);
-		hscriptPlaystate.variables.set("Assets", lime.utils.Assets);
-		hscriptPlaystate.variables.set("ShaderFilter", openfl.filters.ShaderFilter);
-		hscriptPlaystate.variables.set("Exception", haxe.Exception);
-		hscriptPlaystate.variables.set("Lib", openfl.Lib);
-		hscriptPlaystate.variables.set("OpenFlAssets", openfl.utils.Assets);
-		hscriptPlaystate.variables.set("Paths", Paths);
-		hscriptPlaystate.variables.set("SONG", SONG);
-		hscriptPlaystate.variables.set("songCheck", SONG.song.toLowerCase());
-
-		hscriptPlaystate.variables.set("gameplayFunctions", gameplayFunctions);
-
 		#if hscript
-		hscriptPlaystate.variables.set("Parser", hscript.Parser);
-		hscriptPlaystate.variables.set("Interp", hscript.Interp);
+		isCustomStage = true;
+		curStage = SONG.stage;
+		if (FileSystem.exists(Paths.getPreloadPath('stages/${curStage}/${fileName}.hx')))
+		{
+			trace(curStage);
+
+			stageLocal = File.getContent(Paths.getPreloadPath('stages/${curStage}/${fileName}.hx'));
+			var parserStage:hscript.Parser = new hscript.Parser();
+			parserStage.allowTypes = true;
+			parserStage.allowJSON = true;
+			parserStage.allowMetadata = true;
+
+			addDefaultVariablesStage();
+
+			customStage.execute(parserStage.parseString(stageLocal));
+
+			trace("Stage: Success in Uploading the File");
+
+			SONG.stage = curStage;
+		}
+		else
+		{
+			trace("Stage: No File");
+			generateDefaultStage();
+		}
+		#else
+		trace("Stage: Disabled Hscript");
+		generateDefaultStage();
 		#end
+	}
+
+	function getStageImage(imageShti:String)
+	{
+		return 'assets/stages/${curStage}/images/${imageShti}.png';
+	}
+
+	public function addDefaultVariablesStage()
+	{
+		customStage.variables.set("add", add);
+		customStage.variables.set("remove", remove);
+		customStage.variables.set("destroy", destroy);
+
+		customStage.variables.set("boyfriend", boyfriend);
+		customStage.variables.set("gf", gf);
+		customStage.variables.set("dad", dad);
+
+		customStage.variables.set("BOYFRIEND_POS", BOYFRIEND_POS);
+		customStage.variables.set("DAD_POS", DAD_POS);
+		customStage.variables.set("GF_POS", GF_POS);
+
+		customStage.variables.set("addFunkin", addFunkin);
+
+		customStage.variables.set("behindItems", behindItems);
+		customStage.variables.set("frontItems", frontItems);
+
+		customStage.variables.set("defaultCamZoom", defaultCamZoom);
+		customStage.variables.set("defaultCamSpeed", defaultCamSpeed);
+
+		addFlxItems(customStage);
+
+		customStage.variables.set("inCutscene", this.inCutscene);
+
+		customStage.variables.set("Paths", Paths);
+		customStage.variables.set("SONG", SONG);
+		customStage.variables.set("songCheck", SONG.song.toLowerCase());
+
+		customStage.variables.set("Parser", hscript.Parser);
+		customStage.variables.set("Interp", hscript.Interp);
 
 		#if sys
-		hscriptPlaystate.variables.set("File", sys.io.File);
-		hscriptPlaystate.variables.set("FileSystem", sys.FileSystem);
-		hscriptPlaystate.variables.set("FlxGraphic", flixel.graphics.FlxGraphic);
-		hscriptPlaystate.variables.set("BitmapData", openfl.display.BitmapData);
+		customStage.variables.set("FlxGraphic", flixel.graphics.FlxGraphic);
+		customStage.variables.set("BitmapData", openfl.display.BitmapData);
 		#end
-		hscriptPlaystate.variables.set("create", function()
+
+		customStage.variables.set("create", function()
 		{
 		});
-		hscriptPlaystate.variables.set("update", function(elapsed:Float)
+		customStage.variables.set("update", function(elapsed:Float)
 		{
 		});
 
-		hscriptPlaystate.variables.set("stepHit", function()
+		customStage.variables.set("stepHit", function()
 		{
 		});
-		hscriptPlaystate.variables.set("beatHit", function()
-		{
-		});
-
-		hscriptPlaystate.variables.set("goodNoteHit", function(note:Note)
-		{
-		});
-		hscriptPlaystate.variables.set("cpuNoteHit", function(note:Note)
-		{
-		});
-		hscriptPlaystate.variables.set("noteMiss", function(direction:Int)
+		customStage.variables.set("beatHit", function()
 		{
 		});
 	}
 
-	public function hscriptApply(functionToCall:String, ?params:Array<Any>):Dynamic
+	function getHScriptFile(fileName:String)
 	{
-		if (hscriptPlaystate == null)
+		#if hscript
+		if (FileSystem.exists(Paths.getPreloadPath('data/${PlayState.SONG.song.toLowerCase()}/${fileName}.hx')))
+		{
+			scriptLocal = File.getContent(Paths.getPreloadPath('data/${PlayState.SONG.song.toLowerCase()}/${fileName}.hx'));
+			var parser:hscript.Parser = new hscript.Parser();
+			parser.allowTypes = true;
+			parser.allowJSON = true;
+			parser.allowMetadata = true;
+
+			addDefaultVariables();
+
+			script.execute(parser.parseString(scriptLocal));
+
+			trace("Script: Success in Uploading the File");
+		}
+		else
+			trace("Script: No File");
+		#else
+		trace("Script: Disabled Hscript");
+		#end
+	}
+
+	public function addDefaultVariables()
+	{
+		script.variables.set("add", add);
+		script.variables.set("remove", remove);
+		script.variables.set("destroy", destroy);
+
+		script.variables.set("dad", dad);
+		script.variables.set("bf", boyfriend);
+		script.variables.set("gf", gf);
+
+		script.variables.set("Note", Note);
+
+		script.variables.set("defaultCamZoom", defaultCamZoom);
+		script.variables.set("defaultCamSpeed", defaultCamSpeed);
+
+		script.variables.set("health", health);
+		script.variables.set("iconP1", iconP1);
+		script.variables.set("iconP2", iconP2);
+
+		script.variables.set("curBeat", curBeat);
+		script.variables.set("curStep", curStep);
+		script.variables.set("curSection", curSection);
+
+		addFlxItems(script);
+
+		script.variables.set("inCutscene", this.inCutscene);
+
+		script.variables.set("MusicBeatState", MusicBeatState);
+		script.variables.set("PlayState", PlayState);
+		script.variables.set("DiscordClient", DiscordClient);
+		script.variables.set("Paths", Paths);
+		script.variables.set("SONG", SONG);
+
+		script.variables.set("gameplayFunctions", gameplayFunctions);
+
+		script.variables.set("Parser", hscript.Parser);
+		script.variables.set("Interp", hscript.Interp);
+
+		#if sys
+		script.variables.set("File", sys.io.File);
+		script.variables.set("FileSystem", sys.FileSystem);
+		script.variables.set("FlxGraphic", flixel.graphics.FlxGraphic);
+		script.variables.set("BitmapData", openfl.display.BitmapData);
+		#end
+		script.variables.set("create", function()
+		{
+		});
+		script.variables.set("update", function(elapsed:Float)
+		{
+		});
+
+		script.variables.set("stepHit", function()
+		{
+		});
+		script.variables.set("beatHit", function()
+		{
+		});
+
+		script.variables.set("goodNoteHit", function(note:Note)
+		{
+		});
+		script.variables.set("cpuNoteHit", function(note:Note)
+		{
+		});
+		script.variables.set("noteMiss", function(direction:Int)
+		{
+		});
+	}
+
+	public function addFlxItems(hsScc:Interp)
+	{
+		hsScc.variables.set("WiggleEffectType", WiggleEffect.WiggleEffectType);
+		hsScc.variables.set("FlxBasic", flixel.FlxBasic);
+		hsScc.variables.set("FlxCamera", flixel.FlxCamera);
+		hsScc.variables.set("FlxG", flixel.FlxG);
+		hsScc.variables.set("FlxGame", flixel.FlxGame);
+		hsScc.variables.set("FlxSprite", flixel.FlxSprite);
+		hsScc.variables.set("FlxState", flixel.FlxState);
+		hsScc.variables.set("FlxSubState", flixel.FlxSubState);
+		hsScc.variables.set("FlxGridOverlay", flixel.addons.display.FlxGridOverlay);
+		hsScc.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
+		hsScc.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
+		hsScc.variables.set("FlxEffectSprite", flixel.addons.effects.chainable.FlxEffectSprite);
+		hsScc.variables.set("FlxWaveEffect", flixel.addons.effects.chainable.FlxWaveEffect);
+		hsScc.variables.set("FlxTransitionableState", flixel.addons.transition.FlxTransitionableState);
+		hsScc.variables.set("FlxAtlas", flixel.graphics.atlas.FlxAtlas);
+		hsScc.variables.set("FlxAtlasFrames", flixel.graphics.frames.FlxAtlasFrames);
+		hsScc.variables.set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
+		hsScc.variables.set("FlxMath", flixel.math.FlxMath);
+		hsScc.variables.set("FlxText", flixel.text.FlxText);
+		hsScc.variables.set("FlxEase", flixel.tweens.FlxEase);
+		hsScc.variables.set("FlxTween", flixel.tweens.FlxTween);
+		hsScc.variables.set("FlxBar", flixel.ui.FlxBar);
+		hsScc.variables.set("FlxCollision", flixel.util.FlxCollision);
+		hsScc.variables.set("FlxSort", flixel.util.FlxSort);
+		hsScc.variables.set("FlxStringUtil", flixel.util.FlxStringUtil);
+		hsScc.variables.set("FlxTimer", flixel.util.FlxTimer);
+		hsScc.variables.set("FlxRect", flixel.math.FlxRect);
+		hsScc.variables.set("FlxObject", flixel.FlxObject);
+		hsScc.variables.set("FlxSound", flixel.system.FlxSound);
+		hsScc.variables.set("Assets", lime.utils.Assets);
+		hsScc.variables.set("ShaderFilter", openfl.filters.ShaderFilter);
+		hsScc.variables.set("Exception", haxe.Exception);
+		hsScc.variables.set("Lib", openfl.Lib);
+		hsScc.variables.set("OpenFlAssets", openfl.utils.Assets);
+	}
+
+	public function hscriptApply(functionToCall:String, ?params:Array<Any>, scriptName:Interp):Dynamic
+	{
+		if (scriptName == null)
 		{
 			return null;
 		}
-		if (hscriptPlaystate.variables.exists(functionToCall))
+		if (scriptName.variables.exists(functionToCall))
 		{
-			var functionH = hscriptPlaystate.variables.get(functionToCall);
+			var functionH = scriptName.variables.get(functionToCall);
 			if (params == null)
 			{
 				var result = null;
@@ -922,6 +1030,47 @@ class PlayState extends MusicBeatState
 			}
 		}
 		return null;
+	}
+	#end
+
+	function addFunkin(item:Dynamic, amonguus:String = 'back')
+	{
+		if (amonguus == 'front')
+			frontItems.add(item);
+		else
+			behindItems.add(item);
+	}
+
+	function generateDefaultStage()
+	{
+		isCustomStage = false;
+		curStage = 'stage';
+
+		defaultCamZoom = 0.9;
+
+		var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
+		bg.antialiasing = true;
+		bg.scrollFactor.set(0.9, 0.9);
+		bg.active = false;
+		add(bg);
+
+		var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stagefront'));
+		stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+		stageFront.updateHitbox();
+		stageFront.antialiasing = true;
+		stageFront.scrollFactor.set(0.9, 0.9);
+		stageFront.active = false;
+		add(stageFront);
+
+		var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains'));
+		stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
+		stageCurtains.updateHitbox();
+		stageCurtains.antialiasing = true;
+		stageCurtains.scrollFactor.set(1.3, 1.3);
+		stageCurtains.active = false;
+		add(stageCurtains);
+
+		SONG.stage = curStage;
 	}
 
 	function gameplayFunctions(beatExecute:Int, functionPlay:String, active:Array<Dynamic>)
@@ -1631,9 +1780,6 @@ class PlayState extends MusicBeatState
 				DiscordClient.changePresence("Character Editor - " + SONG.player1.toUpperCase(), null, null, true);
 				#end
 			}
-
-			if (FlxG.keys.justPressed.F5)
-				reloadScript();
 		}
 
 		if (startingSong)
@@ -1718,13 +1864,6 @@ class PlayState extends MusicBeatState
 			}
 		}
 		// better streaming of shit
-
-		// RESET = Quick Game Over Screen
-		if (controls.RESET)
-		{
-			health = 0;
-			trace("RESET = True");
-		}
 
 		if (health <= 0)
 		{
@@ -1819,12 +1958,10 @@ class PlayState extends MusicBeatState
 			endSong();
 		#end
 
-		hscriptApply('update', [elapsed]);
-	}
-
-	function reloadScript()
-	{
-		scriptLocal = File.getContent(Paths.getPreloadPath('data/${PlayState.SONG.song.toLowerCase()}/script.hx'));
+		#if hscript
+		hscriptApply('update', [elapsed], script);
+		hscriptApply('update', [elapsed], customStage);
+		#end
 	}
 
 	function endSong():Void
@@ -2292,7 +2429,9 @@ class PlayState extends MusicBeatState
 
 		updateAccuracy();
 
-		hscriptApply('noteMiss', [direction]);
+		#if hscript
+		hscriptApply('noteMiss', [direction], script);
+		#end
 	}
 
 	function badNoteCheck()
@@ -2369,7 +2508,9 @@ class PlayState extends MusicBeatState
 			}
 
 			updateAccuracy();
-			hscriptApply('goodNoteHit', [note]);
+			#if hscript
+			hscriptApply('goodNoteHit', [note], script);
+			#end
 		}
 	}
 
@@ -2397,7 +2538,9 @@ class PlayState extends MusicBeatState
 		notes.remove(note, true);
 		note.destroy();
 
-		hscriptApply('cpuNoteHit', [note]);
+		#if hscript
+		hscriptApply('cpuNoteHit', [note], script);
+		#end
 	}
 
 	var fastCarCanDrive:Bool = true;
@@ -2494,7 +2637,10 @@ class PlayState extends MusicBeatState
 		{
 			resyncVocals();
 		}
-		hscriptApply('stepHit');
+		#if hscript
+		hscriptApply('stepHit', null, script);
+		hscriptApply('stepHit', null, customStage);
+		#end
 	}
 
 	var lightningStrikeBeat:Int = 0;
@@ -2612,7 +2758,10 @@ class PlayState extends MusicBeatState
 		{
 			lightningStrikeShit();
 		}
-		hscriptApply('beatHit');
+		#if hscript
+		hscriptApply('beatHit', null, script);
+		hscriptApply('beatHit', null, customStage);
+		#end
 	}
 
 	var curLight:Int = 0;

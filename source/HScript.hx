@@ -19,10 +19,14 @@ class HScript extends MusicBeatState
 
 	public var hscript:Interp;
 
+	var SONG:Song.SwagSong;
+
 	public function new(file:String)
 	{
 		parser = new hscript.Parser();
 		hscript = new hscript.Interp();
+
+		var fileExport = Paths.getPreloadPath(file);
 
 		hscript.variables.set("remove", remove);
 		hscript.variables.set("destroy", destroy);
@@ -50,13 +54,18 @@ class HScript extends MusicBeatState
 		hscript.variables.set("FlxAtlas", flixel.graphics.atlas.FlxAtlas);
 		hscript.variables.set("FlxAtlasFrames", flixel.graphics.frames.FlxAtlasFrames);
 		hscript.variables.set("FlxMath", flixel.math.FlxMath);
-		hscript.variables.set("FlxPoint", flixel.math.FlxPoint);
 		hscript.variables.set("FlxRect", flixel.math.FlxRect);
 		hscript.variables.set("MusicBeatState", MusicBeatState);
 		hscript.variables.set("FlxSound", flixel.system.FlxSound);
 		hscript.variables.set("FlxText", flixel.text.FlxText);
 		hscript.variables.set("FlxEase", flixel.tweens.FlxEase);
 		hscript.variables.set("FlxTween", flixel.tweens.FlxTween);
+
+		hscript.variables.set("SONG", SONG);
+		hscript.variables.set("songCheck", SONG.song.toLowerCase());
+
+		hscript.variables.set("curStep", curStep);
+		hscript.variables.set("curBeat", curBeat);
 
 		hscript.variables.set("update", function(elapsed:Float)
 		{
@@ -71,14 +80,14 @@ class HScript extends MusicBeatState
 		{
 		});
 
-		hscript.execute(parser.parseString(file));
+		hscript.execute(parser.parseString(fileExport));
 
 		super();
 	}
 
-	public function addVariable(varaa:String, amob:Any)
+	public function addVariable(addString:String, addValue:Dynamic)
 	{
-		hscript.variables.set(varaa, amob);
+		hscript.variables.set(addString, addValue);
 	}
 
 	public function callOnHscript(functionToCall:String, ?params:Array<Any>):Dynamic
