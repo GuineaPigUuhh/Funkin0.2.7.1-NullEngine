@@ -776,8 +776,8 @@ class PlayState extends MusicBeatState
 		#end
 
 		#if hscript
-		hscriptApply('create', null, script);
-		hscriptApply('create', null, customStage);
+		hscriptApply('create', [], script);
+		hscriptApply('create', [], customStage);
 		#end
 
 		super.create();
@@ -849,6 +849,7 @@ class PlayState extends MusicBeatState
 
 		customStage.variables.set("inCutscene", this.inCutscene);
 
+		script.variables.set("MusicBeatState", MusicBeatState);
 		customStage.variables.set("Paths", Paths);
 		customStage.variables.set("SONG", SONG);
 		customStage.variables.set("songCheck", SONG.song.toLowerCase());
@@ -868,10 +869,10 @@ class PlayState extends MusicBeatState
 		{
 		});
 
-		customStage.variables.set("stepHit", function()
+		customStage.variables.set("stepHit", function(curStep:Int)
 		{
 		});
-		customStage.variables.set("beatHit", function()
+		customStage.variables.set("beatHit", function(curBeat:Int)
 		{
 		});
 	}
@@ -907,7 +908,7 @@ class PlayState extends MusicBeatState
 		script.variables.set("destroy", destroy);
 
 		script.variables.set("dad", dad);
-		script.variables.set("bf", boyfriend);
+		script.variables.set("botfriend", boyfriend);
 		script.variables.set("gf", gf);
 
 		script.variables.set("Note", Note);
@@ -918,10 +919,6 @@ class PlayState extends MusicBeatState
 		script.variables.set("health", health);
 		script.variables.set("iconP1", iconP1);
 		script.variables.set("iconP2", iconP2);
-
-		script.variables.set("curBeat", curBeat);
-		script.variables.set("curStep", curStep);
-		script.variables.set("curSection", curSection);
 
 		addFlxItems(script);
 
@@ -951,10 +948,10 @@ class PlayState extends MusicBeatState
 		{
 		});
 
-		script.variables.set("stepHit", function()
+		script.variables.set("stepHit", function(curStep:Int)
 		{
 		});
-		script.variables.set("beatHit", function()
+		script.variables.set("beatHit", function(curBeat:Int)
 		{
 		});
 
@@ -2638,8 +2635,8 @@ class PlayState extends MusicBeatState
 			resyncVocals();
 		}
 		#if hscript
-		hscriptApply('stepHit', null, script);
-		hscriptApply('stepHit', null, customStage);
+		hscriptApply('stepHit', [curStep], script);
+		hscriptApply('stepHit', [curStep], customStage);
 		#end
 	}
 
@@ -2759,8 +2756,8 @@ class PlayState extends MusicBeatState
 			lightningStrikeShit();
 		}
 		#if hscript
-		hscriptApply('beatHit', null, script);
-		hscriptApply('beatHit', null, customStage);
+		hscriptApply('beatHit', [curBeat], script);
+		hscriptApply('beatHit', [curBeat], customStage);
 		#end
 	}
 
