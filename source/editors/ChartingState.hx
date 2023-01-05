@@ -85,6 +85,10 @@ class ChartingState extends MusicBeatState
 	{
 		curSection = lastSection;
 
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
+		bg.scrollFactor.set();
+		add(bg);
+
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
 		add(gridBG);
 
@@ -141,7 +145,8 @@ class ChartingState extends MusicBeatState
 		Conductor.changeBPM(_song.bpm);
 		Conductor.mapBPMChanges(_song);
 
-		bpmTxt = new FlxText(1000, 50, 0, "", 16);
+		bpmTxt = new FlxText(1000, 50, 0, "", 25);
+		bpmTxt.setFormat(Paths.font("vcr.ttf"), 25, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		bpmTxt.scrollFactor.set();
 		add(bpmTxt);
 
@@ -696,7 +701,12 @@ class ChartingState extends MusicBeatState
 			+ " / "
 			+ Std.string(FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 2))
 			+ "\nSection: "
-			+ curSection;
+			+ curSection
+			+ "\ndaBeat: "
+			+ curBeat
+			+ "\ndaStep: "
+			+ curStep;
+
 		super.update(elapsed);
 	}
 
