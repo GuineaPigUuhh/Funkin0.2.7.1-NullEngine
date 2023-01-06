@@ -82,7 +82,9 @@
 	<assets path="assets/week6"    library="week6"    exclude="*.ogg" if="web"/>
 	<assets path="assets/week6"    library="week6"    exclude="*.mp3" unless="web"/>
 	
-	<assets path='example_mods' rename='mods' embed='false'/>
+	<assets path="other/batExport/launch.bat" rename="Launch.bat" embed='false'/>
+	<assets path="other/batExport/launch_with_log.bat" rename="Launch_With_Log.bat" embed='false'/>
+
 	<!-- <template path='mods' /> -->
 
 	<!-- NOTE FOR FUTURE SELF SINCE FONTS ARE ALWAYS FUCKY 

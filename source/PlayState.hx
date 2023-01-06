@@ -916,6 +916,10 @@ class PlayState extends MusicBeatState
 		script.variables.set("defaultCamZoom", defaultCamZoom);
 		script.variables.set("defaultCamSpeed", defaultCamSpeed);
 
+		script.variables.set("camGame", camGame);
+		script.variables.set("camHUD", camHUD);
+		script.variables.set("camNotes", camNotes);
+
 		script.variables.set("health", health);
 		script.variables.set("iconP1", iconP1);
 		script.variables.set("iconP2", iconP2);
