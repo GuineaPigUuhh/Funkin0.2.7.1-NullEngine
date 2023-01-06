@@ -1,0 +1,8 @@
+{
+    "path":"Menu_Pico",
+    "idleAnim":"M Pico Idle",
+    "confirmAnim":"M Pico Idle",
+    "scale":1,
+    "flipX":false,
+    "offsets":[0, -120]
+}

@@ -1,0 +1,8 @@
+{
+    "path":"Menu_GF",
+    "idleAnim":"M GF Idle",
+    "confirmAnim":"M GF Idle",
+    "scale":1,
+    "flipX":false,
+    "offsets":[0, -25]
+}

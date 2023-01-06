@@ -1,0 +1,8 @@
+{
+    "path":"Menu_Mom",
+    "idleAnim":"M Mom Idle",
+    "confirmAnim":"M Mom Idle",
+    "scale":1,
+    "flipX":false,
+    "offsets":[0, 10]
+}

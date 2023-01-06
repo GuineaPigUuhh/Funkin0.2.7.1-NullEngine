@@ -1,0 +1,46 @@
+{
+    "weeks":[
+        {
+            "weekSongs":["Tutorial"],
+            "weekPath":"week0",
+            "weekTitle":"Tutorial",
+            "weekCharacters":["dad", "bf", "gf"]
+        },
+        {
+            "weekSongs":["bopeebo","fresh","dadbattle"],
+            "weekPath":"week1",
+            "weekTitle":"V.S. Daddy Dearest",
+            "weekCharacters":["dad", "bf", "gf"]
+        },
+        {
+            "weekSongs":["Spookeez","South","Monsters"],
+            "weekPath":"week2",
+            "weekTitle":"Spooky Month!",
+            "weekCharacters":["spooky", "bf", "gf"]
+        },
+        {
+            "weekSongs":["Pico", "Philly", "Blammed"],
+            "weekPath":"week3",
+            "weekTitle":"V.S. Pico",
+            "weekCharacters":["pico", "bf", "gf"]
+        },
+        {
+            "weekSongs":["Satin-Panties", "High", "Milf"],
+            "weekPath":"week4",
+            "weekTitle":"MOMMY MUST MURDER",
+            "weekCharacters":["mom", "bf", "gf"]
+        },
+        {
+            "weekSongs":["Cocoa", "Eggnog", "Winter-Horrorland"],
+            "weekPath":"week5",
+            "weekTitle":"Red Snow",
+            "weekCharacters":["parents", "bf", "gf"]
+        },
+        {
+            "weekSongs":["Senpai", "Roses", "Thorns"],
+            "weekPath":"week6",
+            "weekTitle":"hating simulator ft. moawling",
+            "weekCharacters":["senpai", "bf", "gf"]
+        }
+    ]
+}

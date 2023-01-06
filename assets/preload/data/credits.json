@@ -1,6 +1,7 @@
 {
     "users":[
         {
+            "category":"Null Engine",
             "name":"CapyBaraCoding",
             "icon":"capycode",
             "role":"Director And Main Programmer",
@@ -12,6 +13,14 @@
             "icon":"sloow",
             "role":"Programmer",
             "message":"to be or not to be? go fuck yourself!",
+            "color":"CCCCCC"
+        },
+        {
+            "category":"Special Thanks!",
+            "name":"Cracsthor",
+            "icon":"",
+            "role":"PhantoMuff Difficult Font",
+            "message":"",
             "color":"CCCCCC"
         }
     ]

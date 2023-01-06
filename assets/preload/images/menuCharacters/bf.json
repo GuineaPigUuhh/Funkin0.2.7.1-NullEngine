@@ -1,0 +1,8 @@
+{
+    "path":"Menu_BF",
+    "idleAnim":"M BF Idle",
+    "confirmAnim":"M bf HEY",
+    "scale":1,
+    "flipX":false,
+    "offsets":[15, -40]
+}

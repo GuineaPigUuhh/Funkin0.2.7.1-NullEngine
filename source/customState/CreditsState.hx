@@ -4,6 +4,8 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import haxe.Json;
 import haxe.format.JsonParser;
@@ -24,6 +26,7 @@ typedef CreditsStuff =
 	var color:String;
 	var message:String;
 	var role:String;
+	var category:String;
 }
 
 class CreditsState extends MusicBeatState
@@ -32,6 +35,10 @@ class CreditsState extends MusicBeatState
 	var role:FlxText;
 	var creditsIcon:FlxSprite;
 	var massagg:FlxText;
+
+	var copycat:FlxText;
+
+	var leave:Bool = false;
 
 	var creditsJson:Credits;
 
@@ -61,22 +68,29 @@ class CreditsState extends MusicBeatState
 			creditsIcon.screenCenter();
 
 			credits = new FlxText(0, creditsIcon.y + 100, '', 50);
-			credits.screenCenter(X);
 			credits.setFormat(Paths.font("phantomuff.ttf"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			credits.screenCenter(X);
 
 			role = new FlxText(0, credits.y + 50, '', 30);
-			role.screenCenter(X);
 			role.setFormat(Paths.font("phantomuff.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			role.screenCenter(X);
 
 			massagg = new FlxText(0, role.y + 60, '', 25);
-			massagg.screenCenter(X);
 			massagg.setFormat(Paths.font("vcr.ttf"), 25, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			massagg.borderSize = 2;
+			massagg.screenCenter(X);
 
 			add(massagg);
 			add(credits);
 			add(creditsIcon);
 			add(role);
+
+			copycat = new FlxText(0, 150, '', 60);
+			copycat.setFormat(Paths.font("phantomuff.ttf"), 60, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			copycat.borderSize = 2;
+			copycat.screenCenter(X);
+
+			add(copycat);
 
 			changeSelection();
 		}
@@ -88,29 +102,43 @@ class CreditsState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (controls.DOWN_P)
+		if (!leave)
 		{
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-			changeSelection(1);
-		}
-		if (controls.UP_P)
-		{
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-			changeSelection(-1);
-		}
+			if (controls.LEFT_P)
+			{
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+				changeSelection(1);
+			}
+			if (controls.RIGHT_P)
+			{
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+				changeSelection(-1);
+			}
 
-		if (controls.BACK)
-			FlxG.switchState(new MainMenuState());
+			if (controls.BACK)
+			{
+				if (colorTween != null)
+				{
+					colorTween.cancel();
+				}
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.switchState(new MainMenuState());
+				leave = true;
+			}
 
-		if (controls.ACCEPT)
-		{
-			trace('FUCK YOU!');
+			if (controls.ACCEPT)
+			{
+				trace('FUCK YOU!');
+			}
 		}
 	}
 
 	function updateThings()
 	{
-		menuBG.color = FlxColor.fromString('#' + creditsJson.users[curSelected].color);
+		menuBG.color = getCurrentBGColor();
+		intendedColor = menuBG.color;
+
+		changeColorBG();
 
 		creditsIcon.loadGraphic(Paths.image('credits/' + creditsJson.users[curSelected].icon));
 		creditsIcon.screenCenter();
@@ -118,7 +146,13 @@ class CreditsState extends MusicBeatState
 		credits.text = creditsJson.users[curSelected].name;
 		credits.screenCenter(X);
 
-		if (creditsJson.users[curSelected].message == null)
+		if (creditsJson.users[curSelected].category != null)
+		{
+			copycat.text = creditsJson.users[curSelected].category;
+			copycat.screenCenter(X);
+		}
+
+		if (creditsJson.users[curSelected].message == null || creditsJson.users[curSelected].message.length < 1)
 			massagg.text = "";
 		else
 			massagg.text = '"' + creditsJson.users[curSelected].message + '"';
@@ -139,5 +173,34 @@ class CreditsState extends MusicBeatState
 			curSelected = creditsJson.users.length - 1;
 		if (curSelected >= creditsJson.users.length)
 			curSelected = 0;
+	}
+
+	var intendedColor:Int;
+	var colorTween:FlxTween;
+
+	function changeColorBG()
+	{
+		var newColor:Int = getCurrentBGColor();
+
+		if (newColor != intendedColor)
+		{
+			if (colorTween != null)
+			{
+				colorTween.cancel();
+			}
+			intendedColor = newColor;
+			colorTween = FlxTween.color(menuBG, 1, menuBG.color, intendedColor, {
+				onComplete: function(twn:FlxTween)
+				{
+					colorTween = null;
+				}
+			});
+		}
+	}
+
+	function getCurrentBGColor()
+	{
+		var bgColor:String = "#" + creditsJson.users[curSelected].color;
+		return FlxColor.fromString(bgColor);
 	}
 }

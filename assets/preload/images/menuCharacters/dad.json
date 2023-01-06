@@ -1,0 +1,8 @@
+{
+    "path":"Menu_Dad",
+    "idleAnim":"M Dad Idle",
+    "confirmAnim":"M Dad Idle",
+    "scale":1,
+    "flipX":false,
+    "offsets":[0,0]
+}
