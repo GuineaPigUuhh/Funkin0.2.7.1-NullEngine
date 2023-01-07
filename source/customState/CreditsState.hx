@@ -14,7 +14,7 @@ import openfl.system.System;
 
 using StringTools;
 
-typedef Credits =
+typedef CreditJSON =
 {
 	var users:Array<CreditsStuff>;
 }
@@ -35,12 +35,11 @@ class CreditsState extends MusicBeatState
 	var role:FlxText;
 	var creditsIcon:FlxSprite;
 	var massagg:FlxText;
-
 	var copycat:FlxText;
 
 	var leave:Bool = false;
 
-	var creditsJson:Credits;
+	public var creditsJson:CreditJSON;
 
 	var menuBG:FlxSprite;
 
@@ -48,7 +47,7 @@ class CreditsState extends MusicBeatState
 
 	override function create()
 	{
-		creditsJson = Json.parse(Assets.getText(Paths.json('credits')));
+		creditsJson = Json.parse(Assets.getText(Paths.json("credits")));
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));

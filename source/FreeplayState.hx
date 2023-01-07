@@ -11,12 +11,16 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import haxe.Json;
+import haxe.format.JsonParser;
 import lime.utils.Assets;
 
 using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
+	public var freeplayData:StoryMenuState.WeekJSON;
+
 	var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
@@ -35,6 +39,8 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		freeplayData = Json.parse(Assets.getText(Paths.json("weekList")));
+
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -46,13 +52,11 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-		addWeek(['Tutorial'], 0, ['gf']);
-		addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
-		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky']);
-		addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
-		addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
-		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
-		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
+		for (i in 0...freeplayData.weeks.length)
+		{
+			if (freeplayData.weeks[i].hideInFreePlay == false)
+				addWeek(freeplayData.weeks[i].weekSongs, i, freeplayData.weeks[i].weekIcons);
+		}
 
 		// LOAD MUSIC
 

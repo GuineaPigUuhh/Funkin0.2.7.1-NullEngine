@@ -75,16 +75,17 @@ class PlayState extends MusicBeatState
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
 
-	private var strumLine:FlxSprite;
+	public static var strumLine:FlxSprite;
+
 	private var curSection:Int = 0;
 
 	private var camFollow:FlxObject;
 
 	private static var prevCamFollow:FlxObject;
 
-	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
-	private var playerStrums:FlxTypedGroup<FlxSprite>;
-	private var cpuStrums:FlxTypedGroup<FlxSprite>;
+	public static var strumLineNotes:FlxTypedGroup<FlxSprite>;
+	public static var playerStrums:FlxTypedGroup<FlxSprite>;
+	public static var cpuStrums:FlxTypedGroup<FlxSprite>;
 
 	public var camZooming:Bool = false;
 	public var curSong:String = "";
@@ -131,6 +132,11 @@ class PlayState extends MusicBeatState
 	public var songMisses:Int = 0;
 	public var songAccuracy:Float = 0.00;
 	public var songRating:String = '?';
+
+	public var counterSick:Int = 0;
+	public var counterGood:Int = 0;
+	public var counterBad:Int = 0;
+	public var counterShit:Int = 0;
 
 	public var totalNotesHit:Float = 0;
 	public var totalPlayed:Int = 0;
@@ -208,8 +214,8 @@ class PlayState extends MusicBeatState
 		Conductor.changeBPM(SONG.bpm);
 
 		if (SONG.hasDialogue
-			&& OpenFlAssets.exists(Paths.txt('charts/${SONG.song.toLowerCase()}/dialogue'))) // ele vai pegar o arquivo e vai fucionar looolololoollololool // anti crash bruh
-			dialogue = CoolUtil.coolTextFile(Paths.txt('charts/${SONG.song.toLowerCase()}/dialogue'));
+			&& OpenFlAssets.exists(Paths.txt('${SONG.song.toLowerCase()}/dialogue'))) // ele vai pegar o arquivo e vai fucionar looolololoollololool // anti crash bruh
+			dialogue = CoolUtil.coolTextFile(Paths.txt('${SONG.song.toLowerCase()}/dialogue'));
 
 		storyDifficultyText = CoolUtil.difficultyArray[storyDifficulty];
 
@@ -691,12 +697,11 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(0, healthBarBG.y + 42, FlxG.width, "", 18);
+		scoreTxt = new FlxText(0, healthBarBG.y + 42, FlxG.width, "", 20);
 		updateScoreTxt();
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 2;
-		add(scoreTxt);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.playAnimation(boyfriend.curCharacter);
@@ -707,6 +712,8 @@ class PlayState extends MusicBeatState
 		iconP1.playAnimation(dad.curCharacter);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
+		// fixes
+		add(scoreTxt);
 
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
@@ -760,7 +767,7 @@ class PlayState extends MusicBeatState
 				case 'thorns':
 					schoolIntro(doof);
 				default:
-					if (SONG.hasDialogue && OpenFlAssets.exists(Paths.txt('charts/${SONG.song.toLowerCase()}/dialogue')))
+					if (SONG.hasDialogue && OpenFlAssets.exists(Paths.txt('${SONG.song.toLowerCase()}/dialogue')))
 						schoolIntro(doof);
 					else
 						startCountdown();
@@ -1211,8 +1218,8 @@ class PlayState extends MusicBeatState
 	{
 		inCutscene = false;
 
-		generateStaticArrows(0);
-		generateStaticArrows(1);
+		Note.generateStaticArrows(0);
+		Note.generateStaticArrows(1);
 
 		talking = false;
 		startedCountdown = true;
@@ -1437,117 +1444,6 @@ class PlayState extends MusicBeatState
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
 	}
 
-	private function generateStaticArrows(player:Int):Void
-	{
-		for (i in 0...4)
-		{
-			// FlxG.log.add(i);
-			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
-
-			switch (curStage)
-			{
-				case 'school' | 'schoolEvil':
-					babyArrow.loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
-					babyArrow.animation.add('green', [6]);
-					babyArrow.animation.add('red', [7]);
-					babyArrow.animation.add('blue', [5]);
-					babyArrow.animation.add('purplel', [4]);
-
-					babyArrow.setGraphicSize(Std.int(babyArrow.width * daPixelZoom));
-					babyArrow.updateHitbox();
-					babyArrow.antialiasing = false;
-
-					switch (Math.abs(i))
-					{
-						case 0:
-							babyArrow.x += Note.swagWidth * 0;
-							babyArrow.animation.add('static', [0]);
-							babyArrow.animation.add('pressed', [4, 8], 12, false);
-							babyArrow.animation.add('confirm', [12, 16], 24, false);
-						case 1:
-							babyArrow.x += Note.swagWidth * 1;
-							babyArrow.animation.add('static', [1]);
-							babyArrow.animation.add('pressed', [5, 9], 12, false);
-							babyArrow.animation.add('confirm', [13, 17], 24, false);
-						case 2:
-							babyArrow.x += Note.swagWidth * 2;
-							babyArrow.animation.add('static', [2]);
-							babyArrow.animation.add('pressed', [6, 10], 12, false);
-							babyArrow.animation.add('confirm', [14, 18], 12, false);
-						case 3:
-							babyArrow.x += Note.swagWidth * 3;
-							babyArrow.animation.add('static', [3]);
-							babyArrow.animation.add('pressed', [7, 11], 12, false);
-							babyArrow.animation.add('confirm', [15, 19], 24, false);
-					}
-
-				default:
-					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
-					babyArrow.animation.addByPrefix('green', 'arrowUP');
-					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
-					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
-					babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
-
-					babyArrow.antialiasing = true;
-					babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
-
-					switch (Math.abs(i))
-					{
-						case 0:
-							babyArrow.x += Note.swagWidth * 0;
-							babyArrow.animation.addByPrefix('static', 'arrowLEFT');
-							babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
-							babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
-						case 1:
-							babyArrow.x += Note.swagWidth * 1;
-							babyArrow.animation.addByPrefix('static', 'arrowDOWN');
-							babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
-							babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
-						case 2:
-							babyArrow.x += Note.swagWidth * 2;
-							babyArrow.animation.addByPrefix('static', 'arrowUP');
-							babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
-							babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
-						case 3:
-							babyArrow.x += Note.swagWidth * 3;
-							babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
-							babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
-							babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
-					}
-			}
-
-			babyArrow.updateHitbox();
-			babyArrow.scrollFactor.set();
-			babyArrow.cameras = [camNotes];
-
-			if (!isStoryMode)
-			{
-				babyArrow.y -= 10;
-				babyArrow.alpha = 0;
-				FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
-			}
-
-			babyArrow.ID = i;
-
-			if (player == 1)
-				playerStrums.add(babyArrow);
-			else
-				cpuStrums.add(babyArrow);
-
-			babyArrow.animation.play('static');
-
-			babyArrow.x += 50;
-			babyArrow.x += ((FlxG.width / 2) * player);
-
-			strumLineNotes.add(babyArrow);
-
-			cpuStrums.forEach(function(spr:FlxSprite)
-			{
-				spr.centerOffsets();
-			});
-		}
-	}
-
 	override function openSubState(SubState:FlxSubState)
 	{
 		if (paused)
@@ -1644,9 +1540,26 @@ class PlayState extends MusicBeatState
 
 	function updateScoreTxt()
 	{
-		var divider:String = ' || ';
-		scoreTxt.text = 'Score: ${songScore}' + divider + 'Misses: ${songMisses}' + divider + 'Accuracy: ${truncateFloat(songAccuracy, 2)}%' + divider
-			+ ' ${songRating}';
+		getRating();
+
+		var divider:String = ' | ';
+		scoreTxt.text = 'Score: ${songScore}' + divider + 'Misses: ${songMisses}' + divider + 'Accuracy: ${truncateFloat(songAccuracy, 2)}%'
+			+ ' [${songRating}]';
+	}
+
+	function getRating()
+	{
+		if (counterSick > 0)
+			songRating = "SFC";
+		if (counterGood > 0)
+			songRating = "GFC";
+		if (counterBad > 0 || counterShit > 0)
+			songRating = "FC";
+
+		if (songMisses > 0 && songMisses < 10)
+			songRating = "SDCB";
+		else if (songMisses >= 10)
+			songRating = "Clear";
 	}
 
 	function updateAccuracy()
@@ -2108,21 +2021,25 @@ class PlayState extends MusicBeatState
 
 		if (noteDiff > Conductor.safeZoneOffset * 0.9)
 		{
+			counterShit++;
 			daRating = 'shit';
 			addScore = 50;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
 		{
+			counterBad++;
 			daRating = 'bad';
 			addScore = 100;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
 		{
+			counterGood++;
 			daRating = 'good';
 			addScore = 200;
 		}
 		else
 		{
+			counterSick++;
 			daRating = "sick";
 			addScore = 350;
 			NoteSplashesSpawn(daNote);
@@ -2130,16 +2047,13 @@ class PlayState extends MusicBeatState
 
 		songScore += addScore;
 
-		var pixelShitPart1:String = "";
-		var pixelShitPart2:String = '';
+		var localPath:String = daRating;
 
 		if (curStage.startsWith('school'))
 		{
-			pixelShitPart1 = 'weeb/pixelUI/';
-			pixelShitPart2 = '-pixel';
+			localPath = 'weeb/pixelUI/' + daRating + '-pixel';
 		}
-
-		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2));
+		rating.loadGraphic(Paths.image(localPath));
 		rating.cameras = [camHUD];
 		rating.screenCenter();
 		rating.x = coolText.x - 40;
@@ -2148,7 +2062,7 @@ class PlayState extends MusicBeatState
 		rating.velocity.y -= FlxG.random.int(140, 175);
 		rating.velocity.x -= FlxG.random.int(0, 10);
 
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('combo'));
 		comboSpr.screenCenter();
 		comboSpr.cameras = [camHUD];
 		comboSpr.x = coolText.x;
@@ -2183,7 +2097,13 @@ class PlayState extends MusicBeatState
 		var daLoop:Int = 0;
 		for (i in seperatedScore)
 		{
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2));
+			var localPathNum:String = 'num' + Std.int(i);
+			if (curStage.startsWith('school'))
+			{
+				localPathNum = 'weeb/pixelUI/' + 'num' + Std.int(i) + '-pixel';
+			}
+
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(localPathNum));
 			numScore.screenCenter();
 			numScore.x = coolText.x + (43 * daLoop) - 90;
 			numScore.cameras = [camHUD];

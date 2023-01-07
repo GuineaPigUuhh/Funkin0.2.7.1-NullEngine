@@ -49,6 +49,7 @@ class Character extends FlxSprite
 	public var singDuration:Float = 4;
 
 	public var isGf:Bool = false;
+	public var healthBarColor:String = "";
 
 	public var cameraPosition:Array<Float> = [0, 0];
 	public var charPosition:Array<Float> = [0, 0];

@@ -33,6 +33,9 @@ typedef Week =
 	var weekPath:String;
 	var weekTitle:String;
 	var weekCharacters:Array<String>;
+	var weekIcons:Array<String>;
+	var hideInFreePlay:Bool;
+	var hideInStoryMode:Bool;
 }
 
 class StoryMenuState extends MusicBeatState
@@ -109,13 +112,16 @@ class StoryMenuState extends MusicBeatState
 
 		for (i in 0...weekData.weeks.length)
 		{
-			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, weekData.weeks[i].weekPath);
-			weekThing.y += ((weekThing.height + 20) * i);
-			weekThing.targetY = i;
-			weekThing.screenCenter(X);
-			weekThing.antialiasing = true;
+			if (weekData.weeks[i].hideInStoryMode == false)
+			{
+				var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, weekData.weeks[i].weekPath);
+				weekThing.y += ((weekThing.height + 20) * i);
+				weekThing.targetY = i;
+				weekThing.screenCenter(X);
+				weekThing.antialiasing = true;
 
-			grpWeekText.add(weekThing);
+				grpWeekText.add(weekThing);
+			}
 		}
 
 		trace("Line 96");
