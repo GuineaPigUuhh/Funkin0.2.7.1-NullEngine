@@ -9,6 +9,7 @@
             "color":"01FF96"
         },
         {
+            "category":"Null Engine",
             "name":"Sloow",
             "icon":"sloow",
             "role":"Programmer",
@@ -18,10 +19,18 @@
         {
             "category":"Special Thanks!",
             "name":"Cracsthor",
-            "icon":"",
+            "icon":"cracsthor",
             "role":"PhantoMuff Difficult Font",
             "message":"",
-            "color":"CCCCCC"
+            "color":"FF8F11"
+        },
+        {
+            "category":"Special Thanks!",
+            "name":"RozeBud",
+            "icon":"rozebud",
+            "role":"Accuracy System Code",
+            "message":"",
+            "color":"35194C"
         }
     ]
 }

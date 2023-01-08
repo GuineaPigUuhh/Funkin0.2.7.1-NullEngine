@@ -6,6 +6,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.tweens.misc.ColorTween;
 import flixel.util.FlxColor;
 import haxe.Json;
 import haxe.format.JsonParser;
@@ -41,9 +42,9 @@ class CreditsState extends MusicBeatState
 
 	public var creditsJson:CreditJSON;
 
-	var menuBG:FlxSprite;
+	public var menuBG:FlxSprite;
 
-	var curSelected:Int = 0;
+	static var curSelected:Int = -1;
 
 	override function create()
 	{
@@ -64,7 +65,7 @@ class CreditsState extends MusicBeatState
 		if (creditsJson != null)
 		{
 			creditsIcon = new FlxSprite(0, 0);
-			creditsIcon.screenCenter();
+			setScreenCenter(creditsIcon, "XY");
 
 			credits = new FlxText(0, creditsIcon.y + 100, '', 50);
 			credits.setFormat(Paths.font("phantomuff.ttf"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -91,6 +92,8 @@ class CreditsState extends MusicBeatState
 
 			add(copycat);
 
+			curSelected = 0;
+
 			changeSelection();
 		}
 
@@ -103,23 +106,19 @@ class CreditsState extends MusicBeatState
 
 		if (!leave)
 		{
-			if (controls.LEFT_P)
-			{
-				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-				changeSelection(1);
-			}
-			if (controls.RIGHT_P)
+			if (controls.UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 				changeSelection(-1);
 			}
+			else if (controls.DOWN_P)
+			{
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+				changeSelection(1);
+			}
 
 			if (controls.BACK)
 			{
-				if (colorTween != null)
-				{
-					colorTween.cancel();
-				}
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				FlxG.switchState(new MainMenuState());
 				leave = true;
@@ -132,74 +131,64 @@ class CreditsState extends MusicBeatState
 		}
 	}
 
-	function updateThings()
-	{
-		menuBG.color = getCurrentBGColor();
-		intendedColor = menuBG.color;
-
-		changeColorBG();
-
-		creditsIcon.loadGraphic(Paths.image('credits/' + creditsJson.users[curSelected].icon));
-		creditsIcon.screenCenter();
-
-		credits.text = creditsJson.users[curSelected].name;
-		credits.screenCenter(X);
-
-		if (creditsJson.users[curSelected].category != null)
-		{
-			copycat.text = creditsJson.users[curSelected].category;
-			copycat.screenCenter(X);
-		}
-
-		if (creditsJson.users[curSelected].message == null || creditsJson.users[curSelected].message.length < 1)
-			massagg.text = "";
-		else
-			massagg.text = '"' + creditsJson.users[curSelected].message + '"';
-
-		massagg.screenCenter(X);
-
-		role.text = creditsJson.users[curSelected].role;
-		role.screenCenter(X);
-	}
-
 	function changeSelection(change:Int = 0)
 	{
-		updateThings();
-
 		curSelected += change;
 
 		if (curSelected < 0)
 			curSelected = creditsJson.users.length - 1;
 		if (curSelected >= creditsJson.users.length)
 			curSelected = 0;
+
+		FlxTween.color(menuBG, 1.5, menuBG.color, FlxColor.fromString("#" + creditsJson.users[curSelected].color), {ease: FlxEase.quintOut});
+
+		creditsIcon.loadGraphic(Paths.image('credits/' + creditsJson.users[curSelected].icon));
+
+		creditsIcon.alpha = 0;
+		setScreenCenter(creditsIcon, "X");
+		creditsIcon.y = (FlxG.height / 2) - (creditsIcon.height / 2) - 15;
+		FlxTween.tween(creditsIcon, {alpha: 1, y: (FlxG.height / 2) - (creditsIcon.height / 2)}, 0.2, {ease: FlxEase.cubeOut});
+
+		credits.text = creditsJson.users[curSelected].name;
+		credits.screenCenter(X);
+
+		copycat.text = creditsJson.users[curSelected].category;
+		copycat.screenCenter(X);
+
+		if (creditsJson.users[curSelected].message == null || creditsJson.users[curSelected].message.length < 1)
+		{
+			massagg.text = "";
+		}
+		else
+		{
+			massagg.text = '"' + creditsJson.users[curSelected].message + '"';
+			massagg.screenCenter(X);
+		}
+
+		role.text = creditsJson.users[curSelected].role;
+		role.screenCenter(X);
 	}
 
-	var intendedColor:Int;
-	var colorTween:FlxTween;
-
-	function changeColorBG()
+	function setScreenCenter(sprite:FlxSprite, position:String = "XY")
 	{
-		var newColor:Int = getCurrentBGColor();
-
-		if (newColor != intendedColor)
+		if (position == "XY")
 		{
-			if (colorTween != null)
-			{
-				colorTween.cancel();
-			}
-			intendedColor = newColor;
-			colorTween = FlxTween.color(menuBG, 1, menuBG.color, intendedColor, {
-				onComplete: function(twn:FlxTween)
-				{
-					colorTween = null;
-				}
-			});
+			sprite.x = (FlxG.width / 2) - (creditsIcon.width / 2);
+			sprite.y = (FlxG.height / 2) - (creditsIcon.height / 2);
+		}
+		if (position == "X")
+		{
+			sprite.x = (FlxG.width / 2) - (creditsIcon.width / 2);
+		}
+		if (position == "Y")
+		{
+			sprite.y = (FlxG.height / 2) - (creditsIcon.height / 2);
 		}
 	}
 
 	function getCurrentBGColor()
 	{
-		var bgColor:String = "#" + creditsJson.users[curSelected].color;
-		return FlxColor.fromString(bgColor);
+		var bgColor:String = creditsJson.users[curSelected].color;
+		return FlxColor.fromString("#" + bgColor);
 	}
 }

@@ -224,7 +224,7 @@ class FreeplayState extends MusicBeatState
 
 		if (curDifficulty < 0)
 			curDifficulty = CoolUtil.difficultyArray.length - 1;
-		if (curDifficulty > CoolUtil.difficultyArray.length - 1)
+		if (curDifficulty >= CoolUtil.difficultyArray.length)
 			curDifficulty = 0;
 
 		#if !switch
