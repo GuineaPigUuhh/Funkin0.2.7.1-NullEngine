@@ -11,13 +11,33 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.effects.FlxFlicker;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import haxe.Json;
+import haxe.format.JsonParser;
 import lime.app.Application;
+import lime.utils.Assets;
 
 using StringTools;
+
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
+typedef CustomStateJSON =
+{
+	var options:Array<CustomStates>;
+}
+
+typedef CustomStates =
+{
+	var name:String;
+	var stateName:String;
+}
 
 class MainMenuState extends MusicBeatState
 {
@@ -25,14 +45,22 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = [];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
+	var statesJSON:CustomStateJSON;
+
 	override function create()
 	{
-		addOptions(['story mode', 'freeplay', 'options'], [0, 1, 2]);
+		statesJSON = Json.parse(Assets.getText(Paths.json("customStates")));
+
+		for (i in 0...statesJSON.options.length)
+		{
+			optionShit.insert(optionShit.length + i, statesJSON.options[i].name);
+			trace("Add To Options: " + statesJSON.options[i].name + ", Bruh: " + optionShit.length + i);
+		}
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -76,14 +104,25 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
-
 		for (i in 0...optionShit.length)
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
-			menuItem.frames = tex;
-			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
-			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
+
+			var file = Paths.getSparrowAtlas('mainMenuAssets/${optionShit[i]}');
+			var idleAnim = optionShit[i] + " basic";
+			var selectedAnim = optionShit[i] + " white";
+
+			if (!FileSystem.exists(Paths.image('mainMenuAssets/${optionShit[i]}')))
+			{
+				file = Paths.getSparrowAtlas('mainMenuAssets/donate');
+				idleAnim = "donate basic";
+				selectedAnim = "donate white";
+			}
+
+			menuItem.frames = file;
+			menuItem.animation.addByPrefix('idle', idleAnim, 24);
+			menuItem.animation.addByPrefix('selected', selectedAnim, 24);
+
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
@@ -175,41 +214,29 @@ class MainMenuState extends MusicBeatState
 
 	function selectState()
 	{
-		addOptionsFunction(['story mode', 'freeplay', 'options'], [new StoryMenuState(), new FreeplayState(), new options.OptionsState()]);
-	}
-
-	function addOptions(name:Array<String>, b:Array<Int>)
-	{
-		for (i in 0...name.length)
+		switch (optionShit[curSelected])
 		{
-			optionShit.insert(b[i], name[i]);
+			case "story mode":
+				FlxG.switchState(new StoryMenuState());
+			case "freeplay":
+				FlxG.switchState(new FreeplayState());
+			case "options":
+				FlxG.switchState(new options.OptionsState());
 		}
-	}
 
-	function addOptionsFunction(name:Array<String>, state:Array<FlxState>)
-	{
-		for (i in 0...name.length)
+		for (i in 0...statesJSON.options.length)
 		{
-			if (optionShit[curSelected] == name[i])
+			if (optionShit[curSelected] == statesJSON.options[i].name)
 			{
-				FlxG.switchState(state[i]);
+				customState.CustomState.daState = statesJSON.options[i].stateName;
+				FlxG.switchState(new customState.CustomState());
 			}
 		}
 	}
 
-	function removeOption(name:String)
-	{
-		optionShit.remove(name);
-	}
-
 	function changeItem(huh:Int = 0)
 	{
-		curSelected += huh;
-
-		if (curSelected >= menuItems.length)
-			curSelected = 0;
-		if (curSelected < 0)
-			curSelected = menuItems.length - 1;
+		curSelected = FlxMath.wrap(curSelected + huh, 0, menuItems.length - 1);
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{

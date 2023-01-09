@@ -277,12 +277,7 @@ class StoryMenuState extends MusicBeatState
 
 	function changeDifficulty(change:Int = 0):Void
 	{
-		curDifficulty += change;
-
-		if (curDifficulty < 0)
-			curDifficulty = 2;
-		if (curDifficulty > 2)
-			curDifficulty = 0;
+		curDifficulty = FlxMath.wrap(curDifficulty + change, 0, CoolUtil.difficultyArray.length - 1);
 
 		sprDifficulty.offset.x = 0;
 
@@ -317,12 +312,7 @@ class StoryMenuState extends MusicBeatState
 
 	function changeWeek(change:Int = 0):Void
 	{
-		curWeek += change;
-
-		if (curWeek >= weekData.weeks.length)
-			curWeek = 0;
-		if (curWeek < 0)
-			curWeek = weekData.weeks.length - 1;
+		curWeek = FlxMath.wrap(curWeek + change, 0, weekData.weeks.length - 1);
 
 		var bullShit:Int = 0;
 

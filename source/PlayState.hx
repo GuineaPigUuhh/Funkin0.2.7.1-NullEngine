@@ -4,6 +4,7 @@ package;
 import DiscordClient;
 #end
 import Section.SwagSection;
+import Song.Config;
 import Song.SwagSong;
 import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
@@ -59,6 +60,7 @@ class PlayState extends MusicBeatState
 {
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
+	public static var CONFIG:Config;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
@@ -165,15 +167,13 @@ class PlayState extends MusicBeatState
 	var detailsPausedText:String = "";
 	#end
 
+	var script:hscript.Interp = new hscript.Interp();
+
 	var GF_POS:Array<Float> = [400, 130];
 	var DAD_POS:Array<Float> = [100, 100];
 	var BOYFRIEND_POS:Array<Float> = [770, 450];
 
-	var script:hscript.Interp = new hscript.Interp();
-	var scriptLocal:String = 'NO SCRIPT FILE';
-
 	var customStage:hscript.Interp = new hscript.Interp();
-	var stageLocal:String = 'NO STAGE FILE';
 	var behindItems:FlxTypedGroup<FlxSprite>;
 	var frontItems:FlxTypedGroup<FlxSprite>;
 	var isCustomStage:Bool = false;
@@ -779,7 +779,7 @@ class PlayState extends MusicBeatState
 		}
 
 		#if hscript
-		getHScriptFile('modchart');
+		getHScriptFile("script");
 		#end
 
 		#if hscript
@@ -794,6 +794,8 @@ class PlayState extends MusicBeatState
 	function getStageFile(fileName:String)
 	{
 		#if hscript
+		var stageLocal:String = 'NO STAGE FILE';
+
 		isCustomStage = true;
 		curStage = SONG.stage;
 		if (FileSystem.exists(Paths.getPreloadPath('stages/${curStage}/${fileName}.hx')))
@@ -856,7 +858,7 @@ class PlayState extends MusicBeatState
 
 		customStage.variables.set("inCutscene", this.inCutscene);
 
-		script.variables.set("MusicBeatState", MusicBeatState);
+		customStage.variables.set("MusicBeatState", MusicBeatState);
 		customStage.variables.set("Paths", Paths);
 		customStage.variables.set("SONG", SONG);
 		customStage.variables.set("songCheck", SONG.song.toLowerCase());
@@ -887,10 +889,13 @@ class PlayState extends MusicBeatState
 	function getHScriptFile(fileName:String)
 	{
 		#if hscript
+		var scriptLocal:String = 'NO SCRIPT FILE';
+
 		if (FileSystem.exists(Paths.getPreloadPath('data/${PlayState.SONG.song.toLowerCase()}/${fileName}.hx')))
 		{
 			scriptLocal = File.getContent(Paths.getPreloadPath('data/${PlayState.SONG.song.toLowerCase()}/${fileName}.hx'));
 			var parser:hscript.Parser = new hscript.Parser();
+
 			parser.allowTypes = true;
 			parser.allowJSON = true;
 			parser.allowMetadata = true;

@@ -84,12 +84,7 @@ class OptionsState extends MusicBeatState
 	{
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
-		curSelected += change;
-
-		if (curSelected < 0)
-			curSelected = grpOptions.length - 1;
-		if (curSelected >= grpOptions.length)
-			curSelected = 0;
+		curSelected = FlxMath.wrap(curSelected + change, 0, grpOptions.length - 1);
 
 		var bullShit:Int = 0;
 		for (item in grpOptions.members)

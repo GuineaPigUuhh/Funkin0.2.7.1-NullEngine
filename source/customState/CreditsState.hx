@@ -3,6 +3,7 @@ package customState;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -44,11 +45,11 @@ class CreditsState extends MusicBeatState
 
 	public var menuBG:FlxSprite;
 
-	static var curSelected:Int = -1;
+	static var curSelected:Int = 0;
 
 	override function create()
 	{
-		creditsJson = Json.parse(Assets.getText(Paths.json("credits")));
+		creditsJson = Json.parse(Assets.getText(Paths.json("creditList")));
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -92,8 +93,6 @@ class CreditsState extends MusicBeatState
 
 			add(copycat);
 
-			curSelected = 0;
-
 			changeSelection();
 		}
 
@@ -133,12 +132,7 @@ class CreditsState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		curSelected += change;
-
-		if (curSelected < 0)
-			curSelected = creditsJson.users.length - 1;
-		if (curSelected >= creditsJson.users.length)
-			curSelected = 0;
+		curSelected = FlxMath.wrap(curSelected + change, 0, creditsJson.users.length - 1);
 
 		FlxTween.color(menuBG, 1.5, menuBG.color, FlxColor.fromString("#" + creditsJson.users[curSelected].color), {ease: FlxEase.quintOut});
 
