@@ -177,17 +177,23 @@ class FreeplayState extends MusicBeatState
 
 		if (upP)
 		{
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			changeSelection(-1);
 		}
 		if (downP)
 		{
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			changeSelection(1);
 		}
 
 		if (controls.LEFT_P)
+		{
 			changeDiff(-1);
+		}
 		if (controls.RIGHT_P)
+		{
 			changeDiff(1);
+		}
 
 		if (FlxG.keys.justPressed.SPACE)
 		{
@@ -198,6 +204,7 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK)
 		{
+			FlxG.sound.play(Paths.sound('cancelMenu'));
 			FlxG.switchState(new MainMenuState());
 		}
 
@@ -231,8 +238,6 @@ class FreeplayState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-
 		curSelected = FlxMath.wrap(curSelected + change, 0, songs.length - 1);
 
 		// selector.y = (70 * curSelected) + 30;

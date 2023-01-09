@@ -204,21 +204,31 @@ class StoryMenuState extends MusicBeatState
 			{
 				if (controls.UP_P)
 				{
+					FlxG.sound.play(Paths.sound('scrollMenu'));
 					changeWeek(-1);
 				}
 
 				if (controls.DOWN_P)
 				{
+					FlxG.sound.play(Paths.sound('scrollMenu'));
 					changeWeek(1);
 				}
 
-				arrowsPlayAnim(rightArrow, controls.RIGHT);
-				arrowsPlayAnim(leftArrow, controls.LEFT);
-
 				if (controls.RIGHT_P)
+				{
 					changeDifficulty(1);
+					rightArrow.animation.play('press');
+				}
+				else
+					rightArrow.animation.play('idle');
+
 				if (controls.LEFT_P)
+				{
 					changeDifficulty(-1);
+					leftArrow.animation.play('press');
+				}
+				else
+					leftArrow.animation.play('idle');
 			}
 
 			if (controls.ACCEPT)
@@ -240,14 +250,6 @@ class StoryMenuState extends MusicBeatState
 	var movedBack:Bool = false;
 	var selectedWeek:Bool = false;
 	var stopspamming:Bool = false;
-
-	function arrowsPlayAnim(arrow:FlxSprite, nice:Bool)
-	{
-		if (nice)
-			arrow.animation.play('press');
-		else
-			arrow.animation.play('idle');
-	}
 
 	function selectWeek()
 	{
@@ -325,8 +327,6 @@ class StoryMenuState extends MusicBeatState
 				item.alpha = 0.6;
 			bullShit++;
 		}
-
-		FlxG.sound.play(Paths.sound('scrollMenu'));
 
 		updateText();
 	}
