@@ -279,7 +279,6 @@ class Character extends FlxSprite
 				}
 				else
 				{
-					// Need to be flipped! REDO THIS LATER!
 					animation.addByPrefix('singLEFT', 'Pico Note Right0', 24, false);
 					animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
 					animation.addByPrefix('singRIGHTmiss', 'Pico NOTE LEFT miss', 24, false);
@@ -539,8 +538,7 @@ class Character extends FlxSprite
 			default:
 				isJson = true;
 
-				frames = FlxAtlasFrames.fromSparrow(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.png'),
-					Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.xml')));
+				frames = Paths.getSpriteSheet(curCharacter);
 
 				var file:CharacterFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
 

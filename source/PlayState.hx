@@ -801,11 +801,11 @@ class PlayState extends MusicBeatState
 
 		isCustomStage = true;
 		curStage = SONG.stage;
-		if (FileSystem.exists(Paths.getPreloadPath('stages/${curStage}/${fileName}.hx')))
+		if (FileSystem.exists(Paths.hscript('stages/${curStage}/${fileName}')))
 		{
 			trace(curStage);
 
-			stageLocal = File.getContent(Paths.getPreloadPath('stages/${curStage}/${fileName}.hx'));
+			stageLocal = File.getContent(Paths.hscript('stages/${curStage}/${fileName}'));
 			var parserStage:hscript.Parser = new hscript.Parser();
 			parserStage.allowTypes = true;
 			parserStage.allowJSON = true;
@@ -894,9 +894,9 @@ class PlayState extends MusicBeatState
 		#if hscript
 		var scriptLocal:String = 'NO SCRIPT FILE';
 
-		if (FileSystem.exists(Paths.getPreloadPath('data/${PlayState.SONG.song.toLowerCase()}/${fileName}.hx')))
+		if (FileSystem.exists(Paths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}')))
 		{
-			scriptLocal = File.getContent(Paths.getPreloadPath('data/${PlayState.SONG.song.toLowerCase()}/${fileName}.hx'));
+			scriptLocal = File.getContent(Paths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}'));
 			var parser:hscript.Parser = new hscript.Parser();
 
 			parser.allowTypes = true;
@@ -2531,7 +2531,7 @@ class PlayState extends MusicBeatState
 		if (keyP)
 			goodNoteHit(note);
 		else
-			badNoteCheck(note.noteData);
+			badNoteCheck(note.noteData, true);
 	}
 
 	function goodNoteHit(note:Note):Void

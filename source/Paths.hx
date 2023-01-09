@@ -68,6 +68,11 @@ class Paths
 		return getPath('data/$key.xml', TEXT, library);
 	}
 
+	inline static public function hscript(key:String, ?library:String)
+	{
+		return getPath('$key.hx', TEXT, library);
+	}
+
 	inline static public function json(key:String, ?library:String)
 	{
 		return getPath('data/$key.json', TEXT, library);
@@ -106,6 +111,11 @@ class Paths
 	inline static public function font(key:String)
 	{
 		return 'assets/fonts/$key';
+	}
+
+	inline static public function getSpriteSheet(char:String, ?library:String)
+	{
+		return FlxAtlasFrames.fromSparrow(getPreloadPath('characters/$char/spritesheet.png'), getPreloadPath('characters/$char/spritesheet.xml'));
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)

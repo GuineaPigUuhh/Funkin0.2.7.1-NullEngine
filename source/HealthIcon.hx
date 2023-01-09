@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import openfl.utils.Assets as OpenFlAssets;
 
@@ -16,6 +17,8 @@ class HealthIcon extends FlxSprite
 
 	public var curCharacter:String = 'face';
 	public var isPlayer:Bool = false;
+
+	var file:String = "";
 
 	public function new(curCharacter:String = 'face', isPlayer:Bool = false)
 	{
@@ -38,7 +41,10 @@ class HealthIcon extends FlxSprite
 
 	public function changeIcon(curCharacter:String = 'face')
 	{
-		var file:String = Paths.image('icons/${curCharacter}');
+		file = Paths.getPreloadPath('characters/${curCharacter}/icon.png');
+
+		if (!OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/icon.png')))
+			file = Paths.image('icons/${curCharacter}');
 
 		if (!OpenFlAssets.exists(file))
 			curCharacter = 'face';
@@ -66,10 +72,11 @@ class HealthIcon extends FlxSprite
 		animation.play(name);
 	}
 
-	public function beatHitIcon(floatshit:Float = 150)
+	public function beatHitIcon()
 	{
-		scale.set(1.15, 1.15);
-		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000);
+		scale.set(1.1, 1.1);
 		updateHitbox();
+
+		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.cubeOut});
 	}
 }
