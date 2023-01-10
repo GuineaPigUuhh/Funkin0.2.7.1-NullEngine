@@ -22,6 +22,7 @@ typedef CharacterFile =
 	var singDuration:Float;
 	var cameraPos:Array<Float>;
 	var charPos:Array<Float>;
+	var healthBarColor:String;
 }
 
 typedef Animation =
@@ -49,7 +50,27 @@ class Character extends FlxSprite
 	public var singDuration:Float = 4;
 
 	public var isGf:Bool = false;
-	public var healthBarColor:String = "";
+
+	public var healthBarColor:String = "A1A1A1";
+
+	var charactersColors:Map<String, String> = [
+		"bf" => "31B0D1",
+		"bf-car" => "31B0D1",
+		"bf-christmas" => "31B0D1",
+		"bf-pixel" => "7BD6F6",
+		"dad" => "AF66CE",
+		"gf" => "A5004D",
+		"mom" => "D8558E",
+		"mom-car" => "D8558E",
+		"monster" => "F3FF6E",
+		"monster-christmas" => "F3FF6E",
+		"parents-christmas" => "CD599E",
+		"pico" => "B7D855",
+		"senpai" => "FFAA6F",
+		"senpai-angry" => "FFAA6F",
+		"spirit" => "FF3C6E",
+		"spooky" => "D57E00"
+	];
 
 	public var cameraPosition:Array<Float> = [0, 0];
 	public var charPosition:Array<Float> = [0, 0];
@@ -64,6 +85,9 @@ class Character extends FlxSprite
 
 		var tex:FlxAtlasFrames;
 		antialiasing = true;
+
+		if (charactersColors.exists(curCharacter))
+			healthBarColor = charactersColors.get(curCharacter);
 
 		switch (curCharacter)
 		{
@@ -554,6 +578,9 @@ class Character extends FlxSprite
 					setGraphicSize(Std.int(width * file.scale));
 					updateHitbox();
 				}
+
+				if (file.healthBarColor != null || file.healthBarColor.length > 0)
+					healthBarColor = file.healthBarColor;
 
 				singDuration = file.singDuration;
 
