@@ -13,8 +13,8 @@
         },
         {
             "offsets": [
-				-5,
-				0
+				-15,
+				25
 			],
 			"loop": false,
 			"fps": 24,
@@ -25,7 +25,7 @@
         {
             "offsets": [
 				-5,
-				0
+				-50
 			],
 			"loop": false,
 			"fps": 24,
@@ -35,8 +35,8 @@
         },
         {
             "offsets": [
-				-5,
-				0
+				-20,
+				-36
 			],
 			"loop": false,
 			"fps": 24,
@@ -46,7 +46,7 @@
         },
         {
             "offsets": [
-				-5,
+				55,
 				0
 			],
 			"loop": false,
@@ -57,6 +57,7 @@
         }
     ],
     "defaultIdle":"idle",
+	"healthBarColor":"666666",
     "isGf":false,
     "flipX":false,
     "antialiasing":true,

@@ -636,6 +636,10 @@ class PlayState extends MusicBeatState
 		}
 
 		add(gf);
+
+		if (curStage == 'limo')
+			add(limo);
+
 		add(dad);
 		add(boyfriend);
 
