@@ -10,6 +10,16 @@ import flixel.util.FlxColor;
 
 using StringTools;
 
-class NoteSplash extends FlxSprite
+typedef SplashJSON =
 {
+	var image:String;
+	var offset:Array<Float>;
+	var alpha:Float;
+}
+
+class NoteSplashJSON
+{
+	public static function getNoteSplashJson()
+	{
+	}
 }
