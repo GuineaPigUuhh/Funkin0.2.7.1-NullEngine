@@ -33,7 +33,8 @@ typedef Week =
 	var weekPath:String;
 	var weekTitle:String;
 	var weekCharacters:Array<String>;
-	var weekIcons:Array<String>;
+	var songIcons:Array<String>;
+	var songColor:String;
 	var hideInFreePlay:Bool;
 	var hideInStoryMode:Bool;
 }

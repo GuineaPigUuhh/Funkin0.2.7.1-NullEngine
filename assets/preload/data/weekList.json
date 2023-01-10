@@ -5,7 +5,8 @@
             "weekPath":"week0",
             "weekTitle":"Tutorial",
             "weekCharacters":["dad", "bf", "gf"],
-            "weekIcons":["gf"],
+            "songIcons":["gf"],
+            "songColor":"A5004D",
             "hideInFreePlay":false,
             "hideInStoryMode":false
         },
@@ -14,7 +15,8 @@
             "weekPath":"week1",
             "weekTitle":"V.S. Daddy Dearest",
             "weekCharacters":["dad", "bf", "gf"],
-            "weekIcons":["dad"],
+            "songIcons":["dad"],
+            "songColor":"AF66CE",
             "hideInFreePlay":false,
             "hideInStoryMode":false
         },
@@ -23,7 +25,8 @@
             "weekPath":"week2",
             "weekTitle":"Spooky Month!",
             "weekCharacters":["spooky", "bf", "gf"],
-            "weekIcons":["spooky","spooky","monster"],
+            "songIcons":["spooky","spooky","monster"],
+            "songColor":"D57E00",
             "hideInFreePlay":false,
             "hideInStoryMode":false
         },
@@ -32,7 +35,8 @@
             "weekPath":"week3",
             "weekTitle":"V.S. Pico",
             "weekCharacters":["pico", "bf", "gf"],
-            "weekIcons":["pico"],
+            "songIcons":["pico"],
+            "songColor":"B7D855",
             "hideInFreePlay":false,
             "hideInStoryMode":false
         },
@@ -41,7 +45,8 @@
             "weekPath":"week4",
             "weekTitle":"MOMMY MUST MURDER",
             "weekCharacters":["mom", "bf", "gf"],
-            "weekIcons":["mom-car"],
+            "songIcons":["mom-car"],
+            "songColor":"D8558E",
             "hideInFreePlay":false,
             "hideInStoryMode":false
         },
@@ -50,7 +55,8 @@
             "weekPath":"week5",
             "weekTitle":"Red Snow",
             "weekCharacters":["parents", "bf", "gf"],
-            "weekIcons":["parents-christmas","parents-christmas","monster-christmas"],
+            "songIcons":["parents-christmas","parents-christmas","monster-christmas"],
+            "songColor":"CD599E",
             "hideInFreePlay":false,
             "hideInStoryMode":false
         },
@@ -59,7 +65,8 @@
             "weekPath":"week6",
             "weekTitle":"hating simulator ft. moawling",
             "weekCharacters":["senpai", "bf", "gf"],
-            "weekIcons":["senpai","senpai","spirit"],
+            "songIcons":["senpai","senpai","spirit"],
+            "songColor":"FFAA6F",
             "hideInFreePlay":false,
             "hideInStoryMode":false
         }
