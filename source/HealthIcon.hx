@@ -43,11 +43,17 @@ class HealthIcon extends FlxSprite
 	{
 		file = Paths.getPreloadPath('characters/${curCharacter}/icon.png');
 
-		if (!OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/icon.png')))
+		if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/icon.png', ModState.curMod)))
+			file = Paths.getModPath('characters/${curCharacter}/icon.png', ModState.curMod);
+
+		if (OpenFlAssets.exists(Paths.image('icons/${curCharacter}')))
 			file = Paths.image('icons/${curCharacter}');
 
+		if (OpenFlAssets.exists(Paths.getModPath('images/icons/${curCharacter}', ModState.curMod)))
+			file = Paths.getModPath('images/icons/${curCharacter}', ModState.curMod);
+
 		if (!OpenFlAssets.exists(file))
-			curCharacter = 'face';
+			file = Paths.getPreloadPath('characters/face/icon.png');
 
 		loadGraphic(file);
 		loadGraphic(file, true, 150, 150);
@@ -77,6 +83,6 @@ class HealthIcon extends FlxSprite
 		scale.set(1.1, 1.1);
 		updateHitbox();
 
-		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.cubeOut});
+		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.circOut});
 	}
 }

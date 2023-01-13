@@ -7,6 +7,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
+import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
 
@@ -42,8 +43,6 @@ class Character extends FlxSprite
 
 	public var isPlayer:Bool = false;
 
-	var isJson:Bool = false;
-
 	public var curCharacter:String = 'bf';
 
 	public var holdTimer:Float = 0;
@@ -52,6 +51,8 @@ class Character extends FlxSprite
 	public var isGf:Bool = false;
 
 	public var healthBarColor:String = "A1A1A1";
+
+	var default_character:String = "face";
 
 	var charactersColors:Map<String, String> = [
 		"bf" => "31B0D1",
@@ -560,11 +561,13 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			default:
-				isJson = true;
+				var checkSprite = Paths.getSpriteSheet(default_character);
+				var checkFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${default_character}/data.json')));
 
-				frames = Paths.getSpriteSheet(curCharacter);
+				modCheck(checkSprite, checkFile); // vai ver se é um mod
 
-				var file:CharacterFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
+				frames = checkSprite;
+				var file:CharacterFile = checkFile;
 
 				flipX = file.flipX;
 
@@ -617,24 +620,6 @@ class Character extends FlxSprite
 		if (isPlayer)
 		{
 			flipX = !flipX;
-			/*
-				// Doesn't flip for BF, since his are already in the right place???
-				if (!curCharacter.startsWith('bf'))
-				{
-					// var animArray
-					var oldRight = animation.getByName('singRIGHT').frames;
-					animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
-					animation.getByName('singLEFT').frames = oldRight;
-
-					// IF THEY HAVE MISS ANIMATIONS??
-					if (animation.getByName('singRIGHTmiss') != null)
-					{
-						var oldMiss = animation.getByName('singRIGHTmiss').frames;
-						animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
-						animation.getByName('singLEFTmiss').frames = oldMiss;
-					}
-				}
-			 */
 		}
 	}
 
@@ -662,6 +647,32 @@ class Character extends FlxSprite
 		}
 
 		super.update(elapsed);
+	}
+
+	function modCheck(sprite:String, json:String)
+	{
+		if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.png')))
+		{
+			sprite = Paths.getSpriteSheet(curCharacter);
+		}
+
+		if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/data.json')))
+		{
+			trace("Character Type: Assets");
+			json = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
+		}
+
+		// modCheck!
+		if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/spritesheet.png', ModState.curMod)))
+		{
+			sprite = Paths.getSpriteSheetMods(curCharacter, ModState.curMod);
+		}
+
+		if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/data.json', ModState.curMod)))
+		{
+			trace("Character Type: Mod");
+			json = Json.parse(Assets.getText(Paths.getModPath('characters/${curCharacter}/data.json', ModState.curMod)));
+		}
 	}
 
 	function flipAnimations()

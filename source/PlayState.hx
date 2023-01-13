@@ -2189,28 +2189,28 @@ class PlayState extends MusicBeatState
 		curSection += 1;
 	}
 
+	var splashJSON:NoteSplashJSON.SplashJSON = NoteSplashJSON.getNoteSplashJson('default');
+
 	public function NoteSplashesSpawn(daNote:Note):Void
 	{
 		var sploosh:FlxSprite = new FlxSprite(playerStrums.members[daNote.noteData].x + 10.5, playerStrums.members[daNote.noteData].y - 20);
 		sploosh.antialiasing = Save.antialiasing;
+
 		if (FlxG.save.data.noteSplashes)
 		{
-			var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('noteSplashes', 'shared');
-			sploosh.frames = tex;
+			var notes:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
 
-			sploosh.animation.addByPrefix('splash 0 0', 'note splash 1 purple', 24, false);
-			sploosh.animation.addByPrefix('splash 0 1', 'note splash 1  blue', 24, false);
-			sploosh.animation.addByPrefix('splash 0 2', 'note splash 1 green', 24, false);
-			sploosh.animation.addByPrefix('splash 0 3', 'note splash 1 red', 24, false);
-			sploosh.animation.addByPrefix('splash 1 0', 'note splash 2 purple', 24, false);
-			sploosh.animation.addByPrefix('splash 1 1', 'note splash 2 blue', 24, false);
-			sploosh.animation.addByPrefix('splash 1 2', 'note splash 2 green', 24, false);
-			sploosh.animation.addByPrefix('splash 1 3', 'note splash 2 red', 24, false);
+			sploosh.frames = Paths.getSparrowAtlas('splashs/notesplash_Assets', 'shared');
+
+			for (addAnimations in 0...4)
+				sploosh.animation.addByPrefix('Splash' + notes[addAnimations], 'Splash' + notes[addAnimations], 24, false);
 
 			add(sploosh);
 			sploosh.cameras = [camHUD];
-			sploosh.animation.play('splash ' + FlxG.random.int(0, 1) + " " + daNote.noteData);
-			sploosh.alpha = 0.8;
+
+			sploosh.animation.play('Splash' + notes[daNote.noteData]);
+
+			sploosh.alpha = 0.9;
 			sploosh.offset.x += 90;
 			sploosh.offset.y += 80; // lets stick to eight not nine
 			sploosh.animation.finishCallback = function(name) sploosh.kill();

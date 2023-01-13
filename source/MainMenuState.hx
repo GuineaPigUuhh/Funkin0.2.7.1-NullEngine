@@ -165,6 +165,12 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new customState.CreditsState());
 			}
 
+			if (controls.LEFT_P)
+			{
+				selectedSomethin = true;
+				FlxG.switchState(new ModState());
+			}
+
 			if (controls.BACK)
 			{
 				selectedSomethin = true;
