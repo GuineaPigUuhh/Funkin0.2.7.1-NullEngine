@@ -561,10 +561,19 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			default:
-				var checkSprite = Paths.getSpriteSheet(default_character);
-				var checkFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${default_character}/data.json')));
+				var checkSprite = Paths.getSpriteSheet(curCharacter);
+				var checkFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
 
-				modCheck(checkSprite, checkFile); // vai ver se é um mod
+				// modCheck!
+				if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/spritesheet.png', ModState.curMod)))
+				{
+					checkSprite = Paths.getSpriteSheetMods(curCharacter, ModState.curMod);
+				}
+
+				if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/data.json', ModState.curMod)))
+				{
+					checkFile = Json.parse(Assets.getText(Paths.getModPath('characters/${curCharacter}/data.json', ModState.curMod)));
+				}
 
 				frames = checkSprite;
 				var file:CharacterFile = checkFile;
@@ -647,32 +656,6 @@ class Character extends FlxSprite
 		}
 
 		super.update(elapsed);
-	}
-
-	function modCheck(sprite:String, json:String)
-	{
-		if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.png')))
-		{
-			sprite = Paths.getSpriteSheet(curCharacter);
-		}
-
-		if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/data.json')))
-		{
-			trace("Character Type: Assets");
-			json = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
-		}
-
-		// modCheck!
-		if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/spritesheet.png', ModState.curMod)))
-		{
-			sprite = Paths.getSpriteSheetMods(curCharacter, ModState.curMod);
-		}
-
-		if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/data.json', ModState.curMod)))
-		{
-			trace("Character Type: Mod");
-			json = Json.parse(Assets.getText(Paths.getModPath('characters/${curCharacter}/data.json', ModState.curMod)));
-		}
 	}
 
 	function flipAnimations()

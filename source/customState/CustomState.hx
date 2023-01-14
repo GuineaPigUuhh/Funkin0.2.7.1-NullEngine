@@ -46,8 +46,12 @@ class CustomState extends MusicBeatState
 		super.create();
 		#if hscript
 		if (FileSystem.exists(Paths.hscript('states/${daState}')))
+			stateLocal = Paths.hscript('stages/${daState}');
+		if (FileSystem.exists(ModPaths.hscript('states/${daState}')))
+			stateLocal = ModPaths.hscript('stages/${daState}');
+
+		if (FileSystem.exists(Paths.hscript('states/${daState}')))
 		{
-			stateLocal = File.getContent(Paths.hscript('states/${daState}'));
 			var parserState:hscript.Parser = new hscript.Parser();
 			parserState.allowTypes = true;
 			parserState.allowJSON = true;

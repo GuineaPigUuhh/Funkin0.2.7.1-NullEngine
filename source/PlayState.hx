@@ -802,13 +802,17 @@ class PlayState extends MusicBeatState
 		#if hscript
 		var stageLocal:String = 'NO STAGE FILE';
 
+		if (FileSystem.exists(Paths.hscript('stages/${curStage}/${fileName}')))
+			stageLocal = Paths.hscript('stages/${curStage}/${fileName}');
+		if (FileSystem.exists(ModPaths.hscript('stages/${curStage}/${fileName}')))
+			stageLocal = ModPaths.hscript('stages/${curStage}/${fileName}');
+
 		isCustomStage = true;
 		curStage = SONG.stage;
 		if (FileSystem.exists(Paths.hscript('stages/${curStage}/${fileName}')))
 		{
 			trace(curStage);
 
-			stageLocal = File.getContent(Paths.hscript('stages/${curStage}/${fileName}'));
 			var parserStage:hscript.Parser = new hscript.Parser();
 			parserStage.allowTypes = true;
 			parserStage.allowJSON = true;
@@ -895,11 +899,15 @@ class PlayState extends MusicBeatState
 	function getHScriptFile(fileName:String)
 	{
 		#if hscript
-		var scriptLocal:String = 'NO SCRIPT FILE';
+		var scriptLocal:String = "var shit";
 
 		if (FileSystem.exists(Paths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}')))
+			scriptLocal = Paths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}');
+		if (FileSystem.exists(ModPaths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}')))
+			scriptLocal = ModPaths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}');
+
+		if (FileSystem.exists(scriptLocal))
 		{
-			scriptLocal = File.getContent(Paths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}'));
 			var parser:hscript.Parser = new hscript.Parser();
 
 			parser.allowTypes = true;
@@ -1340,8 +1348,13 @@ class PlayState extends MusicBeatState
 		previousFrameTime = FlxG.game.ticks;
 		lastReportedPlayheadPosition = 0;
 
+		var checkInst = Paths.inst(PlayState.SONG.song);
+		if (FileSystem.exists(ModPaths.inst(PlayState.SONG.song)))
+			checkInst = ModPaths.inst(PlayState.SONG.song);
+
 		if (!paused)
-			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
+			FlxG.sound.playMusic(checkInst, 1, false);
+
 		FlxG.sound.music.onComplete = endSong;
 		if (SONG.needsVoices)
 			vocals.play();
@@ -1366,8 +1379,12 @@ class PlayState extends MusicBeatState
 
 		curSong = songData.song;
 
+		var checkVocal:String = Paths.voices(PlayState.SONG.song);
+		if (FileSystem.exists(ModPaths.voices(PlayState.SONG.song)))
+			checkVocal = ModPaths.voices(PlayState.SONG.song);
+
 		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
+			vocals = new FlxSound().loadEmbedded(checkVocal);
 		else
 			vocals = new FlxSound();
 

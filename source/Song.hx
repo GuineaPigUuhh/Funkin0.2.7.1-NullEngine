@@ -7,6 +7,11 @@ import lime.utils.Assets;
 
 using StringTools;
 
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 typedef SwagSong =
 {
 	var song:String;
@@ -51,7 +56,12 @@ class Song
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var rawJson = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
+		var checkFile = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
+
+		if (FileSystem.exists(ModPaths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())))
+			checkFile = Assets.getText(ModPaths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
+
+		var rawJson = checkFile;
 
 		while (!rawJson.endsWith("}"))
 		{
