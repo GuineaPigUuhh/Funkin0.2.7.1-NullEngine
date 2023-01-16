@@ -32,6 +32,8 @@ class ModState extends MusicBeatState
 	{
 		super.create();
 
+		mods.insert(0, "none");
+
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -74,7 +76,16 @@ class ModState extends MusicBeatState
 
 		if (controls.ACCEPT)
 		{
-			curMod = mods[curSelected];
+			if (mods[curSelected] == "none")
+				curMod = "";
+			else
+				curMod = mods[curSelected];
+
+			Save.modSelected = mods[curSelected];
+
+			Save.saveSettings();
+			Save.loadSettings();
+
 			trace("Mod Selected: " + curMod);
 
 			FlxG.switchState(new MainMenuState());

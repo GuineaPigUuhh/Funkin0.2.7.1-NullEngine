@@ -807,10 +807,13 @@ class PlayState extends MusicBeatState
 		if (FileSystem.exists(ModPaths.hscript('stages/${curStage}/${fileName}')))
 			stageLocal = ModPaths.hscript('stages/${curStage}/${fileName}');
 
-		isCustomStage = true;
-		curStage = SONG.stage;
-		if (FileSystem.exists(Paths.hscript('stages/${curStage}/${fileName}')))
+		if (FileSystem.exists(stageLocal))
 		{
+			var executeStage:String = File.getContent(stageLocal);
+
+			isCustomStage = true;
+			curStage = SONG.stage;
+
 			trace(curStage);
 
 			var parserStage:hscript.Parser = new hscript.Parser();
@@ -820,7 +823,7 @@ class PlayState extends MusicBeatState
 
 			addDefaultVariablesStage();
 
-			customStage.execute(parserStage.parseString(stageLocal));
+			customStage.execute(parserStage.parseString(executeStage));
 
 			trace("Stage: Success in Uploading the File");
 
@@ -864,9 +867,40 @@ class PlayState extends MusicBeatState
 		customStage.variables.set("defaultCamZoom", defaultCamZoom);
 		customStage.variables.set("defaultCamSpeed", defaultCamSpeed);
 
-		addFlxItems(customStage);
-
-		customStage.variables.set("inCutscene", this.inCutscene);
+		customStage.variables.set("WiggleEffectType", WiggleEffect.WiggleEffectType);
+		customStage.variables.set("FlxBasic", flixel.FlxBasic);
+		customStage.variables.set("FlxCamera", flixel.FlxCamera);
+		customStage.variables.set("FlxG", flixel.FlxG);
+		customStage.variables.set("FlxGame", flixel.FlxGame);
+		customStage.variables.set("FlxSprite", flixel.FlxSprite);
+		customStage.variables.set("FlxState", flixel.FlxState);
+		customStage.variables.set("FlxSubState", flixel.FlxSubState);
+		customStage.variables.set("FlxGridOverlay", flixel.addons.display.FlxGridOverlay);
+		customStage.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
+		customStage.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
+		customStage.variables.set("FlxEffectSprite", flixel.addons.effects.chainable.FlxEffectSprite);
+		customStage.variables.set("FlxWaveEffect", flixel.addons.effects.chainable.FlxWaveEffect);
+		customStage.variables.set("FlxTransitionableState", flixel.addons.transition.FlxTransitionableState);
+		customStage.variables.set("FlxAtlas", flixel.graphics.atlas.FlxAtlas);
+		customStage.variables.set("FlxAtlasFrames", flixel.graphics.frames.FlxAtlasFrames);
+		customStage.variables.set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
+		customStage.variables.set("FlxMath", flixel.math.FlxMath);
+		customStage.variables.set("FlxText", flixel.text.FlxText);
+		customStage.variables.set("FlxEase", flixel.tweens.FlxEase);
+		customStage.variables.set("FlxTween", flixel.tweens.FlxTween);
+		customStage.variables.set("FlxBar", flixel.ui.FlxBar);
+		customStage.variables.set("FlxCollision", flixel.util.FlxCollision);
+		customStage.variables.set("FlxSort", flixel.util.FlxSort);
+		customStage.variables.set("FlxStringUtil", flixel.util.FlxStringUtil);
+		customStage.variables.set("FlxTimer", flixel.util.FlxTimer);
+		customStage.variables.set("FlxRect", flixel.math.FlxRect);
+		customStage.variables.set("FlxObject", flixel.FlxObject);
+		customStage.variables.set("FlxSound", flixel.system.FlxSound);
+		customStage.variables.set("Assets", lime.utils.Assets);
+		customStage.variables.set("ShaderFilter", openfl.filters.ShaderFilter);
+		customStage.variables.set("Exception", haxe.Exception);
+		customStage.variables.set("Lib", openfl.Lib);
+		customStage.variables.set("OpenFlAssets", openfl.utils.Assets);
 
 		customStage.variables.set("MusicBeatState", MusicBeatState);
 		customStage.variables.set("Paths", Paths);
@@ -908,6 +942,8 @@ class PlayState extends MusicBeatState
 
 		if (FileSystem.exists(scriptLocal))
 		{
+			var executeScript:String = File.getContent(scriptLocal);
+
 			var parser:hscript.Parser = new hscript.Parser();
 
 			parser.allowTypes = true;
@@ -916,7 +952,7 @@ class PlayState extends MusicBeatState
 
 			addDefaultVariables();
 
-			script.execute(parser.parseString(scriptLocal));
+			script.execute(parser.parseString(executeScript));
 
 			trace("Script: Success in Uploading the File");
 		}
@@ -934,7 +970,7 @@ class PlayState extends MusicBeatState
 		script.variables.set("destroy", destroy);
 
 		script.variables.set("dad", dad);
-		script.variables.set("botfriend", boyfriend);
+		script.variables.set("boyfriend", boyfriend);
 		script.variables.set("gf", gf);
 
 		script.variables.set("Note", Note);
@@ -949,7 +985,40 @@ class PlayState extends MusicBeatState
 		script.variables.set("iconP1", iconP1);
 		script.variables.set("iconP2", iconP2);
 
-		addFlxItems(script);
+		script.variables.set("WiggleEffectType", WiggleEffect.WiggleEffectType);
+		script.variables.set("FlxBasic", flixel.FlxBasic);
+		script.variables.set("FlxCamera", flixel.FlxCamera);
+		script.variables.set("FlxG", flixel.FlxG);
+		script.variables.set("FlxGame", flixel.FlxGame);
+		script.variables.set("FlxSprite", flixel.FlxSprite);
+		script.variables.set("FlxState", flixel.FlxState);
+		script.variables.set("FlxSubState", flixel.FlxSubState);
+		script.variables.set("FlxGridOverlay", flixel.addons.display.FlxGridOverlay);
+		script.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
+		script.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
+		script.variables.set("FlxEffectSprite", flixel.addons.effects.chainable.FlxEffectSprite);
+		script.variables.set("FlxWaveEffect", flixel.addons.effects.chainable.FlxWaveEffect);
+		script.variables.set("FlxTransitionableState", flixel.addons.transition.FlxTransitionableState);
+		script.variables.set("FlxAtlas", flixel.graphics.atlas.FlxAtlas);
+		script.variables.set("FlxAtlasFrames", flixel.graphics.frames.FlxAtlasFrames);
+		script.variables.set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
+		script.variables.set("FlxMath", flixel.math.FlxMath);
+		script.variables.set("FlxText", flixel.text.FlxText);
+		script.variables.set("FlxEase", flixel.tweens.FlxEase);
+		script.variables.set("FlxTween", flixel.tweens.FlxTween);
+		script.variables.set("FlxBar", flixel.ui.FlxBar);
+		script.variables.set("FlxCollision", flixel.util.FlxCollision);
+		script.variables.set("FlxSort", flixel.util.FlxSort);
+		script.variables.set("FlxStringUtil", flixel.util.FlxStringUtil);
+		script.variables.set("FlxTimer", flixel.util.FlxTimer);
+		script.variables.set("FlxRect", flixel.math.FlxRect);
+		script.variables.set("FlxObject", flixel.FlxObject);
+		script.variables.set("FlxSound", flixel.system.FlxSound);
+		script.variables.set("Assets", lime.utils.Assets);
+		script.variables.set("ShaderFilter", openfl.filters.ShaderFilter);
+		script.variables.set("Exception", haxe.Exception);
+		script.variables.set("Lib", openfl.Lib);
+		script.variables.set("OpenFlAssets", openfl.utils.Assets);
 
 		script.variables.set("inCutscene", this.inCutscene);
 
@@ -958,6 +1027,7 @@ class PlayState extends MusicBeatState
 		script.variables.set("DiscordClient", DiscordClient);
 		script.variables.set("Paths", Paths);
 		script.variables.set("SONG", SONG);
+		customStage.variables.set("songCheck", SONG.song.toLowerCase());
 
 		script.variables.set("gameplayFunctions", gameplayFunctions);
 
@@ -993,44 +1063,6 @@ class PlayState extends MusicBeatState
 		script.variables.set("noteMiss", function(direction:Int)
 		{
 		});
-	}
-
-	public function addFlxItems(hsScc:Interp)
-	{
-		hsScc.variables.set("WiggleEffectType", WiggleEffect.WiggleEffectType);
-		hsScc.variables.set("FlxBasic", flixel.FlxBasic);
-		hsScc.variables.set("FlxCamera", flixel.FlxCamera);
-		hsScc.variables.set("FlxG", flixel.FlxG);
-		hsScc.variables.set("FlxGame", flixel.FlxGame);
-		hsScc.variables.set("FlxSprite", flixel.FlxSprite);
-		hsScc.variables.set("FlxState", flixel.FlxState);
-		hsScc.variables.set("FlxSubState", flixel.FlxSubState);
-		hsScc.variables.set("FlxGridOverlay", flixel.addons.display.FlxGridOverlay);
-		hsScc.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
-		hsScc.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
-		hsScc.variables.set("FlxEffectSprite", flixel.addons.effects.chainable.FlxEffectSprite);
-		hsScc.variables.set("FlxWaveEffect", flixel.addons.effects.chainable.FlxWaveEffect);
-		hsScc.variables.set("FlxTransitionableState", flixel.addons.transition.FlxTransitionableState);
-		hsScc.variables.set("FlxAtlas", flixel.graphics.atlas.FlxAtlas);
-		hsScc.variables.set("FlxAtlasFrames", flixel.graphics.frames.FlxAtlasFrames);
-		hsScc.variables.set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
-		hsScc.variables.set("FlxMath", flixel.math.FlxMath);
-		hsScc.variables.set("FlxText", flixel.text.FlxText);
-		hsScc.variables.set("FlxEase", flixel.tweens.FlxEase);
-		hsScc.variables.set("FlxTween", flixel.tweens.FlxTween);
-		hsScc.variables.set("FlxBar", flixel.ui.FlxBar);
-		hsScc.variables.set("FlxCollision", flixel.util.FlxCollision);
-		hsScc.variables.set("FlxSort", flixel.util.FlxSort);
-		hsScc.variables.set("FlxStringUtil", flixel.util.FlxStringUtil);
-		hsScc.variables.set("FlxTimer", flixel.util.FlxTimer);
-		hsScc.variables.set("FlxRect", flixel.math.FlxRect);
-		hsScc.variables.set("FlxObject", flixel.FlxObject);
-		hsScc.variables.set("FlxSound", flixel.system.FlxSound);
-		hsScc.variables.set("Assets", lime.utils.Assets);
-		hsScc.variables.set("ShaderFilter", openfl.filters.ShaderFilter);
-		hsScc.variables.set("Exception", haxe.Exception);
-		hsScc.variables.set("Lib", openfl.Lib);
-		hsScc.variables.set("OpenFlAssets", openfl.utils.Assets);
 	}
 
 	public function hscriptApply(functionToCall:String, ?params:Array<Any>, scriptName:Interp):Dynamic
@@ -1349,6 +1381,7 @@ class PlayState extends MusicBeatState
 		lastReportedPlayheadPosition = 0;
 
 		var checkInst = Paths.inst(PlayState.SONG.song);
+
 		if (FileSystem.exists(ModPaths.inst(PlayState.SONG.song)))
 			checkInst = ModPaths.inst(PlayState.SONG.song);
 
@@ -1383,10 +1416,9 @@ class PlayState extends MusicBeatState
 		if (FileSystem.exists(ModPaths.voices(PlayState.SONG.song)))
 			checkVocal = ModPaths.voices(PlayState.SONG.song);
 
+		vocals = new FlxSound();
 		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded(checkVocal);
-		else
-			vocals = new FlxSound();
+			vocals.loadEmbedded(checkVocal);
 
 		FlxG.sound.list.add(vocals);
 

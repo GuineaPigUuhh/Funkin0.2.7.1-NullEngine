@@ -17,6 +17,10 @@ import flixel.util.FlxColor;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 using StringTools;
 
@@ -45,6 +49,9 @@ class FreeplayState extends MusicBeatState
 	override function create()
 	{
 		freeplayData = Json.parse(Assets.getText(Paths.json("weekList")));
+
+		if(FileSystem.exists(ModPaths.json("weekList")))
+			freeplayData = Json.parse(Assets.getText(ModPaths.json("weekList")));
 
 		#if desktop
 		// Updating Discord Rich Presence

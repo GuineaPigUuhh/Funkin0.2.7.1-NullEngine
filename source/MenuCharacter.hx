@@ -5,7 +5,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
 import haxe.format.JsonParser;
 import openfl.utils.Assets;
-#if MODS_ALLOWED
+#if sys
 import sys.FileSystem;
 import sys.io.File;
 #end
@@ -35,6 +35,8 @@ class MenuCharacter extends FlxSprite
 
 	function restartOptions()
 	{
+		visible = true;
+
 		setGraphicSize(Std.int(1));
 		updateHitbox();
 
@@ -48,39 +50,39 @@ class MenuCharacter extends FlxSprite
 
 		this.character = character;
 
-		var char:MenuCharacterInfo = Json.parse(Assets.getText(Paths.getPreloadPath('images/menuCharacters/${character}.json')));
+		switch (character)
+		{
+			case "":
+				visible = false;
 
-		restartOptions();
+			default:
+				var checkJSON = Json.parse(Assets.getText(Paths.getPreloadPath('images/menuCharacters/bf.json')));
 
-		var tex = Paths.getSparrowAtlas("menuCharacters/images/" + char.path);
-		frames = tex;
+				if (FileSystem.exists(Paths.getPreloadPath('images/menuCharacters/${character}.json')))
+					checkJSON = Json.parse(Assets.getText(Paths.getPreloadPath('images/menuCharacters/${character}.json')));
+				if (FileSystem.exists(Paths.getModPath('images/menuCharacters/${character}.json')))
+					checkJSON = Json.parse(Assets.getText(Paths.getModPath('images/menuCharacters/${character}.json')));
 
-		animation.addByPrefix(character + "-idle", char.idleAnim, 24);
+				var char:MenuCharacterInfo = checkJSON;
 
-		if (char.confirmAnim != null || char.confirmAnim.length > 0)
-			animation.addByPrefix(character + "-confirm", char.confirmAnim, 24);
+				restartOptions();
 
-		/*
-			animation.addByPrefix('bf', "BF idle dance white", 24);
-			animation.addByPrefix('bfConfirm', 'BF HEY!!', 24, false);
-			animation.addByPrefix('gf', "GF Dancing Beat WHITE", 24);
-			animation.addByPrefix('dad', "Dad idle dance BLACK LINE", 24);
-			animation.addByPrefix('spooky', "spooky dance idle BLACK LINES", 24);
-			animation.addByPrefix('pico', "Pico Idle Dance", 24);
-			animation.addByPrefix('mom', "Mom Idle BLACK LINES", 24);
-			animation.addByPrefix('parents-christmas', "Parent Christmas Idle", 24);
-			animation.addByPrefix('senpai', "SENPAI idle Black Lines", 24);
-		 */
-		// Parent Christmas Idle
+				frames = Paths.getSparrowAtlas("menuCharacters/images/" + char.path);
 
-		flipX = (char.flipX == true);
+				animation.addByPrefix(character + "-idle", char.idleAnim, 24);
 
-		setGraphicSize(Std.int(width * char.scale));
-		updateHitbox();
+				if (char.confirmAnim != null || char.confirmAnim.length > 0)
+					animation.addByPrefix(character + "-confirm", char.confirmAnim, 24);
 
-		offset.set(char.offsets[0], char.offsets[1]);
+				flipX = (char.flipX == true);
 
-		playAnim("idle");
+				setGraphicSize(Std.int(width * char.scale));
+				updateHitbox();
+
+				offset.set(char.offsets[0], char.offsets[1]);
+
+				playAnim("idle");
+		}
 	}
 
 	public function playAnim(name:String)

@@ -22,6 +22,11 @@ import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
 
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 typedef WeekJSON =
 {
 	var weeks:Array<Week>;
@@ -65,6 +70,9 @@ class StoryMenuState extends MusicBeatState
 	override function create()
 	{
 		weekData = Json.parse(Assets.getText(Paths.json("weekList")));
+
+		if (FileSystem.exists(ModPaths.json("weekList")))
+			weekData = Json.parse(Assets.getText(ModPaths.json("weekList")));
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;

@@ -1,0 +1,14 @@
+{
+    "weeks":[
+        {
+            "weekSongs":["test"],
+            "weekPath":"week1",
+            "weekTitle":"Test",
+            "weekCharacters":["", "bf", "gf"],
+            "songIcons":["face"],
+            "songColor":"AF66CE",
+            "hideInFreePlay":false,
+            "hideInStoryMode":false
+        }
+    ]
+}

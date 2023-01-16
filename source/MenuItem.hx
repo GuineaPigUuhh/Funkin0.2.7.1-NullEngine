@@ -6,6 +6,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
+import openfl.utils.Assets as OpenFlAssets;
 
 class MenuItem extends FlxSpriteGroup
 {
@@ -16,7 +17,17 @@ class MenuItem extends FlxSpriteGroup
 	public function new(x:Float, y:Float, weekName:String = 'week0')
 	{
 		super(x, y);
-		week = new FlxSprite().loadGraphic(Paths.image('storymenu/' + weekName));
+		week = new FlxSprite();
+
+		if (OpenFlAssets.exists(Paths.image('storymenu/' + weekName)))
+		{
+			week.loadGraphic(Paths.image('storymenu/' + weekName));
+		}
+		if (OpenFlAssets.exists(ModPaths.image('storymenu/' + weekName)))
+		{
+			week.loadGraphic(ModPaths.image('storymenu/' + weekName));
+		}
+
 		add(week);
 	}
 

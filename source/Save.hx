@@ -13,6 +13,8 @@ class Save
 	public static var antialiasing:Bool = true;
 	public static var noteSplash:Bool = true;
 
+	public static var modSelected:String = "";
+
 	public static function saveSettings()
 	{
 		// saveSettings();
@@ -20,6 +22,8 @@ class Save
 		FlxG.save.data.flashing = flashing;
 		FlxG.save.data.antialiasing = antialiasing;
 		FlxG.save.data.noteSplash = noteSplash;
+
+		FlxG.save.data.modSelected = modSelected;
 
 		FlxG.save.flush();
 	}
@@ -35,5 +39,8 @@ class Save
 			antialiasing = FlxG.save.data.antialiasing;
 		if (FlxG.save.data.noteSplash != null)
 			noteSplash = FlxG.save.data.noteSplash;
+
+		if (FlxG.save.data.modSelected != null)
+			modSelected = FlxG.save.data.modSelected;
 	}
 }

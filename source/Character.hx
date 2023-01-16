@@ -52,9 +52,10 @@ class Character extends FlxSprite
 
 	public var healthBarColor:String = "A1A1A1";
 
-	var default_character:String = "face";
+	var DEFAULT_CHARACTER:String = "face";
 
 	var charactersColors:Map<String, String> = [
+		// for source code Characters
 		"bf" => "31B0D1",
 		"bf-car" => "31B0D1",
 		"bf-christmas" => "31B0D1",
@@ -561,18 +562,26 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			default:
-				var checkSprite = Paths.getSpriteSheet(curCharacter);
-				var checkFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
+				var checkSprite = Paths.getSpriteSheet(DEFAULT_CHARACTER);
+				var checkFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${DEFAULT_CHARACTER}/data.json')));
 
-				// modCheck!
-				if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/spritesheet.png', ModState.curMod)))
+				if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.png')))
 				{
-					checkSprite = Paths.getSpriteSheetMods(curCharacter, ModState.curMod);
+					checkSprite = Paths.getSpriteSheet(curCharacter);
+				}
+				if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/data.json')))
+				{
+					checkFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
 				}
 
-				if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/data.json', ModState.curMod)))
+				// modCheck!
+				if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/spritesheet.png')))
 				{
-					checkFile = Json.parse(Assets.getText(Paths.getModPath('characters/${curCharacter}/data.json', ModState.curMod)));
+					checkSprite = Paths.getSpriteSheetMods(curCharacter);
+				}
+				if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/data.json')))
+				{
+					checkFile = Json.parse(Assets.getText(Paths.getModPath('characters/${curCharacter}/data.json')));
 				}
 
 				frames = checkSprite;

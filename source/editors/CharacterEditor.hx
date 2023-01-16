@@ -165,6 +165,11 @@ class CharacterEditor extends MusicBeatState
 			char.antialiasing = !char.antialiasing;
 		}
 
+		if (FlxG.keys.justPressed.J)
+		{
+			char.flipX = !char.flipX;
+		}
+
 		if (FlxG.keys.justPressed.W)
 		{
 			curAnim -= 1;

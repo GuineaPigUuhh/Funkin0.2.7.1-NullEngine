@@ -53,9 +53,9 @@ class Paths
 		return 'assets/$file';
 	}
 
-	inline static public function getModPath(file:String, modVar:String)
+	inline static public function getModPath(file:String)
 	{
-		return 'mods/$modVar/$file';
+		return 'mods/${Save.modSelected}/$file';
 	}
 
 	inline static public function file(file:String, type:AssetType = TEXT, ?library:String)
@@ -123,9 +123,9 @@ class Paths
 		return FlxAtlasFrames.fromSparrow(getPreloadPath('characters/$char/spritesheet.png'), getPreloadPath('characters/$char/spritesheet.xml'));
 	}
 
-	inline static public function getSpriteSheetMods(char:String, modVar:String)
+	inline static public function getSpriteSheetMods(char:String)
 	{
-		return FlxAtlasFrames.fromSparrow(getModPath('characters/$char/spritesheet.png', modVar), getModPath('characters/$char/spritesheet.xml', modVar));
+		return FlxAtlasFrames.fromSparrow(getModPath('characters/$char/spritesheet.png'), getModPath('characters/$char/spritesheet.xml'));
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)

@@ -43,14 +43,14 @@ class HealthIcon extends FlxSprite
 	{
 		file = Paths.getPreloadPath('characters/${curCharacter}/icon.png');
 
-		if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/icon.png', ModState.curMod)))
-			file = Paths.getModPath('characters/${curCharacter}/icon.png', ModState.curMod);
+		if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/icon.png')))
+			file = Paths.getModPath('characters/${curCharacter}/icon.png');
 
 		if (OpenFlAssets.exists(Paths.image('icons/${curCharacter}')))
 			file = Paths.image('icons/${curCharacter}');
 
-		if (OpenFlAssets.exists(Paths.getModPath('images/icons/${curCharacter}', ModState.curMod)))
-			file = Paths.getModPath('images/icons/${curCharacter}', ModState.curMod);
+		if (OpenFlAssets.exists(Paths.getModPath('images/icons/${curCharacter}')))
+			file = Paths.getModPath('images/icons/${curCharacter}');
 
 		if (!OpenFlAssets.exists(file))
 			file = Paths.getPreloadPath('characters/face/icon.png');

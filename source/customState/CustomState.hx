@@ -50,7 +50,7 @@ class CustomState extends MusicBeatState
 		if (FileSystem.exists(ModPaths.hscript('states/${daState}')))
 			stateLocal = ModPaths.hscript('stages/${daState}');
 
-		if (FileSystem.exists(Paths.hscript('states/${daState}')))
+		if (FileSystem.exists(stateLocal))
 		{
 			var parserState:hscript.Parser = new hscript.Parser();
 			parserState.allowTypes = true;
