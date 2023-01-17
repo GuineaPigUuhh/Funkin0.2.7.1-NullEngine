@@ -16,6 +16,11 @@ import openfl.system.System;
 
 using StringTools;
 
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 typedef CreditJSON =
 {
 	var users:Array<CreditsStuff>;
@@ -50,6 +55,8 @@ class CreditsState extends MusicBeatState
 	override function create()
 	{
 		creditsJson = Json.parse(Assets.getText(Paths.json("creditList")));
+		if (FileSystem.exists(ModPaths.json("creditList")))
+			creditsJson = Json.parse(Assets.getText(ModPaths.json("creditList")));
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -136,7 +143,15 @@ class CreditsState extends MusicBeatState
 
 		FlxTween.color(menuBG, 1.5, menuBG.color, FlxColor.fromString("#" + creditsJson.users[curSelected].color), {ease: FlxEase.quintOut});
 
-		creditsIcon.loadGraphic(Paths.image('credits/' + creditsJson.users[curSelected].icon));
+		if (FileSystem.exists(Paths.image('credits/' + creditsJson.users[curSelected].icon)))
+			creditsIcon.loadGraphic(Paths.image('credits/' + creditsJson.users[curSelected].icon));
+		else
+			creditsIcon.loadGraphic(Paths.image('credits/none'));
+
+		if (FileSystem.exists(ModPaths.image('credits/' + creditsJson.users[curSelected].icon)))
+			creditsIcon.loadGraphic(ModPaths.image('credits/' + creditsJson.users[curSelected].icon));
+		else
+			creditsIcon.loadGraphic(Paths.image('credits/none'));
 
 		creditsIcon.alpha = 0;
 		setScreenCenter(creditsIcon, "X");

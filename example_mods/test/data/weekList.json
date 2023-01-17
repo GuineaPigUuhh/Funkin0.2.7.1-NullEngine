@@ -5,8 +5,8 @@
             "weekPath":"week1",
             "weekTitle":"Test",
             "weekCharacters":["", "bf", "gf"],
-            "songIcons":["face"],
-            "songColor":"AF66CE",
+            "songIcons":["bf"],
+            "songColor":"31B0D1",
             "hideInFreePlay":false,
             "hideInStoryMode":false
         }

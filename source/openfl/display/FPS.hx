@@ -1,10 +1,10 @@
 package openfl.display;
 
+import flixel.math.FlxMath;
 import haxe.Timer;
 import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import flixel.math.FlxMath;
 #if gl_stats
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
@@ -12,7 +12,6 @@ import openfl.display._internal.stats.DrawCallContext;
 #if flash
 import openfl.Lib;
 #end
-
 #if openfl
 import openfl.system.System;
 #end
@@ -46,9 +45,10 @@ class FPS extends TextField
 		currentFPS = 0;
 		selectable = false;
 		mouseEnabled = false;
-		defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont("assets/fonts/vcr.ttf").fontName, 16,  0xFFFFFFFF);
+		defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont("assets/fonts/vcr.ttf").fontName, 17, 0xFFFFFFFF);
 		autoSize = LEFT;
 		multiline = true;
+		alpha = 0.8;
 		text = "";
 
 		cacheCount = 0;
@@ -81,16 +81,12 @@ class FPS extends TextField
 
 		if (currentCount != cacheCount /*&& visible*/)
 		{
-			text =  currentFPS + " FPS\n";
+			text = "FPS: " + currentFPS + "\n";
 			var memoryMegas:Float = 0;
-            var memoryPeak:Float = 0;
-            
-            if(memoryMegas > memoryPeak)
-                memoryPeak = memoryMegas;
 
 			#if openfl
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-			text += memoryMegas + " MB" + " // " + memoryPeak + " MB" ;
+			text += "MEMORY: " + memoryMegas;
 			#end
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))

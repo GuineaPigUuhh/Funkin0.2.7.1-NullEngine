@@ -1,0 +1,36 @@
+{
+    "users":[
+        {
+            "category":"Null Engine",
+            "name":"CapyBaraCoding",
+            "icon":"capycode",
+            "role":"Director And Main Programmer",
+            "message":"he is not that fast",
+            "color":"01FF96"
+        },
+        {
+            "category":"Null Engine",
+            "name":"Sloow",
+            "icon":"sloow",
+            "role":"Programmer",
+            "message":"to be or not to be? go fuck yourself!",
+            "color":"CCCCCC"
+        },
+        {
+            "category":"Special Thanks!",
+            "name":"Cracsthor",
+            "icon":"cracsthor",
+            "role":"PhantoMuff Difficult Font",
+            "message":"",
+            "color":"FF8F11"
+        },
+        {
+            "category":"Special Thanks!",
+            "name":"RozeBud",
+            "icon":"rozebud",
+            "role":"Accuracy System Code",
+            "message":"",
+            "color":"35194C"
+        }
+    ]
+}

@@ -86,6 +86,7 @@
 	<assets path="other/batExport/launch_with_log.bat" rename="Launch_With_Log.bat" embed='false'/>
 
 	<assets path='example_mods' rename='mods' embed='false'/>
+	<assets path="assets/fonts" embed='false'/>
 
 	<!-- <template path='mods' /> -->
 
@@ -94,7 +95,6 @@
 		THEN UHHH I USED THE NAME OF THE FONT WITH SETFORMAT() ON THE TEXT!!!
 		NOT USING A DIRECT THING TO THE ASSET!!!
 	-->
-	<assets path="assets/fonts" embed='true'/>
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />

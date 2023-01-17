@@ -60,7 +60,6 @@ class PlayState extends MusicBeatState
 {
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
-	public static var CONFIG:Config;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
@@ -150,6 +149,8 @@ class PlayState extends MusicBeatState
 	var isCpuControl:Bool = false;
 
 	var scoreTxt:FlxText;
+	var timeTxt:FlxText;
+	var songTxt:FlxText;
 
 	public static var campaignScore:Int = 0;
 	public static var campaignMisses:Int = 0;
@@ -162,11 +163,11 @@ class PlayState extends MusicBeatState
 
 	var inCutscene:Bool = false;
 	var storyDifficultyText:String = "";
+	var songLength:Float = 0;
 
 	#if desktop
 	// Discord RPC variables
 	var iconRPC:String = "";
-	var songLength:Float = 0;
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
 	#end
@@ -181,6 +182,10 @@ class PlayState extends MusicBeatState
 	var behindItems:FlxTypedGroup<FlxSprite>;
 	var frontItems:FlxTypedGroup<FlxSprite>;
 	var isCustomStage:Bool = false;
+
+	var divider:String = " • ";
+	var defaultFont:String = Paths.font("vcr.ttf");
+	var defaultBorderSize:Float = 2;
 
 	function resetStaticsVar()
 	{
@@ -697,17 +702,27 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', minHealth, maxHealth);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(FlxColor.fromString("#" + dad.healthBarColor), FlxColor.fromString("#" + boyfriend.healthBarColor));
+		reloadHealthColors();
 
 		health = maxHealth / 2;
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(0, healthBarBG.y + 38, FlxG.width, "", 18);
+		scoreTxt = new FlxText(0, healthBarBG.y + 38, FlxG.width, "", 17);
 		updateScoreTxt();
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(defaultFont, 17, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
-		scoreTxt.borderSize = 2;
+		scoreTxt.borderSize = defaultBorderSize;
+
+		timeTxt = new FlxText(-20, FlxG.height * 0.9 + 34, FlxG.width, '0:00${divider}0:00', 26);
+		timeTxt.setFormat(defaultFont, 26, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		timeTxt.scrollFactor.set();
+		timeTxt.borderSize = defaultBorderSize;
+
+		songTxt = new FlxText(-20, FlxG.height * 0.9 + 16, FlxG.width, curSong + divider + storyDifficultyText, 18);
+		songTxt.setFormat(defaultFont, 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		songTxt.scrollFactor.set();
+		songTxt.borderSize = defaultBorderSize;
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.playAnimation(boyfriend.curCharacter);
@@ -719,6 +734,8 @@ class PlayState extends MusicBeatState
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 		// fixes
+		add(timeTxt);
+		add(songTxt);
 		add(scoreTxt);
 
 		strumLineNotes.cameras = [camHUD];
@@ -728,8 +745,11 @@ class PlayState extends MusicBeatState
 		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
-		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
+
+		scoreTxt.cameras = [camHUD];
+		timeTxt.cameras = [camHUD];
+		songTxt.cameras = [camHUD];
 
 		startingSong = true;
 
@@ -1392,10 +1412,10 @@ class PlayState extends MusicBeatState
 		if (SONG.needsVoices)
 			vocals.play();
 
-		#if desktop
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
 
+		#if desktop
 		// Updating Discord Rich Presence (with Time Left)
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength);
 		#end
@@ -1597,15 +1617,13 @@ class PlayState extends MusicBeatState
 		return num;
 	}
 
-	var divider:String = " // ";
-
 	function updateScoreTxt()
 	{
 		getRating();
 
 		scoreTxt.text = 'Score: ${songScore}' + divider + 'Misses: ${songMisses}' + divider + 'Accuracy: ${truncateFloat(songAccuracy, 2)}%';
 		if (songRating != "?")
-			scoreTxt.text += divider + '${songRating} [${songRatingFC}]';
+			scoreTxt.text += ' [${songRating}${divider}${songRatingFC}]';
 	}
 
 	function getRating()
@@ -1655,6 +1673,11 @@ class PlayState extends MusicBeatState
 			songRatingFC = "Clear";
 		else
 			songRatingFC = "?";
+	}
+
+	function reloadHealthColors()
+	{
+		healthBar.createFilledBar(FlxColor.fromString("#" + dad.healthBarColor), FlxColor.fromString("#" + boyfriend.healthBarColor));
 	}
 
 	function updateAccuracy()
@@ -1804,6 +1827,21 @@ class PlayState extends MusicBeatState
 					Conductor.lastSongPos = Conductor.songPosition;
 					// Conductor.songPosition += FlxG.elapsed * 1000;
 					// trace('MISSED FRAME');
+				}
+
+				var curTime:Float = Conductor.songPosition;
+
+				if (curTime < 0)
+				{
+					timeTxt.text = '0:00${divider}0:00';
+					curTime = 0;
+				}
+
+				if (curTime > 0)
+				{
+					timeTxt.text = FlxStringUtil.formatTime(Math.floor((songLength - curTime) / 1000))
+						+ divider
+						+ FlxStringUtil.formatTime(Math.floor(songLength / 1000));
 				}
 			}
 

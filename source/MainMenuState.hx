@@ -55,6 +55,8 @@ class MainMenuState extends MusicBeatState
 	override function create()
 	{
 		statesJSON = Json.parse(Assets.getText(Paths.json("customStates")));
+		if (FileSystem.exists(ModPaths.json("customStates")))
+			statesJSON = Json.parse(Assets.getText(ModPaths.json("customStates")));
 
 		for (i in 0...statesJSON.options.length)
 		{
@@ -105,15 +107,22 @@ class MainMenuState extends MusicBeatState
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
 
-			var file = Paths.getSparrowAtlas('mainMenuAssets/${optionShit[i]}');
-			var idleAnim = optionShit[i] + " basic";
-			var selectedAnim = optionShit[i] + " white";
+			var file = Paths.getSparrowAtlas('mainMenuAssets/donate');
+			var idleAnim = "donate basic";
+			var selectedAnim = "donate white";
 
-			if (!FileSystem.exists(Paths.image('mainMenuAssets/${optionShit[i]}')))
+			if (FileSystem.exists(Paths.image('mainMenuAssets/${optionShit[i]}')))
 			{
-				file = Paths.getSparrowAtlas('mainMenuAssets/donate');
-				idleAnim = "donate basic";
-				selectedAnim = "donate white";
+				file = Paths.getSparrowAtlas('mainMenuAssets/${optionShit[i]}');
+				idleAnim = '${optionShit[i]} basic';
+				selectedAnim = '${optionShit[i]} white';
+			}
+
+			if (FileSystem.exists(ModPaths.image('mainMenuAssets/${optionShit[i]}')))
+			{
+				file = ModPaths.getSparrowAtlas('mainMenuAssets/${optionShit[i]}');
+				idleAnim = '${optionShit[i]} basic';
+				selectedAnim = '${optionShit[i]} white';
 			}
 
 			menuItem.frames = file;
