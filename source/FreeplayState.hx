@@ -71,10 +71,6 @@ class FreeplayState extends MusicBeatState
 				addWeek(freeplayData.weeks[i].weekSongs, freeplayData.weeks[i].songColor, i, freeplayData.weeks[i].songIcons);
 		}
 
-		// LOAD MUSIC
-
-		// LOAD CHARACTERS
-
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		add(bg);
 
@@ -115,6 +111,15 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
+		var bottomBG = new FlxSprite(0, FlxG.height - 30).makeGraphic(FlxG.width, 30, 0xFF000000, true);
+		bottomBG.alpha = 0.6;
+		add(bottomBG);
+
+		var spaceInfo = new FlxText(0, 0, FlxG.width, '[Space] Listen to Selected Song.');
+		spaceInfo.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		spaceInfo.y = FlxG.height - 5 - spaceInfo.height;
+		add(spaceInfo);
+
 		changeSelection();
 		changeDiff();
 
@@ -127,23 +132,6 @@ class FreeplayState extends MusicBeatState
 		// add(selector);
 
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
-
-		// JUST DOIN THIS SHIT FOR TESTING!!!
-		/* 
-			var md:String = Markdown.markdownToHtml(Assets.getText('CHANGELOG.md'));
-
-			var texFel:TextField = new TextField();
-			texFel.width = FlxG.width;
-			texFel.height = FlxG.height;
-			// texFel.
-			texFel.htmlText = md;
-
-			FlxG.stage.addChild(texFel);
-
-			// scoreText.textField.htmlText = md;
-
-			trace(md);
-		 */
 
 		super.create();
 	}
@@ -186,7 +174,6 @@ class FreeplayState extends MusicBeatState
 
 		var upP = controls.UP_P;
 		var downP = controls.DOWN_P;
-		var accepted = controls.ACCEPT;
 
 		if (upP)
 		{
@@ -221,7 +208,7 @@ class FreeplayState extends MusicBeatState
 			FlxG.switchState(new MainMenuState());
 		}
 
-		if (accepted)
+		if (FlxG.keys.justPressed.ENTER)
 		{
 			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 

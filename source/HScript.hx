@@ -45,7 +45,6 @@ class HScript extends MusicBeatState
 		hscript.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
 		hscript.variables.set("Paths", Paths);
 		hscript.variables.set("PlayState", PlayState);
-		hscript.variables.set("HScript", HScript);
 		hscript.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
 		hscript.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
 		hscript.variables.set("FlxEffectSprite", flixel.addons.effects.chainable.FlxEffectSprite);
@@ -60,9 +59,6 @@ class HScript extends MusicBeatState
 		hscript.variables.set("FlxText", flixel.text.FlxText);
 		hscript.variables.set("FlxEase", flixel.tweens.FlxEase);
 		hscript.variables.set("FlxTween", flixel.tweens.FlxTween);
-
-		hscript.variables.set("SONG", SONG);
-		hscript.variables.set("songCheck", SONG.song.toLowerCase());
 
 		hscript.variables.set("curStep", curStep);
 		hscript.variables.set("curBeat", curBeat);

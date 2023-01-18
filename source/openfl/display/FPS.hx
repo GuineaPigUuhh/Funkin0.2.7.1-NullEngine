@@ -86,7 +86,7 @@ class FPS extends TextField
 
 			#if openfl
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-			text += "MEMORY: " + memoryMegas;
+			text += "MEMORY: " + memoryMegas + " MB";
 			#end
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))

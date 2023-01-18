@@ -45,7 +45,7 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'options', 'mods'];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -61,7 +61,7 @@ class MainMenuState extends MusicBeatState
 		for (i in 0...statesJSON.options.length)
 		{
 			optionShit.insert(optionShit.length + i, statesJSON.options[i].name);
-			trace("Add To Options: " + statesJSON.options[i].name + ", Bruh: " + optionShit.length + i);
+			trace("Add To Options: " + statesJSON.options[i].name);
 		}
 
 		#if desktop
@@ -174,12 +174,6 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new customState.CreditsState());
 			}
 
-			if (controls.LEFT_P)
-			{
-				selectedSomethin = true;
-				FlxG.switchState(new ModState());
-			}
-
 			if (controls.BACK)
 			{
 				selectedSomethin = true;
@@ -234,6 +228,8 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new FreeplayState());
 			case "options":
 				FlxG.switchState(new options.OptionsState());
+			case "mods":
+				FlxG.switchState(new ModState());
 		}
 
 		for (i in 0...statesJSON.options.length)

@@ -14,17 +14,20 @@ import lime.utils.Assets;
 
 using StringTools;
 
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 class ModState extends MusicBeatState
 {
 	var selector:FlxText;
 
 	static var curSelected:Int = 0;
 
-	var modsCool:Alphabet;
-
 	public static var curMod:String = "";
 
-	public var mods:Array<String> = CoolUtil.coolTextFile("mods/modList.txt");
+	public var mods:Array<String> = FileSystem.readDirectory('mods/');
 
 	private var grpMods:FlxTypedGroup<Alphabet>;
 
@@ -32,32 +35,25 @@ class ModState extends MusicBeatState
 	{
 		super.create();
 
-		mods.insert(0, "none");
-
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
-		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
-		menuBG.updateHitbox();
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuLineArt'));
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
+		menuBG.updateHitbox();
+		menuBG.scrollFactor.set();
 		add(menuBG);
 
 		grpMods = new FlxTypedGroup<Alphabet>();
 		add(grpMods);
 
+		mods.insert(0, "none");
 		for (i in 0...mods.length)
 		{
-			addMods(i);
+			var modsCool:Alphabet = new Alphabet(0, 50 + (i * 50), mods[i], true, false);
+			modsCool.isMenuItem = true;
+			modsCool.targetY = i;
+			grpMods.add(modsCool);
 		}
 
 		changeSelection();
-	}
-
-	function addMods(idddd:Int)
-	{
-		modsCool = new Alphabet(0, 50 + (idddd * 50), mods[idddd], true, false);
-		modsCool.isMenuItem = true;
-		modsCool.targetY = idddd;
-		grpMods.add(modsCool);
 	}
 
 	override function update(elapsed:Float)

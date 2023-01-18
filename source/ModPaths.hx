@@ -47,12 +47,12 @@ class ModPaths
 
 	inline static public function voices(song:String)
 	{
-		return 'mods/${Save.modSelected}/songs/${song.toLowerCase()}/Voices.ogg';
+		return 'mods/${Save.modSelected}/data/songs/${song.toLowerCase()}/Voices.ogg';
 	}
 
 	inline static public function inst(song:String)
 	{
-		return 'mods/${Save.modSelected}/songs/${song.toLowerCase()}/Inst.ogg';
+		return 'mods/${Save.modSelected}/data/songs/${song.toLowerCase()}/Inst.ogg';
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)
