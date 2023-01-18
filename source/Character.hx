@@ -562,26 +562,28 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			default:
-				var checkSprite = Paths.getSpriteSheet(DEFAULT_CHARACTER);
-				var checkFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${DEFAULT_CHARACTER}/data.json')));
+				var checkSprite = Paths.getSparrowAtlas('characters/${DEFAULT_CHARACTER}');
+				var checkFile = Json.parse(Assets.getText(Paths.json('characters/${DEFAULT_CHARACTER}')));
 
 				if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.png')))
 				{
-					checkSprite = Paths.getSpriteSheet(curCharacter);
+					checkSprite = Paths.getSparrowAtlas('characters/${curCharacter}');
 				}
-				if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/data.json')))
+
+				if (OpenFlAssets.exists(Paths.json('characters/${curCharacter}')))
 				{
-					checkFile = Json.parse(Assets.getText(Paths.getPreloadPath('characters/${curCharacter}/data.json')));
+					checkFile = Json.parse(Assets.getText(Paths.json('characters/${curCharacter}')));
 				}
 
 				// modCheck!
-				if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/spritesheet.png')))
+				if (OpenFlAssets.exists(ModPaths.image('characters/${curCharacter}')))
 				{
-					checkSprite = Paths.getSpriteSheetMods(curCharacter);
+					checkSprite = ModPaths.getSparrowAtlas('characters/${curCharacter}');
 				}
-				if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/data.json')))
+
+				if (OpenFlAssets.exists(ModPaths.json('characters/${curCharacter}')))
 				{
-					checkFile = Json.parse(Assets.getText(Paths.getModPath('characters/${curCharacter}/data.json')));
+					checkFile = Json.parse(Assets.getText(ModPaths.json('characters/${curCharacter}')));
 				}
 
 				frames = checkSprite;

@@ -118,16 +118,6 @@ class Paths
 		return 'assets/fonts/$key';
 	}
 
-	inline static public function getSpriteSheet(char:String)
-	{
-		return FlxAtlasFrames.fromSparrow(getPreloadPath('characters/$char/spritesheet.png'), getPreloadPath('characters/$char/spritesheet.xml'));
-	}
-
-	inline static public function getSpriteSheetMods(char:String)
-	{
-		return FlxAtlasFrames.fromSparrow(getModPath('characters/$char/spritesheet.png'), getModPath('characters/$char/spritesheet.xml'));
-	}
-
 	inline static public function getSparrowAtlas(key:String, ?library:String)
 	{
 		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));

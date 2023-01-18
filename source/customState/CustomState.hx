@@ -45,10 +45,10 @@ class CustomState extends MusicBeatState
 	{
 		super.create();
 		#if hscript
-		if (FileSystem.exists(Paths.hscript('states/${daState}')))
-			stateLocal = Paths.hscript('stages/${daState}');
-		if (FileSystem.exists(ModPaths.hscript('states/${daState}')))
-			stateLocal = ModPaths.hscript('stages/${daState}');
+		if (FileSystem.exists(Paths.hscript('data/states/${daState}')))
+			stateLocal = Paths.hscript('data/states/${daState}');
+		if (FileSystem.exists(ModPaths.hscript('data/states/${daState}')))
+			stateLocal = ModPaths.hscript('data/states/${daState}');
 
 		if (FileSystem.exists(stateLocal))
 		{
@@ -82,7 +82,7 @@ class CustomState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (!FileSystem.exists(Paths.getPreloadPath('states/${daState}.hx')))
+		if (stateLocal != 'NO STATE FILE' && !FileSystem.exists(stateLocal))
 		{
 			if (curUpdate == 1)
 			{
@@ -99,7 +99,7 @@ class CustomState extends MusicBeatState
 				});
 			}
 
-			if (controls.BACK && !menubakcedd)
+			if (!menubakcedd && controls.BACK)
 			{
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				menubakcedd = true;

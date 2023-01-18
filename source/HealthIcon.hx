@@ -41,19 +41,13 @@ class HealthIcon extends FlxSprite
 
 	public function changeIcon(curCharacter:String = 'face')
 	{
-		file = Paths.getPreloadPath('characters/${curCharacter}/icon.png');
+		file = Paths.image('icons/${curCharacter}');
 
-		if (OpenFlAssets.exists(Paths.getModPath('characters/${curCharacter}/icon.png')))
-			file = Paths.getModPath('characters/${curCharacter}/icon.png');
-
-		if (OpenFlAssets.exists(Paths.image('icons/${curCharacter}')))
-			file = Paths.image('icons/${curCharacter}');
-
-		if (OpenFlAssets.exists(Paths.getModPath('images/icons/${curCharacter}')))
-			file = Paths.getModPath('images/icons/${curCharacter}');
+		if (OpenFlAssets.exists(ModPaths.image('icons/${curCharacter}')))
+			file = ModPaths.image('icons/${curCharacter}');
 
 		if (!OpenFlAssets.exists(file))
-			file = Paths.getPreloadPath('characters/face/icon.png');
+			file = Paths.image('icons/face');
 
 		loadGraphic(file);
 		loadGraphic(file, true, 150, 150);

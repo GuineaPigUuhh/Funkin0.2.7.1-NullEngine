@@ -26,7 +26,7 @@ class HScript extends MusicBeatState
 		parser = new hscript.Parser();
 		hscript = new hscript.Interp();
 
-		var fileExport = Paths.getPreloadPath(file);
+		var fileExport = Paths.hscript(file);
 
 		hscript.variables.set("remove", remove);
 		hscript.variables.set("destroy", destroy);

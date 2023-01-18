@@ -54,15 +54,17 @@ class Song
 		this.bpm = bpm;
 	}
 
+	var defaultCharts:String = "charts/";
+
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var checkFile = Assets.getText(Paths.json('tutorial/tutorial')).trim();
+		var checkFile = Assets.getText(Paths.json(defaultCharts + 'tutorial/tutorial')).trim();
 
-		if (FileSystem.exists(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())))
-			checkFile = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
+		if (FileSystem.exists(Paths.json(defaultCharts + folder.toLowerCase() + '/' + jsonInput.toLowerCase())))
+			checkFile = Assets.getText(Paths.json(defaultCharts + folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
 
-		if (FileSystem.exists(ModPaths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())))
-			checkFile = Assets.getText(ModPaths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
+		if (FileSystem.exists(ModPaths.json(defaultCharts + folder.toLowerCase() + '/' + jsonInput.toLowerCase())))
+			checkFile = Assets.getText(ModPaths.json(defaultCharts + folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
 
 		var rawJson = checkFile;
 

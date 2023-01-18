@@ -32,6 +32,9 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		super();
 
+		if (Save.flashing == true)
+			FlxG.camera.flash(FlxColor.RED, 0.6);
+
 		Conductor.songPosition = 0;
 
 		bf = new Boyfriend(x, y, daBf);

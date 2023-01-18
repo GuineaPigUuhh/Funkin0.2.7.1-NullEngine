@@ -223,7 +223,7 @@ class PlayState extends MusicBeatState
 			&& OpenFlAssets.exists(Paths.txt('${SONG.song.toLowerCase()}/dialogue'))) // ele vai pegar o arquivo e vai fucionar looolololoollololool // anti crash bruh
 			dialogue = CoolUtil.coolTextFile(Paths.txt('${SONG.song.toLowerCase()}/dialogue'));
 
-		storyDifficultyText = CoolUtil.difficultyArray[storyDifficulty];
+		storyDifficultyText = CoolUtil.difficultyString();
 
 		#if desktop
 		// Making difficulty text for Discord Rich Presence.
@@ -820,12 +820,12 @@ class PlayState extends MusicBeatState
 	function getStageFile(fileName:String)
 	{
 		#if hscript
-		var stageLocal:String = 'NO STAGE FILE';
+		var stageLocal:String = 'my balls funny';
 
-		if (FileSystem.exists(Paths.hscript('stages/${curStage}/${fileName}')))
-			stageLocal = Paths.hscript('stages/${curStage}/${fileName}');
-		if (FileSystem.exists(ModPaths.hscript('stages/${curStage}/${fileName}')))
-			stageLocal = ModPaths.hscript('stages/${curStage}/${fileName}');
+		if (FileSystem.exists(Paths.hscript('data/stages/${curStage}/${fileName}')))
+			stageLocal = Paths.hscript('data/stages/${curStage}/${fileName}');
+		if (FileSystem.exists(ModPaths.hscript('data/stages/${curStage}/${fileName}')))
+			stageLocal = ModPaths.hscript('data/stages/${curStage}/${fileName}');
 
 		if (FileSystem.exists(stageLocal))
 		{
@@ -858,11 +858,6 @@ class PlayState extends MusicBeatState
 		trace("Stage: Disabled Hscript");
 		generateDefaultStage();
 		#end
-	}
-
-	function getStageImage(imageShti:String)
-	{
-		return 'assets/stages/${curStage}/images/${imageShti}.png';
 	}
 
 	public function addDefaultVariablesStage()
@@ -955,10 +950,10 @@ class PlayState extends MusicBeatState
 		#if hscript
 		var scriptLocal:String = "var shit";
 
-		if (FileSystem.exists(Paths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}')))
-			scriptLocal = Paths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}');
-		if (FileSystem.exists(ModPaths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}')))
-			scriptLocal = ModPaths.hscript('data/${PlayState.SONG.song.toLowerCase()}/${fileName}');
+		if (FileSystem.exists(Paths.hscript('data/charts/${PlayState.SONG.song.toLowerCase()}/${fileName}')))
+			scriptLocal = Paths.hscript('data/charts/${PlayState.SONG.song.toLowerCase()}/${fileName}');
+		if (FileSystem.exists(ModPaths.hscript('data/charts/${PlayState.SONG.song.toLowerCase()}/${fileName}')))
+			scriptLocal = ModPaths.hscript('data/charts/${PlayState.SONG.song.toLowerCase()}/${fileName}');
 
 		if (FileSystem.exists(scriptLocal))
 		{
@@ -1767,6 +1762,8 @@ class PlayState extends MusicBeatState
 
 		if (health > maxHealth)
 			health = maxHealth;
+		if (health < minHealth)
+			health = minHealth;
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - 26);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - 26);

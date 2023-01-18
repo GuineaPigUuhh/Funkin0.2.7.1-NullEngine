@@ -145,12 +145,11 @@ class CreditsState extends MusicBeatState
 
 		if (FileSystem.exists(Paths.image('credits/' + creditsJson.users[curSelected].icon)))
 			creditsIcon.loadGraphic(Paths.image('credits/' + creditsJson.users[curSelected].icon));
-		else
-			creditsIcon.loadGraphic(Paths.image('credits/none'));
-
 		if (FileSystem.exists(ModPaths.image('credits/' + creditsJson.users[curSelected].icon)))
 			creditsIcon.loadGraphic(ModPaths.image('credits/' + creditsJson.users[curSelected].icon));
-		else
+
+		if (FileSystem.exists(Paths.image('credits/' + creditsJson.users[curSelected].icon))
+			&& FileSystem.exists(ModPaths.image('credits/' + creditsJson.users[curSelected].icon)))
 			creditsIcon.loadGraphic(Paths.image('credits/none'));
 
 		creditsIcon.alpha = 0;
