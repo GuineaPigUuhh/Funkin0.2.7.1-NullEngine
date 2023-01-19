@@ -22,7 +22,7 @@ class OptionsState extends MusicBeatState
 
 	var optionsCool:Alphabet;
 
-	public var options:Array<String> = ["Preferences", "Flashing"];
+	public var options:Array<String> = ["Preferences", "Controls"];
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 

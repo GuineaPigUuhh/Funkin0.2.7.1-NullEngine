@@ -109,6 +109,14 @@ class Preferences extends MusicBeatSubstate
 				{
 					Save.flashing = !Save.flashing;
 				}
+			case "Antialiasing" | "No Antialiasing":
+				{
+					Save.antialiasing = !Save.antialiasing;
+				}
+			case "NoteSplash" | "No NoteSplash":
+				{
+					Save.noteSplash = !Save.noteSplash;
+				}
 			default:
 				trace("ERROR ON CHANGE OPTION");
 		}
@@ -124,7 +132,9 @@ class Preferences extends MusicBeatSubstate
 	{
 		options = [
 			Save.ghostTapping ? "GhostTapping" : "No GhostTapping",
-			Save.flashing ? "Flashing" : "No Flashing"
+			Save.flashing ? "Flashing" : "No Flashing",
+			Save.antialiasing ? "Antialiasing" : "No Antialiasing",
+			Save.noteSplash ? "NoteSplash" : "No NoteSplash"
 		];
 	}
 
