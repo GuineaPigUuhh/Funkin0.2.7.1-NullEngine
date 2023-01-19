@@ -31,6 +31,14 @@
             "role":"Accuracy System Code",
             "message":"",
             "color":"35194C"
+        },
+        {
+            "category":"Special Thanks!",
+            "name":"PolybiusProxy",
+            "icon":"Ppolybiusproxy",
+            "role":"Video Support",
+            "message":"",
+            "color":"CCCCCC"
         }
     ]
 }

@@ -26,7 +26,7 @@ class HScript extends MusicBeatState
 		parser = new hscript.Parser();
 		hscript = new hscript.Interp();
 
-		var fileExport = Paths.hscript(file);
+		var fileExport = File.getContent(Paths.hscript(file));
 
 		hscript.variables.set("remove", remove);
 		hscript.variables.set("destroy", destroy);
@@ -44,6 +44,7 @@ class HScript extends MusicBeatState
 		hscript.variables.set("FlxGridOverlay", flixel.addons.display.FlxGridOverlay);
 		hscript.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
 		hscript.variables.set("Paths", Paths);
+		hscript.variables.set("ModPaths", ModPaths);
 		hscript.variables.set("PlayState", PlayState);
 		hscript.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
 		hscript.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
