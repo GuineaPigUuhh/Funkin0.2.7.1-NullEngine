@@ -10,6 +10,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import lime.utils.Assets;
 
 using StringTools;
@@ -21,8 +22,10 @@ class Preferences extends MusicBeatSubstate
 	var curSelected:Int = 0;
 	var optionsCool:Alphabet;
 
-	public var options:Array<String> = ["GhostTapping", "Flashing"];
-	public var optionsFunction:Array<Dynamic> = [Save.ghostTapping, Save.flashing];
+	public var options:Array<String> = ["GhostTapping", "Flashing", "Antiliasing"];
+
+	var youCanPress:Bool = false;
+	var stopSpam:Bool = false;
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 
@@ -30,88 +33,98 @@ class Preferences extends MusicBeatSubstate
 	{
 		super();
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuEngine'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuLineArt'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;
 		add(menuBG);
 
-		var other:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuEngine'));
-		other.setGraphicSize(Std.int(other.width * 1.1));
-		other.updateHitbox();
-		other.screenCenter();
-		other.antialiasing = true;
-		// add(other);
-
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
 		for (i in 0...options.length)
 		{
-			addOptions(i);
+			optionsCool = new Alphabet(0, 50 + (i * 50), options[i], true, false);
+			optionsCool.isMenuItem = true;
+			optionsCool.targetY = i;
+			grpOptions.add(optionsCool);
 		}
 
-		changeSelection();
-	}
+		new FlxTimer().start(0.2, function(bruh:FlxTimer)
+		{
+			youCanPress = true;
+		});
 
-	function addOptions(idddd:Int)
-	{
-		optionsCool = new Alphabet(0, 50 + (idddd * 50), options[idddd] + " - " + optionsFunction[idddd], true, false);
-		optionsCool.isMenuItem = true;
-		optionsCool.targetY = idddd;
-		grpOptions.add(optionsCool);
+		changeSelection();
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
+		if (stopSpam == false)
+			addKeys();
+	}
+
+	function addKeys()
+	{
 		if (controls.DOWN_P)
+		{
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			changeSelection(1);
+		}
+
 		if (controls.UP_P)
+		{
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			changeSelection(-1);
+		}
 
 		if (controls.BACK)
 		{
-			Save.ghostTapping = optionsFunction[0];
-			Save.flashing = optionsFunction[1];
+			stopSpam = true;
 			Save.saveSettings();
-
-			Save.loadSettings();
 
 			FlxG.state.closeSubState();
 		}
 
-		if (controls.ACCEPT)
-		{
-			changeStatus();
-		}
+		if (youCanPress == true)
+			if (controls.ACCEPT)
+				changeStatus();
 	}
 
 	function changeStatus()
 	{
-		for (item in grpOptions.members)
+		grpOptions.remove(grpOptions.members[curSelected]);
+
+		switch (options[curSelected])
 		{
-			if (item.targetY == 0)
-			{
-				item.text = options[curSelected] + " - " + optionsFunction[curSelected];
-			}
+			case "GhostTapping" | "No GhostTapping":
+				{
+					Save.ghostTapping = !Save.ghostTapping;
+				}
+			case "Flashing" | "No Flashing":
+				{
+					Save.flashing = !Save.flashing;
+				}
+			default:
+				trace("ERROR ON CHANGE OPTION");
 		}
 
-		optionsFunction[curSelected] = !optionsFunction[curSelected];
+		options = [
+			Save.ghostTapping ? "GhostTapping" : "No GhostTapping",
+			Save.flashing ? "Flashing" : "No Flashing"
+		];
+
+		optionsCool = new Alphabet(0, 50 + (curSelected * 50), options[curSelected], true, false);
+		optionsCool.isMenuItem = true;
+		grpOptions.add(optionsCool);
 	}
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-
-		curSelected += change;
-
-		if (curSelected < 0)
-			curSelected = grpOptions.length - 1;
-		if (curSelected >= grpOptions.length)
-			curSelected = 0;
+		curSelected = FlxMath.wrap(curSelected + change, 0, grpOptions.length - 1);
 
 		var bullShit:Int = 0;
 		for (item in grpOptions.members)

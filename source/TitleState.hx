@@ -53,7 +53,6 @@ class TitleState extends MusicBeatState
 
 		super.create();
 
-		Save.saveSettings();
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		Save.loadSettings();

@@ -53,6 +53,19 @@ class ModState extends MusicBeatState
 			grpMods.add(modsCool);
 		}
 
+		var bottomBG = new FlxSprite(0, FlxG.height - 30).makeGraphic(FlxG.width, 30, 0xFF000000, true);
+		bottomBG.alpha = 0.6;
+
+		var spaceInfo = new FlxText(0, 0, FlxG.width, 'Mod Selected: ' + Save.modSelected + ".");
+		spaceInfo.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		spaceInfo.y = FlxG.height - 5 - spaceInfo.height;
+
+		if (Save.modSelected != "")
+		{
+			add(bottomBG);
+			add(spaceInfo);
+		}
+
 		changeSelection();
 	}
 
@@ -77,12 +90,12 @@ class ModState extends MusicBeatState
 			else
 				curMod = mods[curSelected];
 
-			Save.modSelected = mods[curSelected];
+			Save.modSelected = curMod;
 
 			Save.saveSettings();
 			Save.loadSettings();
 
-			trace("Mod Selected: " + curMod);
+			trace("Mod Selected: " + Save.modSelected);
 
 			FlxG.switchState(new MainMenuState());
 		}

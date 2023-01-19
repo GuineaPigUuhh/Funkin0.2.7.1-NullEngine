@@ -26,6 +26,7 @@ class Save
 		FlxG.save.data.modSelected = modSelected;
 
 		FlxG.save.flush();
+		trace('Save Settings');
 	}
 
 	public static function loadSettings()
@@ -42,5 +43,6 @@ class Save
 
 		if (FlxG.save.data.modSelected != null)
 			modSelected = FlxG.save.data.modSelected;
+		trace('Load Settings');
 	}
 }

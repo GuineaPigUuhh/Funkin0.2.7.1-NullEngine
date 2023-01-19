@@ -26,11 +26,14 @@ class OptionsState extends MusicBeatState
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 
+	var stopSpam:Bool = false;
+
 	override function create()
 	{
 		super.create();
+		Save.loadSettings();
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuEngine'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuLineArt'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
@@ -60,22 +63,29 @@ class OptionsState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (controls.DOWN_P)
-			changeSelection(1);
-		if (controls.UP_P)
-			changeSelection(-1);
-
-		if (controls.BACK)
+		if (stopSpam == false)
 		{
-			FlxG.switchState(new MainMenuState());
-		}
+			if (controls.DOWN_P)
+				changeSelection(1);
+			if (controls.UP_P)
+				changeSelection(-1);
 
-		if (controls.ACCEPT)
-		{
-			switch (options[curSelected])
+			if (controls.BACK)
 			{
-				default:
-					trace('DONT WORK');
+				stopSpam = true;
+				FlxG.switchState(new MainMenuState());
+			}
+
+			if (controls.ACCEPT)
+			{
+				switch (options[curSelected])
+				{
+					case "Preferences":
+						stopSpam = true;
+						FlxG.state.openSubState(new options.Preferences());
+					default:
+						trace('DONT WORK');
+				}
 			}
 		}
 	}
