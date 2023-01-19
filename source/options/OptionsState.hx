@@ -31,7 +31,6 @@ class OptionsState extends MusicBeatState
 	override function create()
 	{
 		super.create();
-		Save.loadSettings();
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuLineArt'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -81,7 +80,6 @@ class OptionsState extends MusicBeatState
 				switch (options[curSelected])
 				{
 					case "Preferences":
-						stopSpam = true;
 						FlxG.state.openSubState(new options.Preferences());
 					default:
 						trace('DONT WORK');

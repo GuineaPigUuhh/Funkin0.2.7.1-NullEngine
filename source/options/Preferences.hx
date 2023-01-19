@@ -22,7 +22,7 @@ class Preferences extends MusicBeatSubstate
 	var curSelected:Int = 0;
 	var optionsCool:Alphabet;
 
-	public var options:Array<String> = ["GhostTapping", "Flashing", "Antiliasing"];
+	public var options:Array<String> = [];
 
 	var youCanPress:Bool = false;
 	var stopSpam:Bool = false;
@@ -31,6 +31,7 @@ class Preferences extends MusicBeatSubstate
 
 	public function new()
 	{
+		updateOptions();
 		super();
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuLineArt'));
@@ -112,14 +113,19 @@ class Preferences extends MusicBeatSubstate
 				trace("ERROR ON CHANGE OPTION");
 		}
 
-		options = [
-			Save.ghostTapping ? "GhostTapping" : "No GhostTapping",
-			Save.flashing ? "Flashing" : "No Flashing"
-		];
+		updateOptions();
 
 		optionsCool = new Alphabet(0, 50 + (curSelected * 50), options[curSelected], true, false);
 		optionsCool.isMenuItem = true;
 		grpOptions.add(optionsCool);
+	}
+
+	function updateOptions()
+	{
+		options = [
+			Save.ghostTapping ? "GhostTapping" : "No GhostTapping",
+			Save.flashing ? "Flashing" : "No Flashing"
+		];
 	}
 
 	function changeSelection(change:Int = 0)
