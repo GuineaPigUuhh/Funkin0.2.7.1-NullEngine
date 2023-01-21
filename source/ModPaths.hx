@@ -45,14 +45,19 @@ class ModPaths
 		return Paths.getModPath('$key.$format');
 	}
 
+	inline static public function video(key:String)
+	{
+		return Paths.getModPath('data/videos/$key');
+	}
+
 	inline static public function voices(song:String)
 	{
-		return 'mods/${Save.modSelected}/data/songs/${song.toLowerCase()}/Voices.ogg';
+		return Paths.getModPath('data/songs/${song.toLowerCase()}/Voices.ogg');
 	}
 
 	inline static public function inst(song:String)
 	{
-		return 'mods/${Save.modSelected}/data/songs/${song.toLowerCase()}/Inst.ogg';
+		return Paths.getModPath('data/songs/${song.toLowerCase()}/Inst.ogg');
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)

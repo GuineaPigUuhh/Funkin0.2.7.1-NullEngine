@@ -120,7 +120,7 @@ class Paths
 
 	inline static public function video(key:String)
 	{
-		return 'assets/videos/$key';
+		return 'assets/data/videos/$key';
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)

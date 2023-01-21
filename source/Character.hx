@@ -86,7 +86,7 @@ class Character extends FlxSprite
 		this.isPlayer = isPlayer;
 
 		var tex:FlxAtlasFrames;
-		antialiasing = true;
+		antialiasing = Save.antialiasing;
 
 		if (charactersColors.exists(curCharacter))
 			healthBarColor = charactersColors.get(curCharacter);
