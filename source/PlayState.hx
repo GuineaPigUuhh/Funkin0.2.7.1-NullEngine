@@ -984,9 +984,14 @@ class PlayState extends MusicBeatState
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
-			dad.dance();
-			gf.dance();
-			boyfriend.playAnim('idle');
+			if (dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing'))
+				dad.dance();
+
+			if (gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith('sing'))
+				gf.dance();
+
+			if (boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing'))
+				boyfriend.dance();
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
@@ -2527,10 +2532,6 @@ class PlayState extends MusicBeatState
 			}
 			// else
 			// Conductor.changeBPM(SONG.bpm);
-
-			// Dad doesnt interupt his own notes
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
-				dad.dance();
 		}
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 		wiggleShit.update(Conductor.crochet);
@@ -2565,12 +2566,18 @@ class PlayState extends MusicBeatState
 		iconP1.beatHitIcon();
 		iconP2.beatHitIcon();
 
-		if (curBeat % gfSpeed == 0)
+		if (dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing'))
 		{
-			gf.dance();
+			dad.dance();
 		}
 
-		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
+		if (curBeat % gfSpeed == 0)
+		{
+			if (gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
+				gf.dance();
+		}
+
+		if (boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith("sing"))
 		{
 			boyfriend.playAnim('idle');
 		}

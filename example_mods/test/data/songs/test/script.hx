@@ -1,48 +1,62 @@
 function create()
 {
-	trace("create");
+	/*
+		It will execute the function once
+	 */
 }
 
 function postCreate()
 {
-	trace("postCreate");
+	/*
+		It will execute the function once
+	 */
 }
-
-var dontRepit:Bool = false;
-var dontRepitt:Bool = false;
 
 function update(elapsed)
 {
-	if (dontRepit == false)
-	{
-		dontRepit = true;
-		trace("update");
-	}
+	/*
+		it will run the function repeatedly
+	 */
 }
 
 function postUpdate(elapsed)
 {
-	if (dontRepitt == false)
-	{
-		dontRepitt = true;
-		trace("postUpdate");
-	}
+	/*
+		it will run the function repeatedly
+	 */
 }
 
 function onPlayerHit(note)
 {
-	trace("PALYHIY");
+	/*
+		When Player Hits a Note It Will Execute the Function
+	 */
 }
 
 function onCpuHit(note)
 {
-	trace("CPUHIY");
+	/*
+		When Cpu Hits a Note It Will Execute the Function
+	 */
+}
+
+function onNoteMiss(direction)
+{
+	/*
+		if the player misses a note, it will execute this function
+	 */
 }
 
 function beatHit(curBeat)
 {
+	/*
+		Every Beat The function will be executed
+	 */
 }
 
 function stepHit(curStep)
 {
+	/*
+		Every Step The function will be executed
+	 */
 }

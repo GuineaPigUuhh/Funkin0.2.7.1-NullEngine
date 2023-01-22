@@ -6,6 +6,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxSubState;
+import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.effects.FlxTrail;
 import flixel.addons.effects.FlxTrailArea;
@@ -104,9 +105,11 @@ class HScript extends MusicBeatState
 		setVariable("FlxText", FlxText);
 		setVariable("FlxEase", FlxEase);
 		setVariable("FlxTween", FlxTween);
+		setVariable("FlxBackdrop", FlxBackdrop);
 
 		// game states
 		setVariable("Character", Character);
+		setVariable("Boyfriend", Boyfriend);
 		setVariable("DiscordClient", DiscordClient);
 		setVariable("MusicBeatState", MusicBeatState);
 		setVariable("Paths", Paths);
