@@ -55,6 +55,9 @@ class TitleState extends MusicBeatState
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
+		if (FlxG.save.data.flashing == null)
+			Save.saveSettings();
+
 		Save.loadSettings();
 
 		Highscore.load();

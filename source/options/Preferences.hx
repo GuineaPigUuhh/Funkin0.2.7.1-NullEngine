@@ -117,6 +117,18 @@ class Preferences extends MusicBeatSubstate
 				{
 					Save.noteSplash = !Save.noteSplash;
 				}
+			case "UpScroll" | "DownScroll":
+				{
+					Save.isDownscroll = !Save.isDownscroll;
+				}
+			case "lightStrumsPlayer" | "No lightStrumsPlayer":
+				{
+					Save.lightStrumsPlayer = !Save.lightStrumsPlayer;
+				}
+			case "lightStrumsCpu" | "No lightStrumsCpu":
+				{
+					Save.lightStrumsCpu = !Save.lightStrumsCpu;
+				}
 			default:
 				trace("ERROR ON CHANGE OPTION");
 		}
@@ -134,7 +146,10 @@ class Preferences extends MusicBeatSubstate
 			Save.ghostTapping ? "GhostTapping" : "No GhostTapping",
 			Save.flashing ? "Flashing" : "No Flashing",
 			Save.antialiasing ? "Antialiasing" : "No Antialiasing",
-			Save.noteSplash ? "NoteSplash" : "No NoteSplash"
+			Save.noteSplash ? "NoteSplash" : "No NoteSplash",
+			Save.isDownscroll ? "DownScroll" : "UpScroll",
+			Save.lightStrumsPlayer ? "lightStrumsPlayer" : "No lightStrumsPlayer",
+			Save.lightStrumsCpu ? "lightStrumsCpu" : "No lightStrumsCpu"
 		];
 	}
 

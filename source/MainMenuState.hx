@@ -45,7 +45,7 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'options', 'mods'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'options', 'mods', 'credits'];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -54,6 +54,11 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
+		#if desktop
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("In the Menus", null);
+		#end
+
 		statesJSON = Json.parse(Assets.getText(Paths.json("customStates")));
 		if (FileSystem.exists(ModPaths.json("customStates")))
 			statesJSON = Json.parse(Assets.getText(ModPaths.json("customStates")));
@@ -64,10 +69,7 @@ class MainMenuState extends MusicBeatState
 			trace("Add To Options: " + statesJSON.options[i].name);
 		}
 
-		#if desktop
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
-		#end
+		trace(Save.controls);
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -168,12 +170,6 @@ class MainMenuState extends MusicBeatState
 				changeItem(1);
 			}
 
-			if (controls.RIGHT_P)
-			{
-				selectedSomethin = true;
-				FlxG.switchState(new customState.CreditsState());
-			}
-
 			if (controls.BACK)
 			{
 				selectedSomethin = true;
@@ -228,6 +224,8 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new FreeplayState());
 			case "options":
 				FlxG.switchState(new options.OptionsState());
+			case "credits":
+				FlxG.switchState(new customState.CreditsState());
 			case "mods":
 				FlxG.switchState(new ModState());
 		}

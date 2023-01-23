@@ -22,7 +22,7 @@ class OptionsState extends MusicBeatState
 
 	var optionsCool:Alphabet;
 
-	public var options:Array<String> = ["Preferences", "Controls"];
+	public var options:Array<String> = ["preferences", "controls"];
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 
@@ -79,8 +79,10 @@ class OptionsState extends MusicBeatState
 			{
 				switch (options[curSelected])
 				{
-					case "Preferences":
+					case "preferences":
 						FlxG.state.openSubState(new options.Preferences());
+					case "controls":
+						FlxG.state.openSubState(new options.Controls());
 					default:
 						trace('DONT WORK');
 				}
