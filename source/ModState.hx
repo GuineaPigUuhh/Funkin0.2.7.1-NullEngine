@@ -27,6 +27,8 @@ class ModState extends MusicBeatState
 
 	public static var curMod:String = "";
 
+	var stop:Bool = false;
+
 	public var mods:Array<String> = FileSystem.readDirectory('mods/');
 
 	private var grpMods:FlxTypedGroup<Alphabet>;
@@ -73,31 +75,35 @@ class ModState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (controls.DOWN_P)
-			changeSelection(1);
-		if (controls.UP_P)
-			changeSelection(-1);
-
-		if (controls.BACK)
+		if (stop == false)
 		{
-			FlxG.switchState(new MainMenuState());
-		}
+			if (controls.DOWN_P)
+				changeSelection(1);
+			if (controls.UP_P)
+				changeSelection(-1);
 
-		if (controls.ACCEPT)
-		{
-			if (mods[curSelected] == "none")
-				curMod = "";
-			else
-				curMod = mods[curSelected];
+			if (controls.BACK)
+			{
+				FlxG.switchState(new MainMenuState());
+				stop = true;
+			}
 
-			Save.modSelected = curMod;
+			if (controls.ACCEPT)
+			{
+				if (mods[curSelected] == "none")
+					curMod = "";
+				else
+					curMod = mods[curSelected];
 
-			Save.saveSettings();
-			Save.loadSettings();
+				Save.modSelected = curMod;
 
-			trace("Mod Selected: " + Save.modSelected);
+				Save.saveSettings();
 
-			FlxG.switchState(new MainMenuState());
+				trace("Mod Selected: " + Save.modSelected);
+
+				FlxG.switchState(new MainMenuState());
+				stop = true;
+			}
 		}
 	}
 

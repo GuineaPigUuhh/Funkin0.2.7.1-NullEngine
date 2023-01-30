@@ -56,14 +56,11 @@ class MenuCharacter extends FlxSprite
 				visible = false;
 
 			default:
-				var checkJSON = Json.parse(Assets.getText(Paths.getPreloadPath('images/menuCharacters/bf.json')));
+				var checkJSON = Paths.getModPath('images/menuCharacters/${character}.json');
+				if (!FileSystem.exists(checkJSON))
+					checkJSON = Paths.getPreloadPath('images/menuCharacters/${character}.json');
 
-				if (FileSystem.exists(Paths.getPreloadPath('images/menuCharacters/${character}.json')))
-					checkJSON = Json.parse(Assets.getText(Paths.getPreloadPath('images/menuCharacters/${character}.json')));
-				if (FileSystem.exists(Paths.getModPath('images/menuCharacters/${character}.json')))
-					checkJSON = Json.parse(Assets.getText(Paths.getModPath('images/menuCharacters/${character}.json')));
-
-				var char:MenuCharacterInfo = checkJSON;
+				var char:MenuCharacterInfo = Json.parse(Assets.getText(checkJSON));
 
 				restartOptions();
 

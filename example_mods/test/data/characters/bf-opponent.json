@@ -58,6 +58,8 @@
     ],
     "defaultIdle":"idle",
 	"healthBarColor":"31B0D1",
+	"healthIcon":"bf-opponent",
+	"spritesheet":"characters/bf-opponent",
     "isGf":false,
     "flipX":true,
     "antialiasing":true,

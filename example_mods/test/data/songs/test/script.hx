@@ -1,25 +1,25 @@
-function create()
+function onCreate()
 {
 	/*
 		It will execute the function once
 	 */
 }
 
-function postCreate()
+function onCreatePost()
 {
 	/*
 		It will execute the function once
 	 */
 }
 
-function update(elapsed)
+function onUpdate(elapsed)
 {
 	/*
 		it will run the function repeatedly
 	 */
 }
 
-function postUpdate(elapsed)
+function onUpdatePost(elapsed)
 {
 	/*
 		it will run the function repeatedly
@@ -47,14 +47,14 @@ function onNoteMiss(direction)
 	 */
 }
 
-function beatHit(curBeat)
+function onBeatHit(curBeat)
 {
 	/*
 		Every Beat The function will be executed
 	 */
 }
 
-function stepHit(curStep)
+function onStepHit(curStep)
 {
 	/*
 		Every Step The function will be executed

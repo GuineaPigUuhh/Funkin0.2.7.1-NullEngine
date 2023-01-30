@@ -56,15 +56,14 @@ class Song
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var checkFile = Assets.getText(Paths.json("songs/" + 'tutorial/tutorial')).trim();
+		var rawJson = null;
 
-		if (FileSystem.exists(Paths.json("songs/" + folder.toLowerCase() + '/' + jsonInput.toLowerCase())))
-			checkFile = Assets.getText(Paths.json("songs/" + folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
+		var modFile:String = ModPaths.json("songs/" + folder.toLowerCase() + '/' + jsonInput.toLowerCase()); // psych stuff
 
-		if (FileSystem.exists(ModPaths.json("songs/" + folder.toLowerCase() + '/' + jsonInput.toLowerCase())))
-			checkFile = Assets.getText(ModPaths.json("songs/" + folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
-
-		var rawJson = checkFile;
+		if (FileSystem.exists(modFile))
+			rawJson = File.getContent(modFile).trim();
+		if (rawJson == null)
+			rawJson = File.getContent(Paths.json("songs/" + folder + '/' + jsonInput)).trim();
 
 		while (!rawJson.endsWith("}"))
 		{

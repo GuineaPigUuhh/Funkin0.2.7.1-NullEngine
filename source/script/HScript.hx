@@ -1,5 +1,6 @@
 package script;
 
+import ModPaths;
 import Paths;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -18,6 +19,8 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import haxe.io.Path;
 
 using StringTools;
@@ -36,18 +39,16 @@ class HScript extends MusicBeatState
 {
 	public static var parser:Parser;
 
-	public var hscript:Interp;
+	public var interp:Interp;
 
 	public var scriptToExecute:String = "";
+	public var executedScript:Bool = false;
 
 	public var isString:Bool = false;
-	public var isNull:Bool = false;
 
-	public function new(scriptToExecute:String, isString:Bool = false, isNull:Bool = false)
+	public function new(scriptToExecute:String, isString:Bool = false)
 	{
 		this.scriptToExecute = scriptToExecute;
-
-		this.isNull = isNull;
 		this.isString = isString;
 
 		executeScript(this.scriptToExecute);
@@ -58,37 +59,48 @@ class HScript extends MusicBeatState
 	function executeScript(script:String)
 	{
 		parser = new hscript.Parser();
-		hscript = new hscript.Interp();
+		interp = new hscript.Interp();
 
 		parser.allowJSON = true;
 		parser.allowTypes = true;
 		parser.allowMetadata = true;
 
-		if (isNull == false)
-			addDefaultVariables();
-
 		if (isString == false)
 		{
-			var filePath = Paths.hscript(script);
-			if (FileSystem.exists(ModPaths.hscript(script)))
+			var isMod:Bool = true;
+			var filePath = ModPaths.hscript(script);
+			if (!FileSystem.exists(filePath))
 			{
-				filePath = ModPaths.hscript(script);
+				isMod = false;
+				filePath = Paths.hscript(script);
 			}
+
+			addDefaultVariables(isMod);
 
 			if (FileSystem.exists(filePath))
 			{
+				executedScript = true;
+
 				var getFile:String = File.getContent(filePath);
-				hscript.execute(parser.parseString(getFile));
+				interp.execute(parser.parseString(getFile));
 			}
 		}
 		else
 		{
-			hscript.execute(parser.parseString(script));
+			addDefaultVariables(false);
+
+			executedScript = true;
+			interp.execute(parser.parseString(script));
 		}
 	}
 
-	function addDefaultVariables()
+	function addDefaultVariables(isMod:Bool)
 	{
+		setVariable("add", FlxG.state.add);
+		setVariable("destroy", FlxG.state.destroy);
+		setVariable("remove", FlxG.state.remove);
+
+		// Flx Items
 		setVariable("FlxG", FlxG);
 		setVariable("FlxObject", FlxObject);
 		setVariable("FlxSprite", FlxSprite);
@@ -105,44 +117,41 @@ class HScript extends MusicBeatState
 		setVariable("FlxText", FlxText);
 		setVariable("FlxEase", FlxEase);
 		setVariable("FlxTween", FlxTween);
+		setVariable("FlxTimer", FlxTimer);
 		setVariable("FlxBackdrop", FlxBackdrop);
 
 		// game states
 		setVariable("Character", Character);
-		setVariable("Boyfriend", Boyfriend);
 		setVariable("DiscordClient", DiscordClient);
 		setVariable("MusicBeatState", MusicBeatState);
-		setVariable("Paths", Paths);
-		setVariable("ModPaths", ModPaths);
+		setVariable("Paths", (isMod ? ModPaths : Paths));
 		setVariable("PlayState", PlayState);
 
-		setVariable("traceHScript", traceHScript);
+		setVariable("traceWindows", function(title:String, message:String)
+		{
+			lime.app.Application.current.window.alert(title, message);
+		});
 	}
 
-	function traceHScript(message:String, title:String)
+	public function setVariable(setValue:String, value:Dynamic):Void // add custom variables of state
 	{
-		lime.app.Application.current.window.alert(title, message);
-	}
-
-	public function setVariable(addString:String, addValue:Dynamic) // add custom variables of state
-	{
-		hscript.variables.set(addString, addValue);
+		interp.variables.set(setValue, value);
 	}
 
 	public function getVariable(name:String)
 	{
-		return hscript.variables.get(name);
+		return interp.variables.get(name);
 	}
 
-	public function callOnHscript(functionToCall:String, ?params:Array<Any>):Dynamic
+	public function call(functionToCall:String, ?params:Array<Any>):Dynamic
 	{
-		if (hscript == null)
+		if (interp == null)
 		{
 			return null;
 		}
-		if (hscript.variables.exists(functionToCall))
+		if (interp.variables.exists(functionToCall))
 		{
-			var functionH = hscript.variables.get(functionToCall);
+			var functionH = interp.variables.get(functionToCall);
 			if (params == null)
 			{
 				var result = null;
@@ -156,6 +165,7 @@ class HScript extends MusicBeatState
 				return result;
 			}
 		}
+
 		return null;
 	}
 }

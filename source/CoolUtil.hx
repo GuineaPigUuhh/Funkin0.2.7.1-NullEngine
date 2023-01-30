@@ -4,6 +4,11 @@ import lime.utils.Assets;
 
 using StringTools;
 
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 class CoolUtil
 {
 	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
@@ -17,6 +22,28 @@ class CoolUtil
 	public static function difficultyExport():String
 	{
 		return difficultyArrayExport[PlayState.storyDifficulty];
+	}
+
+	public static function createModFolder():Void
+	{
+	}
+
+	public static function getInst(string:String):String
+	{
+		var inst = ModPaths.inst(string);
+		if (!FileSystem.exists(inst))
+			inst = Paths.inst(string);
+
+		return inst;
+	}
+
+	public static function getVocal(string:String):String
+	{
+		var vocal = ModPaths.voices(string);
+		if (!FileSystem.exists(vocal))
+			vocal = Paths.voices(string);
+
+		return vocal;
 	}
 
 	public static function coolTextFile(path:String):Array<String>

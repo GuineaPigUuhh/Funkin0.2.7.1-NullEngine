@@ -24,6 +24,7 @@ class Save
 	public static function saveSettings()
 	{
 		// saveSettings();
+
 		FlxG.save.data.ghostTapping = ghostTapping;
 		FlxG.save.data.flashing = flashing;
 		FlxG.save.data.antialiasing = antialiasing;
@@ -44,6 +45,7 @@ class Save
 	public static function loadSettings()
 	{
 		// loadSettings();
+
 		if (FlxG.save.data.ghostTapping != null)
 			ghostTapping = FlxG.save.data.ghostTapping;
 		if (FlxG.save.data.flashing != null)
@@ -54,6 +56,8 @@ class Save
 			noteSplash = FlxG.save.data.noteSplash;
 		if (FlxG.save.data.controls != null)
 			controls = FlxG.save.data.controls;
+		if (FlxG.save.data.isDownscroll != null)
+			isDownscroll = FlxG.save.data.isDownscroll;
 
 		if (FlxG.save.data.lightStrumsPlayer != null)
 			lightStrumsPlayer = FlxG.save.data.lightStrumsPlayer;

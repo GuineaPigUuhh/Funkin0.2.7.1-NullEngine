@@ -198,7 +198,7 @@ class FreeplayState extends MusicBeatState
 		if (FlxG.keys.justPressed.SPACE)
 		{
 			#if PRELOAD_ALL
-			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
+			FlxG.sound.playMusic(CoolUtil.getInst(songs[curSelected].songName.toLowerCase()), 0);
 			#end
 		}
 

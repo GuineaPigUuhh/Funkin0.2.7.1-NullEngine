@@ -11,6 +11,11 @@ import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
 
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 typedef CharacterFile =
 {
 	var animations:Array<Animation>;
@@ -24,6 +29,8 @@ typedef CharacterFile =
 	var cameraPos:Array<Float>;
 	var charPos:Array<Float>;
 	var healthBarColor:String;
+	var healthIcon:String;
+	var spritesheet:String;
 }
 
 typedef Animation =
@@ -51,6 +58,7 @@ class Character extends FlxSprite
 	public var isGf:Bool = false;
 
 	public var healthBarColor:String = "A1A1A1";
+	public var healthIcon:String = "face";
 
 	var DEFAULT_CHARACTER:String = "face";
 
@@ -74,6 +82,25 @@ class Character extends FlxSprite
 		"spooky" => "D57E00"
 	];
 
+	var charactersIcons:Map<String, String> = [
+		"bf" => "bf",
+		"bf-car" => "bf",
+		"bf-christmas" => "bf",
+		"bf-pixel" => "bf",
+		"dad" => "dad",
+		"gf" => "gf",
+		"mom" => "mom",
+		"mom-car" => "mom",
+		"monster" => "monster",
+		"monster-christmas" => "monster",
+		"parents-christmas" => "parents-christmas",
+		"pico" => "pico",
+		"senpai" => "senpai",
+		"senpai-angry" => "senpai",
+		"spirit" => "spirit",
+		"spooky" => "spooky"
+	];
+
 	public var cameraPosition:Array<Float> = [0, 0];
 	public var charPosition:Array<Float> = [0, 0];
 
@@ -82,6 +109,7 @@ class Character extends FlxSprite
 		super(x, y);
 
 		animOffsets = new Map<String, Array<Dynamic>>();
+
 		curCharacter = character;
 		this.isPlayer = isPlayer;
 
@@ -90,6 +118,8 @@ class Character extends FlxSprite
 
 		if (charactersColors.exists(curCharacter))
 			healthBarColor = charactersColors.get(curCharacter);
+		if (charactersIcons.exists(curCharacter))
+			healthIcon = charactersIcons.get(curCharacter);
 
 		switch (curCharacter)
 		{
@@ -329,7 +359,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('BOYFRIEND');
+				tex = Paths.getSparrowAtlas('BOYFRIEND');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -371,7 +401,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf-christmas':
-				var tex = Paths.getSparrowAtlas('christmas/bfChristmas');
+				tex = Paths.getSparrowAtlas('christmas/bfChristmas');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -399,7 +429,7 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-car':
-				var tex = Paths.getSparrowAtlas('bfCar');
+				tex = Paths.getSparrowAtlas('bfCar');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -562,32 +592,22 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			default:
-				var checkSprite = Paths.getSparrowAtlas('characters/${DEFAULT_CHARACTER}');
-				var checkFile = Json.parse(Assets.getText(Paths.json('characters/${DEFAULT_CHARACTER}')));
+				var vanillaPath:Bool = false;
 
-				if (OpenFlAssets.exists(Paths.getPreloadPath('characters/${curCharacter}/spritesheet.png')))
+				var checkJSON = ModPaths.json('characters/${curCharacter}');
+				if (!FileSystem.exists(checkJSON))
 				{
-					checkSprite = Paths.getSparrowAtlas('characters/${curCharacter}');
+					vanillaPath = true;
+					checkJSON = Paths.json('characters/${curCharacter}');
 				}
 
-				if (OpenFlAssets.exists(Paths.json('characters/${curCharacter}')))
-				{
-					checkFile = Json.parse(Assets.getText(Paths.json('characters/${curCharacter}')));
-				}
+				var file:CharacterFile = Json.parse(File.getContent(checkJSON));
 
-				// modCheck!
-				if (OpenFlAssets.exists(ModPaths.image('characters/${curCharacter}')))
-				{
-					checkSprite = ModPaths.getSparrowAtlas('characters/${curCharacter}');
-				}
+				tex = ModPaths.getSparrowAtlas(file.spritesheet);
+				if (vanillaPath == true)
+					tex = Paths.getSparrowAtlas(file.spritesheet);
 
-				if (OpenFlAssets.exists(ModPaths.json('characters/${curCharacter}')))
-				{
-					checkFile = Json.parse(Assets.getText(ModPaths.json('characters/${curCharacter}')));
-				}
-
-				frames = checkSprite;
-				var file:CharacterFile = checkFile;
+				frames = tex;
 
 				flipX = file.flipX;
 
@@ -604,6 +624,9 @@ class Character extends FlxSprite
 
 				if (file.healthBarColor != null || file.healthBarColor.length > 0)
 					healthBarColor = file.healthBarColor;
+
+				if (file.healthIcon != null || file.healthBarColor.length > 0)
+					healthIcon = file.healthIcon;
 
 				singDuration = file.singDuration;
 
@@ -666,6 +689,26 @@ class Character extends FlxSprite
 					playAnim('danceRight');
 		}
 
+		if (isPlayer)
+		{
+			if (!debugMode && animation.curAnim != null)
+			{
+				if (animation.curAnim.name.startsWith('sing'))
+				{
+					holdTimer += elapsed;
+				}
+				else
+					holdTimer = 0;
+
+				if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
+					playAnim('idle', true, false, 10);
+
+				if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
+				{
+					playAnim('deathLoop');
+				}
+			}
+		}
 		super.update(elapsed);
 	}
 
@@ -752,6 +795,13 @@ class Character extends FlxSprite
 					playAnim('idle');
 			}
 		}
+	}
+
+	var notesID:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
+
+	public function playSingAnimations(Dir:Int, end:String = "", Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
+	{
+		playAnim("sing" + notesID[Dir] + end.toLowerCase(), Force, Reversed, Frame);
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void

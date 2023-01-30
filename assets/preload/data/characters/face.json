@@ -58,11 +58,19 @@
     ],
     "defaultIdle":"idle",
 	"healthBarColor":"666666",
+	"healthIcon":"face",
+	"spritesheet":"characters/face",
     "isGf":false,
     "flipX":false,
     "antialiasing":true,
 	"singDuration":4,
     "scale":1.2,
-    "cameraPos":[0,0],
-    "charPos":[60,420]
+    "cameraPos":[
+		0,
+		0
+    ],
+	"charPos":[
+		60,
+		420
+    ]
 }

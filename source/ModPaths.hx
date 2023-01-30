@@ -30,6 +30,11 @@ class ModPaths
 		return Paths.getModPath('images/$key.png');
 	}
 
+	inline static public function file(key:String)
+	{
+		return Paths.getModPath('$key');
+	}
+
 	inline static public function json(key:String)
 	{
 		return Paths.getModPath('data/$key.json');
@@ -38,11 +43,6 @@ class ModPaths
 	inline static public function txt(key:String)
 	{
 		return Paths.getModPath('data/$key.txt');
-	}
-
-	inline static public function file(key:String, format:String)
-	{
-		return Paths.getModPath('$key.$format');
 	}
 
 	inline static public function video(key:String)

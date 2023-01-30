@@ -8,6 +8,11 @@ import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
 
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 class HealthIcon extends FlxSprite
 {
 	/**
@@ -41,13 +46,12 @@ class HealthIcon extends FlxSprite
 
 	public function changeIcon(curCharacter:String = 'face')
 	{
-		file = Paths.image('icons/${curCharacter}');
-
-		if (OpenFlAssets.exists(ModPaths.image('icons/${curCharacter}')))
-			file = ModPaths.image('icons/${curCharacter}');
+		file = ModPaths.image('icons/${curCharacter}');
+		if (!OpenFlAssets.exists(file))
+			file = Paths.image('icons/${curCharacter}');
 
 		if (!OpenFlAssets.exists(file))
-			file = Paths.image('icons/face');
+			curCharacter = 'face';
 
 		loadGraphic(file);
 		loadGraphic(file, true, 150, 150);

@@ -81,19 +81,16 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		var bg:DoubleSprite = new DoubleSprite(-80, 0, 0, 0, "menuBG");
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = true;
 		add(bg);
-		bg.scrollFactor.set();
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
 		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-		magenta.setGraphicSize(Std.int(magenta.width * 1.1));
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
