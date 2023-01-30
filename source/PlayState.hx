@@ -240,8 +240,12 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
+		var getStage:String = curStage = SONG.stage;
 		playStateScript = new HScript('data/songs/' + SONG.song.toLowerCase() + '/script', false);
-		stageScript = new HScript('data/stages/' + curStage, false);
+		stageScript = new HScript('data/stages/' + getStage, false);
+		if (stageScript.executedScript == true)
+			SONG.stage = curStage;
+
 		multiCodes([playStateScript, stageScript], "var");
 
 		playStateScript.call("onCreate", []);
@@ -263,10 +267,7 @@ class PlayState extends MusicBeatState
 					curStage = 'school';
 				case 'thorns':
 					curStage = 'schoolEvil';
-				default:
-					curStage = "stage";
 			}
-
 		switch (curStage)
 		{
 			case 'spooky':
@@ -519,36 +520,43 @@ class PlayState extends MusicBeatState
 					bg.scale.set(6, 6);
 					add(bg);
 				}
-			case "stage":
-				curStage = 'stage';
-
-				defaultCamZoom = 0.9;
-
-				var myballs:String = "stage/";
-
-				var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image(myballs + 'stageback'));
-				bg.antialiasing = Save.antialiasing;
-				bg.scrollFactor.set(0.9, 0.9);
-				bg.active = false;
-				add(bg);
-
-				var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image(myballs + 'stagefront'));
-				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-				stageFront.updateHitbox();
-				stageFront.antialiasing = Save.antialiasing;
-				stageFront.scrollFactor.set(0.9, 0.9);
-				stageFront.active = false;
-				add(stageFront);
-
-				var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image(myballs + 'stagecurtains'));
-				stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-				stageCurtains.updateHitbox();
-				stageCurtains.antialiasing = Save.antialiasing;
-				stageCurtains.scrollFactor.set(1.3, 1.3);
-				stageCurtains.active = false;
-				add(stageCurtains);
 			default:
 				stageScript.call("onCreateStage", []);
+
+				var defaultStage = ModPaths.hscript('data/stages/' + curStage);
+				if (!FileSystem.exists(defaultStage))
+					defaultStage = Paths.hscript('data/stages/' + curStage);
+
+				if (!FileSystem.exists(defaultStage))
+				{
+					curStage = 'stage';
+
+					defaultCamZoom = 0.9;
+
+					var myballs:String = "stage/";
+
+					var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image(myballs + 'stageback'));
+					bg.antialiasing = Save.antialiasing;
+					bg.scrollFactor.set(0.9, 0.9);
+					bg.active = false;
+					add(bg);
+
+					var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image(myballs + 'stagefront'));
+					stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+					stageFront.updateHitbox();
+					stageFront.antialiasing = Save.antialiasing;
+					stageFront.scrollFactor.set(0.9, 0.9);
+					stageFront.active = false;
+					add(stageFront);
+
+					var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image(myballs + 'stagecurtains'));
+					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
+					stageCurtains.updateHitbox();
+					stageCurtains.antialiasing = Save.antialiasing;
+					stageCurtains.scrollFactor.set(1.3, 1.3);
+					stageCurtains.active = false;
+					add(stageCurtains);
+				}
 		}
 
 		var gfVersion:String = 'gf';
