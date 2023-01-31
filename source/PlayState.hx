@@ -244,13 +244,18 @@ class PlayState extends MusicBeatState
 		playStateScript = new HScript('data/songs/' + SONG.song.toLowerCase() + '/script', false);
 		stageScript = new HScript('data/stages/' + getStage, false);
 		if (stageScript.executedScript == true)
+		{
 			SONG.stage = curStage;
-
+			trace("curStage: " + curStage);
+		}
 		multiCodes([playStateScript, stageScript], "var");
+		playStateScript.setVariable("playCutscene", playCutscene);
+		playStateScript.setVariable("funkinIntro", funkinIntro);
 
 		playStateScript.call("onCreate", []);
 
 		if (SONG.stage == null || SONG.stage.length < 1)
+		{
 			switch (SONG.song.toLowerCase())
 			{
 				case 'spookeez' | 'south' | 'monster':
@@ -268,6 +273,7 @@ class PlayState extends MusicBeatState
 				case 'thorns':
 					curStage = 'schoolEvil';
 			}
+		}
 		switch (curStage)
 		{
 			case 'spooky':
@@ -693,6 +699,7 @@ class PlayState extends MusicBeatState
 		}
 
 		add(camFollow);
+		playStateScript.setVariable("camFollow", camFollow);
 
 		FlxG.camera.follow(camFollow, LOCKON, 0.04);
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
@@ -821,19 +828,22 @@ class PlayState extends MusicBeatState
 	function multiCodes(scripts:Array<HScript>, part:String)
 	{
 		for (i in 0...scripts.length)
+		{
 			switch (part)
 			{
 				case "var":
 					scripts[i].setVariable("curStep", curStep);
-					scripts[i].setVariable("curStage", curStage);
+					scripts[i].setVariable("curStage", curStage); // why?
+					scripts[i].setVariable("curBeat", curBeat);
 					scripts[i].setVariable("camHUD", camHUD);
 					scripts[i].setVariable("camGame", camGame);
-					scripts[i].setVariable("curBeat", curBeat);
+
 				case "characters":
 					scripts[i].setVariable("boyfriend", boyfriend);
 					scripts[i].setVariable("gf", gf);
 					scripts[i].setVariable("dad", dad);
 			}
+		}
 	}
 
 	function schoolIntro(?dialogueBox:DialogueBox):Void

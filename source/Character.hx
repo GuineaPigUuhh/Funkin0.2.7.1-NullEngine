@@ -16,9 +16,18 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+enum abstract AtlasType(String) // cool system
+{
+	public var XML = "sparrowAtlas";
+	public var TEXT = "packerAtlas";
+	public var PNG = "png";
+}
+
 typedef CharacterFile =
 {
 	var animations:Array<Animation>;
+	var atlasType:AtlasType;
+	var pngSpecifications:Array<Int>; // code cool
 
 	var defaultIdle:String;
 	var isGf:Bool;
@@ -62,47 +71,70 @@ class Character extends FlxSprite
 
 	var DEFAULT_CHARACTER:String = "face";
 
-	var charactersColors:Map<String, String> = [
-		// for source code Characters
-		"bf" => "31B0D1",
-		"bf-car" => "31B0D1",
-		"bf-christmas" => "31B0D1",
-		"bf-pixel" => "7BD6F6",
-		"dad" => "AF66CE",
-		"gf" => "A5004D",
-		"mom" => "D8558E",
-		"mom-car" => "D8558E",
-		"monster" => "F3FF6E",
-		"monster-christmas" => "F3FF6E",
-		"parents-christmas" => "CD599E",
-		"pico" => "B7D855",
-		"senpai" => "FFAA6F",
-		"senpai-angry" => "FFAA6F",
-		"spirit" => "FF3C6E",
-		"spooky" => "D57E00"
-	];
-
-	var charactersIcons:Map<String, String> = [
-		"bf" => "bf",
-		"bf-car" => "bf",
-		"bf-christmas" => "bf",
-		"bf-pixel" => "bf",
-		"dad" => "dad",
-		"gf" => "gf",
-		"mom" => "mom",
-		"mom-car" => "mom",
-		"monster" => "monster",
-		"monster-christmas" => "monster",
-		"parents-christmas" => "parents-christmas",
-		"pico" => "pico",
-		"senpai" => "senpai",
-		"senpai-angry" => "senpai",
-		"spirit" => "spirit",
-		"spooky" => "spooky"
-	];
-
 	public var cameraPosition:Array<Float> = [0, 0];
 	public var charPosition:Array<Float> = [0, 0];
+
+	var existsMAP:Bool = false;
+
+	function getMAP()
+	{
+		var charactersColors:Map<String, String> = [
+			// for source code Characters
+			"bf" => "31B0D1",
+			"bf-car" => "31B0D1",
+			"bf-christmas" => "31B0D1",
+			"bf-pixel" => "7BD6F6",
+			"dad" => "AF66CE",
+			"gf" => "A5004D",
+			"mom" => "D8558E",
+			"mom-car" => "D8558E",
+			"monster" => "F3FF6E",
+			"monster-christmas" => "F3FF6E",
+			"parents-christmas" => "CD599E",
+			"pico" => "B7D855",
+			"senpai" => "FFAA6F",
+			"senpai-angry" => "FFAA6F",
+			"spirit" => "FF3C6E",
+			"spooky" => "D57E00"
+		];
+
+		var charactersIcons:Map<String, String> = [
+			"bf" => "bf",
+			"bf-car" => "bf",
+			"bf-christmas" => "bf",
+			"bf-pixel" => "bf",
+			"dad" => "dad",
+			"gf" => "gf",
+			"mom" => "mom",
+			"mom-car" => "mom",
+			"monster" => "monster",
+			"monster-christmas" => "monster",
+			"parents-christmas" => "parents-christmas",
+			"pico" => "pico",
+			"senpai" => "senpai",
+			"senpai-angry" => "senpai",
+			"spirit" => "spirit",
+			"spooky" => "spooky"
+		];
+
+		// for hard code Characters
+		var getVariable = "";
+		if (charactersColors.exists(curCharacter))
+		{
+			getVariable = charactersColors.get(curCharacter);
+
+			healthBarColor = getVariable;
+			existsMAP = true;
+		}
+
+		if (charactersIcons.exists(curCharacter))
+		{
+			getVariable = charactersIcons.get(curCharacter);
+
+			healthIcon = charactersIcons.get(curCharacter);
+			existsMAP = true;
+		}
+	}
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
@@ -116,10 +148,7 @@ class Character extends FlxSprite
 		var tex:FlxAtlasFrames;
 		antialiasing = Save.antialiasing;
 
-		if (charactersColors.exists(curCharacter))
-			healthBarColor = charactersColors.get(curCharacter);
-		if (charactersIcons.exists(curCharacter))
-			healthIcon = charactersIcons.get(curCharacter);
+		getMAP();
 
 		switch (curCharacter)
 		{
@@ -603,11 +632,28 @@ class Character extends FlxSprite
 
 				var file:CharacterFile = Json.parse(File.getContent(checkJSON));
 
-				tex = ModPaths.getSparrowAtlas(file.spritesheet);
-				if (vanillaPath == true)
-					tex = Paths.getSparrowAtlas(file.spritesheet);
+				var isPng:Bool = false;
+				var pngPath:String = ModPaths.image(file.spritesheet);
 
-				frames = tex;
+				var texAlt = ModPaths.getSparrowAtlas(file.spritesheet);
+				switch (file.atlasType)
+				{
+					default:
+						file.atlasType = XML;
+					case XML:
+						if (vanillaPath == true) texAlt = Paths.getSparrowAtlas(file.spritesheet);
+					case TEXT:
+						texAlt = ModPaths.getPackerAtlas(file.spritesheet);
+						if (vanillaPath == true) texAlt = Paths.getPackerAtlas(file.spritesheet);
+					case PNG:
+						isPng = true;
+						if (vanillaPath == true) pngPath = Paths.image(file.spritesheet);
+				}
+
+				if (isPng == true)
+					loadGraphic(pngPath, true, file.pngSpecifications[0], file.pngSpecifications[1]);
+				else
+					frames = texAlt; // amongus
 
 				flipX = file.flipX;
 
@@ -639,11 +685,15 @@ class Character extends FlxSprite
 				{
 					for (animArray in file.animations)
 					{
-						if (animArray.indices != null && animArray.indices.length > 0)
+						if (isPng == true)
+						{
+							animation.add(animArray.anim, animArray.indices, animArray.fps, !!animArray.loop);
+						}
+						else if (animArray.indices != null && animArray.indices.length > 0 && isPng == false)
 						{
 							animation.addByIndices(animArray.anim, animArray.name, animArray.indices, "", animArray.fps, !!animArray.loop);
 						}
-						else
+						else if (isPng == false)
 						{
 							animation.addByPrefix(animArray.anim, animArray.name, animArray.fps, !!animArray.loop);
 						}

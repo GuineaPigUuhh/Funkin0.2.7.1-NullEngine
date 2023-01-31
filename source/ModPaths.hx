@@ -60,9 +60,14 @@ class ModPaths
 		return Paths.getModPath('data/songs/${song.toLowerCase()}/Inst.ogg');
 	}
 
-	inline static public function getSparrowAtlas(key:String, ?library:String)
+	inline static public function getSparrowAtlas(key:String)
 	{
 		return FlxAtlasFrames.fromSparrow(image(key), Paths.getModPath('images/$key.xml'));
+	}
+
+	inline static public function getPackerAtlas(key:String)
+	{
+		return FlxAtlasFrames.fromSpriteSheetPacker(image(key), file('images/$key.txt'));
 	}
 
 	inline static public function xml(key:String)
