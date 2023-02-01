@@ -7,6 +7,10 @@ import haxe.format.JsonParser;
 import lime.utils.Assets;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 class Paths
 {
@@ -75,7 +79,13 @@ class Paths
 
 	inline static public function hscript(key:String, ?library:String)
 	{
-		return getPath('$key.hx', TEXT, library);
+		var modFile:String = ModPaths.hscript(key);
+		var vanillaFile = getPath('$key.hx', TEXT, library);
+
+		if (FileSystem.exists(modFile))
+			return modFile;
+		else
+			return vanillaFile;
 	}
 
 	inline static public function json(key:String, ?library:String)

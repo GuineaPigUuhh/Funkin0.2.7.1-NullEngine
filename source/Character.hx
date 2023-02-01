@@ -16,7 +16,7 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
-enum abstract AtlasType(String) // cool system
+enum abstract AtlasType(String) // why did I put this code WHYEEEEEE
 {
 	public var XML = "sparrowAtlas";
 	public var TEXT = "packerAtlas";
@@ -866,7 +866,7 @@ class Character extends FlxSprite
 		else
 			offset.set(0, 0);
 
-		if (curCharacter == 'gf')
+		if (curCharacter == 'gf' || isGf == true)
 		{
 			if (AnimName == 'singLEFT')
 			{

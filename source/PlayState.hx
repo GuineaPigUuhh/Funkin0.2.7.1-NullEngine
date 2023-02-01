@@ -38,12 +38,13 @@ import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
 import haxe.Json;
+import hxcodec.VideoHandler;
 import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
 import openfl.utils.Assets as OpenFlAssets;
-import script.HScript;
+import script.NewScript;
 
 using StringTools;
 
@@ -177,8 +178,8 @@ class PlayState extends MusicBeatState
 
 	var frontItems:FlxTypedGroup<FlxSprite>;
 
-	var playStateScript:HScript;
-	var stageScript:HScript;
+	var playStateScript:NewScript;
+	var stageScript:NewScript;
 
 	var divider:String = " • ";
 	var defaultFont:String = Paths.font("vcr.ttf");
@@ -240,17 +241,14 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
-		var getStage:String = curStage = SONG.stage;
-		playStateScript = new HScript('data/songs/' + SONG.song.toLowerCase() + '/script', false);
-		stageScript = new HScript('data/stages/' + getStage, false);
-		if (stageScript.executedScript == true)
-		{
-			SONG.stage = curStage;
+		var getStage:String = curStage = SONG.stage = curStage; // Monster....
+		playStateScript = new NewScript(Paths.hscript('data/songs/' + SONG.song.toLowerCase() + '/script'), true);
+		stageScript = new NewScript(Paths.hscript('data/stages/' + getStage), true);
+		if (stageScript.active == true)
 			trace("curStage: " + curStage);
-		}
-		multiCodes([playStateScript, stageScript], "var");
-		playStateScript.setVariable("playCutscene", playCutscene);
-		playStateScript.setVariable("funkinIntro", funkinIntro);
+
+		playStateScript.set("playCutscene", playCutscene);
+		playStateScript.set("funkinIntro", funkinIntro);
 
 		playStateScript.call("onCreate", []);
 
@@ -699,7 +697,7 @@ class PlayState extends MusicBeatState
 		}
 
 		add(camFollow);
-		playStateScript.setVariable("camFollow", camFollow);
+		playStateScript.set("camFollow", camFollow);
 
 		FlxG.camera.follow(camFollow, LOCKON, 0.04);
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
@@ -825,23 +823,24 @@ class PlayState extends MusicBeatState
 		super.create();
 	}
 
-	function multiCodes(scripts:Array<HScript>, part:String)
+	function multiCodes(scripts:Array<NewScript>, part:String)
 	{
 		for (i in 0...scripts.length)
 		{
 			switch (part)
 			{
 				case "var":
-					scripts[i].setVariable("curStep", curStep);
-					scripts[i].setVariable("curStage", curStage); // why?
-					scripts[i].setVariable("curBeat", curBeat);
-					scripts[i].setVariable("camHUD", camHUD);
-					scripts[i].setVariable("camGame", camGame);
+					scripts[i].set("curStep", curStep);
+					scripts[i].set("curStage", curStage); // why?
+					scripts[i].set("curBeat", curBeat);
+					scripts[i].set("camHUD", camHUD);
+					scripts[i].set("camGame", camGame);
+					scripts[i].set("camZooming", camZooming);
 
 				case "characters":
-					scripts[i].setVariable("boyfriend", boyfriend);
-					scripts[i].setVariable("gf", gf);
-					scripts[i].setVariable("dad", dad);
+					scripts[i].set("boyfriend", boyfriend);
+					scripts[i].set("gf", gf);
+					scripts[i].set("dad", dad);
 			}
 		}
 	}

@@ -1,3 +1,5 @@
+APIStuff.hx
+
 export/
 .vscode/
-APIStuff.hx
+.haxelib/
