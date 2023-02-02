@@ -47,10 +47,10 @@ class HealthIcon extends FlxSprite
 	public function changeIcon(curCharacter:String = 'face')
 	{
 		file = ModPaths.image('icons/${curCharacter}');
-		if (!OpenFlAssets.exists(file))
+		if (!FileSystem.exists(file))
 			file = Paths.image('icons/${curCharacter}');
 
-		if (!OpenFlAssets.exists(file))
+		if (!FileSystem.exists(file))
 			curCharacter = 'face';
 
 		loadGraphic(file);
@@ -81,6 +81,6 @@ class HealthIcon extends FlxSprite
 		scale.set(1.1, 1.1);
 		updateHitbox();
 
-		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.circOut});
+		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.quadOut});
 	}
 }

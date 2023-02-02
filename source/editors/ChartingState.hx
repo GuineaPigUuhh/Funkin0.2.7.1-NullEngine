@@ -85,6 +85,8 @@ class ChartingState extends MusicBeatState
 	{
 		curSection = lastSection;
 
+		ChartJSON.getJSON('chartList');
+
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
 		bg.scrollFactor.set();
 		add(bg);
@@ -94,6 +96,7 @@ class ChartingState extends MusicBeatState
 
 		leftIcon = new HealthIcon('bf');
 		rightIcon = new HealthIcon('dad');
+
 		leftIcon.scrollFactor.set(1, 1);
 		rightIcon.scrollFactor.set(1, 1);
 
@@ -123,6 +126,7 @@ class ChartingState extends MusicBeatState
 				needsVoices: true,
 				player1: 'bf',
 				player2: 'dad',
+				player3: 'gf',
 				stage: 'stage',
 				speed: 1,
 				validScore: false,
@@ -193,18 +197,6 @@ class ChartingState extends MusicBeatState
 			trace('CHECKED!');
 		};
 
-		var check_mute_inst = new FlxUICheckBox(10, 200, null, null, "Mute Instrumental (in editor)", 100);
-		check_mute_inst.checked = false;
-		check_mute_inst.callback = function()
-		{
-			var vol:Float = 1;
-
-			if (check_mute_inst.checked)
-				vol = 0;
-
-			FlxG.sound.music.volume = vol;
-		};
-
 		var saveButton:FlxButton = new FlxButton(110, 8, "Save", function()
 		{
 			saveLevel();
@@ -230,31 +222,54 @@ class ChartingState extends MusicBeatState
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
 
-		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
-		var stages:Array<String> = CoolUtil.coolTextFile(Paths.txt('stageList'));
+		var characters:Array<String> = ChartJSON.opponents;
+		var boyfriends:Array<String> = ChartJSON.boyfriends;
+		var girlfriends:Array<String> = ChartJSON.girlfriends;
+		var stages:Array<String> = ChartJSON.stages;
 
-		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
+		var extGroupsPlayers:Int = 30;
+
+		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(boyfriends, true), function(character:String)
 		{
-			_song.player1 = characters[Std.parseInt(character)];
+			_song.player1 = boyfriends[Std.parseInt(character)];
 		});
 		player1DropDown.selectedLabel = _song.player1;
 
-		var player2DropDown = new FlxUIDropDownMenu(player1DropDown.x, player1DropDown.y + 25, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true),
-			function(character:String)
-			{
-				_song.player2 = characters[Std.parseInt(character)];
-			});
+		var player2DropDown = new FlxUIDropDownMenu(player1DropDown.x, player1DropDown.y + extGroupsPlayers,
+			FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
+		{
+			_song.player2 = characters[Std.parseInt(character)];
+		});
+		player2DropDown.selectedLabel = _song.player2;
 
-		var stageDropDown = new FlxUIDropDownMenu(player2DropDown.x, player2DropDown.y + 25, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true),
-			function(character:String)
-			{
-				_song.stage = stages[Std.parseInt(character)];
-			});
+		var player3DropDown = new FlxUIDropDownMenu(player1DropDown.x, player2DropDown.y + extGroupsPlayers,
+			FlxUIDropDownMenu.makeStrIdLabelArray(girlfriends, true), function(character:String)
+		{
+			_song.player3 = girlfriends[Std.parseInt(character)];
+		});
+		player3DropDown.selectedLabel = _song.player3;
+
+		var stageDropDown = new FlxUIDropDownMenu(player1DropDown.x, player3DropDown.y + extGroupsPlayers,
+			FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(character:String)
+		{
+			_song.stage = stages[Std.parseInt(character)];
+		});
+		player3DropDown.selectedLabel = _song.stage;
 
 		var check_hasDialogue:FlxUICheckBox = new FlxUICheckBox(loadAutosaveBtn.x, loadAutosaveBtn.y + 40, _song.hasDialogue, null, "has Dialogue", 100);
 		check_hasDialogue.name = 'check_hasDialogue';
 
-		player2DropDown.selectedLabel = _song.player2;
+		var check_mute_inst = new FlxUICheckBox(10, stageDropDown.y + extGroupsPlayers, null, null, "Mute Instrumental (in editor)", 100);
+		check_mute_inst.checked = false;
+		check_mute_inst.callback = function()
+		{
+			var vol:Float = 1;
+
+			if (check_mute_inst.checked)
+				vol = 0;
+
+			FlxG.sound.music.volume = vol;
+		};
 
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
@@ -272,6 +287,8 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(check_hasDialogue);
 
 		tab_group_song.add(stageDropDown);
+
+		tab_group_song.add(player3DropDown); // 3D CHAR?!?!??!?!!! No
 		tab_group_song.add(player2DropDown);
 		tab_group_song.add(player1DropDown);
 
@@ -428,8 +445,6 @@ class ChartingState extends MusicBeatState
 				case 'Must hit section':
 					_song.notes[curSection].mustHitSection = check.checked;
 
-					updateHeads();
-
 				case 'Change BPM':
 					_song.notes[curSection].changeBPM = check.checked;
 					FlxG.log.add('changed bpm shit');
@@ -503,6 +518,8 @@ class ChartingState extends MusicBeatState
 		return daPos;
 	}
 
+	var changeSectionForFix:Bool = false;
+
 	override function update(elapsed:Float)
 	{
 		curStep = recalculateSteps();
@@ -524,6 +541,18 @@ class ChartingState extends MusicBeatState
 			}
 
 			changeSection(curSection + 1, false);
+			changeSectionForFix = true;
+		}
+
+		if (check_mustHitSection.checked)
+		{
+			leftIcon.setPosition(0, -100);
+			rightIcon.setPosition(gridBG.width / 2, -100);
+		}
+		else
+		{
+			leftIcon.setPosition(gridBG.width / 2, -100);
+			rightIcon.setPosition(0, -100);
 		}
 
 		FlxG.watch.addQuick('daBeat', curBeat);
@@ -827,22 +856,6 @@ class ChartingState extends MusicBeatState
 
 		check_changeBPM.checked = sec.changeBPM;
 		stepperSectionBPM.value = sec.bpm;
-
-		updateHeads();
-	}
-
-	function updateHeads():Void
-	{
-		if (check_mustHitSection.checked)
-		{
-			leftIcon.animation.play('bf');
-			rightIcon.animation.play('dad');
-		}
-		else
-		{
-			leftIcon.animation.play('dad');
-			rightIcon.animation.play('bf');
-		}
 	}
 
 	function updateNoteUI():Void
@@ -900,7 +913,7 @@ class ChartingState extends MusicBeatState
 			var daStrumTime = i[0];
 			var daSus = i[2];
 
-			var note:Note = new Note(daStrumTime, daNoteInfo % 4);
+			var note:Note = new Note(daStrumTime, daNoteInfo % 4, null, false, 0);
 			note.sustainLength = daSus;
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 			note.updateHitbox();

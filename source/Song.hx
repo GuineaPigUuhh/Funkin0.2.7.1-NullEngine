@@ -22,6 +22,7 @@ typedef SwagSong =
 
 	var player1:String;
 	var player2:String;
+	var player3:String;
 	var stage:String;
 	var validScore:Bool;
 	var hasDialogue:Bool;
@@ -43,6 +44,7 @@ class Song
 
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
+	public var player3:String = 'gf';
 	public var stage:String = 'stage';
 
 	public var hasDialogue:Bool = false;
@@ -62,6 +64,7 @@ class Song
 
 		if (FileSystem.exists(modFile))
 			rawJson = File.getContent(modFile).trim();
+
 		if (rawJson == null)
 			rawJson = File.getContent(Paths.json("songs/" + folder + '/' + jsonInput)).trim();
 

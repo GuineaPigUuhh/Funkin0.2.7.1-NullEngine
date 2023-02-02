@@ -54,9 +54,11 @@ class CreditsState extends MusicBeatState
 
 	override function create()
 	{
-		creditsJson = Json.parse(Assets.getText(Paths.json("creditList")));
-		if (FileSystem.exists(ModPaths.json("creditList")))
-			creditsJson = Json.parse(Assets.getText(ModPaths.json("creditList")));
+		var creditsPath:String = ModPaths.json("creditList");
+		if (!FileSystem.exists(creditsPath))
+			creditsPath = Paths.json("creditList");
+
+		creditsJson = Json.parse(Assets.getText(creditsPath));
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
