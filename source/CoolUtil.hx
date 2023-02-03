@@ -28,6 +28,24 @@ class CoolUtil
 	{
 	}
 
+	public static function formatSong(diff:Int):String
+	{
+		var coolDiff:String = "normal";
+		switch (diff)
+		{
+			case 0:
+				coolDiff = "easy";
+			case 1:
+				coolDiff = "normal";
+			case 2:
+				coolDiff = "hard";
+		}
+
+		var formatedSong:String = coolDiff;
+
+		return formatedSong;
+	}
+
 	public static function getInst(string:String):String
 	{
 		var inst = ModPaths.inst(string);

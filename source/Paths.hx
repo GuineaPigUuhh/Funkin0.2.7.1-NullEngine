@@ -110,12 +110,12 @@ class Paths
 
 	inline static public function voices(song:String)
 	{
-		return 'assets/data/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		return 'assets/data/songs/${song.toLowerCase()}/audio/Voices.$SOUND_EXT';
 	}
 
 	inline static public function inst(song:String)
 	{
-		return 'assets/data/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+		return 'assets/data/songs/${song.toLowerCase()}/audio/Inst.$SOUND_EXT';
 	}
 
 	inline static public function image(key:String, ?library:String)
@@ -125,7 +125,13 @@ class Paths
 
 	inline static public function font(key:String)
 	{
-		return 'assets/fonts/$key';
+		var modFile:String = ModPaths.font(key);
+		var vanillaFile = 'assets/fonts/$key';
+
+		if (FileSystem.exists(modFile))
+			return modFile;
+		else
+			return vanillaFile;
 	}
 
 	inline static public function video(key:String)

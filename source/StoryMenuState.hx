@@ -69,10 +69,11 @@ class StoryMenuState extends MusicBeatState
 
 	override function create()
 	{
-		weekData = Json.parse(Assets.getText(Paths.json("weekList")));
+		var weekPath:String = ModPaths.json("weekList");
+		if (!FileSystem.exists(weekPath))
+			weekPath = Paths.json("weekList");
 
-		if (FileSystem.exists(ModPaths.json("weekList")))
-			weekData = Json.parse(Assets.getText(ModPaths.json("weekList")));
+		weekData = Json.parse(Assets.getText(weekPath));
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -271,8 +272,9 @@ class StoryMenuState extends MusicBeatState
 		selectedWeek = true;
 
 		PlayState.storyDifficulty = curDifficulty;
+		var formatSong = CoolUtil.formatSong(PlayState.storyDifficulty);
 
-		PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + CoolUtil.difficultyExport(), PlayState.storyPlaylist[0].toLowerCase());
+		PlayState.SONG = Song.loadFromJson(formatSong, PlayState.storyPlaylist[0].toLowerCase());
 		PlayState.storyWeek = curWeek;
 		PlayState.campaignScore = 0;
 		new FlxTimer().start(1, function(tmr:FlxTimer)

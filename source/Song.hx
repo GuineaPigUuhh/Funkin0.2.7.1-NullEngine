@@ -25,13 +25,6 @@ typedef SwagSong =
 	var player3:String;
 	var stage:String;
 	var validScore:Bool;
-	var hasDialogue:Bool;
-}
-
-typedef Config =
-{
-	var skipTo:Int;
-	var scripts:Array<String>;
 }
 
 class Song
@@ -47,8 +40,6 @@ class Song
 	public var player3:String = 'gf';
 	public var stage:String = 'stage';
 
-	public var hasDialogue:Bool = false;
-
 	public function new(song, notes, bpm)
 	{
 		this.song = song;
@@ -60,13 +51,12 @@ class Song
 	{
 		var rawJson = null;
 
-		var modFile:String = ModPaths.json("songs/" + folder.toLowerCase() + '/' + jsonInput.toLowerCase()); // psych stuff
+		var modFile:String = ModPaths.json("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase()); // psych stuff
 
 		if (FileSystem.exists(modFile))
 			rawJson = File.getContent(modFile).trim();
-
 		if (rawJson == null)
-			rawJson = File.getContent(Paths.json("songs/" + folder + '/' + jsonInput)).trim();
+			rawJson = File.getContent(Paths.json("songs/" + folder + '/chart/' + jsonInput)).trim();
 
 		while (!rawJson.endsWith("}"))
 		{

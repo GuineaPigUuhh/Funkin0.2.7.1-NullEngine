@@ -14,7 +14,6 @@ class Save
 	public static var noteSplash:Bool = true;
 	public static var isDownscroll:Bool = false;
 
-	public static var lightStrumsPlayer:Bool = true;
 	public static var lightStrumsCpu:Bool = true;
 
 	public static var modSelected:String = "";
@@ -32,7 +31,6 @@ class Save
 		FlxG.save.data.isDownscroll = isDownscroll;
 		FlxG.save.data.controls = controls;
 
-		FlxG.save.data.lightStrumsPlayer = lightStrumsPlayer;
 		FlxG.save.data.lightStrumsCpu = lightStrumsCpu;
 
 		FlxG.save.data.modSelected = modSelected;
@@ -59,8 +57,6 @@ class Save
 		if (FlxG.save.data.isDownscroll != null)
 			isDownscroll = FlxG.save.data.isDownscroll;
 
-		if (FlxG.save.data.lightStrumsPlayer != null)
-			lightStrumsPlayer = FlxG.save.data.lightStrumsPlayer;
 		if (FlxG.save.data.lightStrumsCpu != null)
 			lightStrumsCpu = FlxG.save.data.lightStrumsCpu;
 

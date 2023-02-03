@@ -78,7 +78,7 @@ class HealthIcon extends FlxSprite
 
 	public function beatHitIcon()
 	{
-		scale.set(1.1, 1.1);
+		scale.set(1.15, 1.15);
 		updateHitbox();
 
 		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.quadOut});

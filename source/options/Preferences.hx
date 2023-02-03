@@ -121,10 +121,6 @@ class Preferences extends MusicBeatSubstate
 				{
 					Save.isDownscroll = !Save.isDownscroll;
 				}
-			case "lightStrumsPlayer" | "No lightStrumsPlayer":
-				{
-					Save.lightStrumsPlayer = !Save.lightStrumsPlayer;
-				}
 			case "lightStrumsCpu" | "No lightStrumsCpu":
 				{
 					Save.lightStrumsCpu = !Save.lightStrumsCpu;
@@ -148,7 +144,6 @@ class Preferences extends MusicBeatSubstate
 			Save.antialiasing ? "Antialiasing" : "No Antialiasing",
 			Save.noteSplash ? "NoteSplash" : "No NoteSplash",
 			Save.isDownscroll ? "DownScroll" : "UpScroll",
-			Save.lightStrumsPlayer ? "lightStrumsPlayer" : "No lightStrumsPlayer",
 			Save.lightStrumsCpu ? "lightStrumsCpu" : "No lightStrumsCpu"
 		];
 	}

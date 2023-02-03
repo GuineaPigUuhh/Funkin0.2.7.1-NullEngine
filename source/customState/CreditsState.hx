@@ -143,16 +143,38 @@ class CreditsState extends MusicBeatState
 	{
 		curSelected = FlxMath.wrap(curSelected + change, 0, creditsJson.users.length - 1);
 
-		FlxTween.color(menuBG, 1.5, menuBG.color, FlxColor.fromString("#" + creditsJson.users[curSelected].color), {ease: FlxEase.quintOut});
+		updateCredits();
+	}
 
-		if (FileSystem.exists(Paths.image('credits/' + creditsJson.users[curSelected].icon)))
-			creditsIcon.loadGraphic(Paths.image('credits/' + creditsJson.users[curSelected].icon));
-		if (FileSystem.exists(ModPaths.image('credits/' + creditsJson.users[curSelected].icon)))
-			creditsIcon.loadGraphic(ModPaths.image('credits/' + creditsJson.users[curSelected].icon));
+	function setScreenCenter(sprite:FlxSprite, position:String = "XY")
+	{
+		if (position == "XY")
+		{
+			sprite.x = (FlxG.width / 2) - (creditsIcon.width / 2);
+			sprite.y = (FlxG.height / 2) - (creditsIcon.height / 2);
+		}
+		if (position == "X")
+		{
+			sprite.x = (FlxG.width / 2) - (creditsIcon.width / 2);
+		}
+		if (position == "Y")
+		{
+			sprite.y = (FlxG.height / 2) - (creditsIcon.height / 2);
+		}
+	}
 
-		if (FileSystem.exists(Paths.image('credits/' + creditsJson.users[curSelected].icon))
-			&& FileSystem.exists(ModPaths.image('credits/' + creditsJson.users[curSelected].icon)))
-			creditsIcon.loadGraphic(Paths.image('credits/none'));
+	function updateCredits()
+	{
+		FlxTween.color(menuBG, 1.5, menuBG.color, FlxColor.fromString("#" + creditsJson.users[curSelected].color), {startDelay: 0.05});
+
+		var loadImage = ModPaths.image('credits/' + creditsJson.users[curSelected].icon);
+		if (!FileSystem.exists(loadImage))
+			loadImage = Paths.image('credits/' + creditsJson.users[curSelected].icon);
+
+		if (!FileSystem.exists(loadImage))
+			loadImage = Paths.image('credits/none');
+
+		creditsIcon.loadGraphic(loadImage);
 
 		creditsIcon.alpha = 0;
 		setScreenCenter(creditsIcon, "X");
@@ -177,23 +199,6 @@ class CreditsState extends MusicBeatState
 
 		role.text = creditsJson.users[curSelected].role;
 		role.screenCenter(X);
-	}
-
-	function setScreenCenter(sprite:FlxSprite, position:String = "XY")
-	{
-		if (position == "XY")
-		{
-			sprite.x = (FlxG.width / 2) - (creditsIcon.width / 2);
-			sprite.y = (FlxG.height / 2) - (creditsIcon.height / 2);
-		}
-		if (position == "X")
-		{
-			sprite.x = (FlxG.width / 2) - (creditsIcon.width / 2);
-		}
-		if (position == "Y")
-		{
-			sprite.y = (FlxG.height / 2) - (creditsIcon.height / 2);
-		}
 	}
 
 	function getCurrentBGColor()

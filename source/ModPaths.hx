@@ -30,6 +30,11 @@ class ModPaths
 		return Paths.getModPath('images/$key.png');
 	}
 
+	inline static public function font(key:String)
+	{
+		return Paths.getModPath('fonts/$key');
+	}
+
 	inline static public function file(key:String)
 	{
 		return Paths.getModPath('$key');
@@ -52,12 +57,12 @@ class ModPaths
 
 	inline static public function voices(song:String)
 	{
-		return Paths.getModPath('data/songs/${song.toLowerCase()}/Voices.ogg');
+		return Paths.getModPath('data/songs/${song.toLowerCase()}/audio/Voices.ogg');
 	}
 
 	inline static public function inst(song:String)
 	{
-		return Paths.getModPath('data/songs/${song.toLowerCase()}/Inst.ogg');
+		return Paths.getModPath('data/songs/${song.toLowerCase()}/audio/Inst.ogg');
 	}
 
 	inline static public function getSparrowAtlas(key:String)

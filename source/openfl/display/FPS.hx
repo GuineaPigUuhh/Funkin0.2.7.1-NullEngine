@@ -45,7 +45,7 @@ class FPS extends TextField
 		currentFPS = 0;
 		selectable = false;
 		mouseEnabled = false;
-		defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont("assets/fonts/vcr.ttf").fontName, 17, 0xFFFFFFFF);
+		defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont("assets/fonts/vcr.ttf").fontName, 16, 0xFFFFFFFF);
 		autoSize = LEFT;
 		multiline = true;
 		alpha = 0.8;
@@ -82,12 +82,13 @@ class FPS extends TextField
 		if (currentCount != cacheCount /*&& visible*/)
 		{
 			text = "FPS: " + currentFPS + "\n";
-			var memoryMegas:Float = 0;
 
+			var memoryMegas:Float = 0;
 			#if openfl
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-			text += "MEMORY: " + memoryMegas + " MB";
+			text += "RAM: " + memoryMegas + " MB\n";
 			#end
+			text += "Null Engine v" + '0.2.4';
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))
 			text += "\ntotalDC: " + Context3DStats.totalDrawCalls();

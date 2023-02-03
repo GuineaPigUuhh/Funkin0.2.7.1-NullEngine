@@ -28,17 +28,6 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
-typedef CustomStateJSON =
-{
-	var options:Array<CustomStates>;
-}
-
-typedef CustomStates =
-{
-	var name:String;
-	var stateName:String;
-}
-
 class MainMenuState extends MusicBeatState
 {
 	var curSelected:Int = 0;
@@ -50,24 +39,12 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	var statesJSON:CustomStateJSON;
-
 	override function create()
 	{
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
-
-		statesJSON = Json.parse(Assets.getText(Paths.json("customStates")));
-		if (FileSystem.exists(ModPaths.json("customStates")))
-			statesJSON = Json.parse(Assets.getText(ModPaths.json("customStates")));
-
-		for (i in 0...statesJSON.options.length)
-		{
-			optionShit.insert(optionShit.length + i, statesJSON.options[i].name);
-			trace("Add To Options: " + statesJSON.options[i].name);
-		}
 
 		trace(Save.controls);
 
@@ -81,10 +58,11 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		var bg:DoubleSprite = new DoubleSprite(-80, 0, 0, 0, "menuBG");
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = true;
+		bg.antialiasing = Save.antialiasing;
+		bg.scrollFactor.set();
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -94,7 +72,7 @@ class MainMenuState extends MusicBeatState
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
-		magenta.antialiasing = true;
+		magenta.antialiasing = Save.antialiasing;
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 		magenta.scrollFactor.set();
@@ -106,22 +84,24 @@ class MainMenuState extends MusicBeatState
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
 
-			var file = Paths.getSparrowAtlas('mainMenuAssets/donate');
-			var idleAnim = "donate basic";
-			var selectedAnim = "donate white";
+			var defaultImage:String = "donate";
 
-			if (FileSystem.exists(Paths.image('mainMenuAssets/${optionShit[i]}')))
+			var file = ModPaths.getSparrowAtlas('mainMenuAssets/' + optionShit[i]);
+			var idleAnim = optionShit[i] + " basic";
+			var selectedAnim = optionShit[i] + " white";
+
+			var fileExists = ModPaths.image('mainMenuAssets/' + optionShit[i]);
+
+			if (!FileSystem.exists(fileExists))
 			{
 				file = Paths.getSparrowAtlas('mainMenuAssets/${optionShit[i]}');
-				idleAnim = '${optionShit[i]} basic';
-				selectedAnim = '${optionShit[i]} white';
+				fileExists = Paths.image('mainMenuAssets/' + optionShit[i]);
 			}
-
-			if (FileSystem.exists(ModPaths.image('mainMenuAssets/${optionShit[i]}')))
+			if (!FileSystem.exists(fileExists))
 			{
-				file = ModPaths.getSparrowAtlas('mainMenuAssets/${optionShit[i]}');
-				idleAnim = '${optionShit[i]} basic';
-				selectedAnim = '${optionShit[i]} white';
+				file = Paths.getSparrowAtlas('mainMenuAssets/' + defaultImage);
+				idleAnim = defaultImage + " basic";
+				selectedAnim = defaultImage + " white";
 			}
 
 			menuItem.frames = file;
@@ -133,7 +113,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set(0, 0.8);
-			menuItem.antialiasing = true;
+			menuItem.antialiasing = Save.antialiasing;
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);
@@ -178,7 +158,8 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 
-				FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+				if (Save.flashing == true)
+					FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
 				menuItems.forEach(function(spr:FlxSprite)
 				{
@@ -225,15 +206,6 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new customState.CreditsState());
 			case "mods":
 				FlxG.switchState(new ModState());
-		}
-
-		for (i in 0...statesJSON.options.length)
-		{
-			if (optionShit[curSelected] == statesJSON.options[i].name)
-			{
-				customState.CustomState.daState = statesJSON.options[i].stateName;
-				FlxG.switchState(new customState.CustomState());
-			}
 		}
 	}
 

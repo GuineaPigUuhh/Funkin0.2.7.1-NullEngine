@@ -49,10 +49,11 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		freeplayData = Json.parse(Assets.getText(Paths.json("weekList")));
+		var weekPath:String = ModPaths.json("weekList");
+		if (!FileSystem.exists(weekPath))
+			weekPath = Paths.json("weekList");
 
-		if (FileSystem.exists(ModPaths.json("weekList")))
-			freeplayData = Json.parse(Assets.getText(ModPaths.json("weekList")));
+		freeplayData = Json.parse(Assets.getText(weekPath));
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -210,8 +211,7 @@ class FreeplayState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.ENTER)
 		{
-			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
-
+			var poop:String = CoolUtil.formatSong(curDifficulty);
 			trace(poop);
 
 			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());

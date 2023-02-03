@@ -4,7 +4,6 @@ package;
 import DiscordClient;
 #end
 import Section.SwagSection;
-import Song.Config;
 import Song.SwagSong;
 import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
@@ -209,9 +208,8 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
-		if (SONG.hasDialogue
-			&& OpenFlAssets.exists(Paths.txt('${SONG.song.toLowerCase()}/dialogue'))) // ele vai pegar o arquivo e vai fucionar looolololoollololool // anti crash bruh
-			dialogue = CoolUtil.coolTextFile(Paths.txt('${SONG.song.toLowerCase()}/dialogue'));
+		if (FileSystem.exists(Paths.txt('songs/${SONG.song.toLowerCase()}/dialogue'))) // ele vai pegar o arquivo e vai fucionar looolololoollololool // anti crash bruh
+			dialogue = CoolUtil.coolTextFile(Paths.txt('songs/${SONG.song.toLowerCase()}/dialogue'));
 
 		storyDifficultyText = CoolUtil.difficultyString();
 
@@ -241,14 +239,10 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
-		var getStage:String = curStage = SONG.stage; // Monster....
+		curStage = SONG.stage;
+
 		playStateScript = new NewScript(Paths.hscript('data/songs/' + SONG.song.toLowerCase() + '/script'), true);
-		stageScript = new NewScript(Paths.hscript('data/stages/' + getStage), true);
-		if (stageScript.active == true)
-		{
-			SONG.stage = curStage;
-			trace("curStage: " + curStage);
-		}
+		stageScript = new NewScript(Paths.hscript('data/stages/' + curStage), true);
 
 		playStateScript.set("playCutscene", playCutscene);
 		playStateScript.set("funkinIntro", funkinIntro);
@@ -275,6 +269,10 @@ class PlayState extends MusicBeatState
 					curStage = 'schoolEvil';
 			}
 		}
+
+		SONG.stage = curStage;
+		trace("Stage: " + curStage);
+
 		switch (curStage)
 		{
 			case 'spooky':
@@ -816,10 +814,13 @@ class PlayState extends MusicBeatState
 				case 'thorns':
 					schoolIntro(doof);
 				default:
-					if (SONG.hasDialogue && OpenFlAssets.exists(Paths.txt('${SONG.song.toLowerCase()}/dialogue')))
-						schoolIntro(doof);
-					else
-						startCountdown();
+					/*
+						if (FileSystem.exists(Paths.txt('songs/${SONG.song.toLowerCase()}/dialogue')))
+							schoolIntro(doof);
+						else
+					 */
+
+					startCountdown();
 			}
 		}
 		else
@@ -1356,21 +1357,17 @@ class PlayState extends MusicBeatState
 
 	function updateIcons()
 	{
-		if (healthBar.percent < 20)
+		if (healthBar.percent < 20) // boyfriend losing
 		{
 			iconP1.playAnimation(boyfriend.curCharacter + "-losing");
 		}
-		else
-		{
-			iconP1.playAnimation(boyfriend.curCharacter);
-		}
-
-		if (healthBar.percent > 80)
+		else if (healthBar.percent > 80) // dad Losing
 		{
 			iconP2.playAnimation(dad.curCharacter + "-losing");
 		}
 		else
 		{
+			iconP1.playAnimation(boyfriend.curCharacter);
 			iconP2.playAnimation(dad.curCharacter);
 		}
 	}
@@ -1712,10 +1709,12 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				trace('LOADING NEXT SONG');
-				trace(PlayState.storyPlaylist[0].toLowerCase() + CoolUtil.difficultyExport());
+				var formatSong = CoolUtil.formatSong(PlayState.storyDifficulty);
 
-				switch (SONG.song.toLowerCase()) // cutcesss
+				trace('LOADING NEXT SONG');
+				trace(formatSong);
+
+				switch (SONG.song.toLowerCase()) // end cutcesss
 				{
 					case 'eggnog':
 						var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
@@ -1730,7 +1729,7 @@ class PlayState extends MusicBeatState
 				FlxTransitionableState.skipNextTransOut = true;
 				prevCamFollow = camFollow;
 
-				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + CoolUtil.difficultyExport(), PlayState.storyPlaylist[0]);
+				PlayState.SONG = Song.loadFromJson(formatSong, PlayState.storyPlaylist[0]);
 				FlxG.sound.music.stop();
 
 				LoadingState.loadAndSwitchState(new PlayState());
@@ -2356,14 +2355,13 @@ class PlayState extends MusicBeatState
 
 			boyfriend.playSingAnimations(daNote.noteData, checkAltAnimBF, true);
 
-			if (Save.lightStrumsPlayer)
-				playerStrums.forEach(function(spr:FlxSprite)
+			playerStrums.forEach(function(spr:FlxSprite)
+			{
+				if (Math.abs(daNote.noteData) == spr.ID)
 				{
-					if (Math.abs(daNote.noteData) == spr.ID)
-					{
-						spr.animation.play('confirm', true);
-					}
-				});
+					spr.animation.play('confirm', true);
+				}
+			});
 
 			daNote.wasGoodHit = true;
 
