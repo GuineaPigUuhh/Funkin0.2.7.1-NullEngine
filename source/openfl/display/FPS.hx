@@ -5,6 +5,7 @@ import haxe.Timer;
 import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
+import sys.io.File;
 #if gl_stats
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
@@ -88,7 +89,7 @@ class FPS extends TextField
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
 			text += "RAM: " + memoryMegas + " MB\n";
 			#end
-			text += "Null Engine v" + '0.2.4';
+			text += "Null Engine v" + File.getContent("buildNumber.txt");
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))
 			text += "\ntotalDC: " + Context3DStats.totalDrawCalls();

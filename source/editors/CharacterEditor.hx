@@ -14,8 +14,6 @@ import flixel.util.FlxColor;
  */
 class CharacterEditor extends MusicBeatState
 {
-	var bf:Character;
-	var dad:Character;
 	var char:Character;
 
 	var ghost:Character;
@@ -33,6 +31,7 @@ class CharacterEditor extends MusicBeatState
 	public function new(daAnim:String = 'dad', isDad:Bool)
 	{
 		super();
+
 		this.daAnim = daAnim;
 		this.isDad = isDad;
 	}
@@ -54,34 +53,28 @@ class CharacterEditor extends MusicBeatState
 
 		add(ghost);
 
-		if (isDad)
+		var dadType:Bool = false;
+		if (isDad == true)
 		{
-			dad = new Character(0, 0, daAnim);
-			dad.screenCenter();
-			dad.debugMode = true;
-
-			char = dad;
-			dad.flipX = false;
-
-			add(dad);
+			dadType = false;
 		}
 		else
 		{
-			bf = new Character(0, 0, daAnim, true);
-			bf.screenCenter();
-			bf.debugMode = true;
-
-			char = bf;
-			bf.flipX = false;
-			add(bf);
+			dadType = true;
 		}
+
+		char = new Character(0, 0, daAnim, dadType);
+		char.screenCenter();
+		char.debugMode = true;
+		char.flipX = false;
+		add(char);
 
 		ghost.flipX = char.flipX;
 
 		dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
 
-		textAnim = new FlxText(300, 16);
+		textAnim = new FlxText(300, 60);
 		textAnim.color = FlxColor.BLUE;
 		textAnim.size = 26;
 		textAnim.scrollFactor.set();
@@ -155,21 +148,6 @@ class CharacterEditor extends MusicBeatState
 			camFollow.velocity.set();
 		}
 
-		if (FlxG.keys.justPressed.G)
-		{
-			ghost.visible = !ghost.visible;
-		}
-
-		if (FlxG.keys.justPressed.H)
-		{
-			char.antialiasing = !char.antialiasing;
-		}
-
-		if (FlxG.keys.justPressed.J)
-		{
-			char.flipX = !char.flipX;
-		}
-
 		if (FlxG.keys.justPressed.W)
 		{
 			curAnim -= 1;
@@ -181,10 +159,13 @@ class CharacterEditor extends MusicBeatState
 		}
 
 		if (curAnim < 0)
+		{
 			curAnim = animList.length - 1;
-
+		}
 		if (curAnim >= animList.length)
+		{
 			curAnim = 0;
+		}
 
 		if (FlxG.keys.justPressed.S || FlxG.keys.justPressed.W || FlxG.keys.justPressed.SPACE)
 		{

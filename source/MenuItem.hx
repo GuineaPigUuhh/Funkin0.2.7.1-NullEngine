@@ -6,7 +6,12 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
+import modding.ModPaths;
 import openfl.utils.Assets as OpenFlAssets;
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 class MenuItem extends FlxSpriteGroup
 {
@@ -18,15 +23,9 @@ class MenuItem extends FlxSpriteGroup
 	{
 		super(x, y);
 		week = new FlxSprite();
+		var path:String = 'storymenu/' + weekName;
 
-		if (OpenFlAssets.exists(Paths.image('storymenu/' + weekName)))
-		{
-			week.loadGraphic(Paths.image('storymenu/' + weekName));
-		}
-		if (OpenFlAssets.exists(ModPaths.image('storymenu/' + weekName)))
-		{
-			week.loadGraphic(ModPaths.image('storymenu/' + weekName));
-		}
+		week.loadGraphic(CoolUtil.configGraphic(path));
 
 		add(week);
 	}

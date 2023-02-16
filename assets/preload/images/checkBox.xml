@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="checkBox.png">
+	<!-- Created with Adobe Animate version 19.2.1.408 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="checkFalseAnim0000" x="0" y="0" width="206" height="203" frameX="0" frameY="0" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0001" x="0" y="0" width="206" height="203" frameX="0" frameY="0" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0002" x="206" y="0" width="204" height="200" frameX="-13" frameY="-4" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0003" x="206" y="0" width="204" height="200" frameX="-13" frameY="-4" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0004" x="410" y="0" width="210" height="192" frameX="-27" frameY="-13" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0005" x="410" y="0" width="210" height="192" frameX="-27" frameY="-13" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0006" x="620" y="0" width="255" height="162" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0007" x="620" y="0" width="255" height="162" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0008" x="0" y="203" width="274" height="166" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0009" x="274" y="203" width="279" height="167" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0010" x="553" y="203" width="289" height="176" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0011" x="0" y="379" width="291" height="180" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0012" x="291" y="379" width="292" height="188" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0013" x="583" y="379" width="292" height="233" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0014" x="583" y="379" width="292" height="233" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0015" x="583" y="379" width="292" height="233" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0016" x="583" y="379" width="292" height="233" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkFalseAnim0017" x="583" y="379" width="292" height="233" frameX="-27" frameY="-47" frameWidth="319" frameHeight="280"/>
+	<SubTexture name="checkTrueAnim0000" x="0" y="612" width="238" height="234" frameX="0" frameY="-14" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0001" x="238" y="612" width="225" height="242" frameX="-13" frameY="-6" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0002" x="463" y="612" width="211" height="246" frameX="-23" frameY="0" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0003" x="463" y="612" width="211" height="246" frameX="-23" frameY="0" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0004" x="674" y="612" width="187" height="210" frameX="-33" frameY="0" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0005" x="674" y="612" width="187" height="210" frameX="-33" frameY="0" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0006" x="0" y="858" width="170" height="208" frameX="-50" frameY="-2" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0007" x="0" y="858" width="170" height="208" frameX="-50" frameY="-2" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0008" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0009" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0010" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0011" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0012" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0013" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0014" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0015" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+	<SubTexture name="checkTrueAnim0016" x="170" y="858" width="170" height="206" frameX="-50" frameY="-4" frameWidth="238" frameHeight="248"/>
+</TextureAtlas>

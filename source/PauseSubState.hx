@@ -12,6 +12,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import options.OptionsState;
 
 class PauseSubState extends MusicBeatSubstate
 {
@@ -20,6 +21,7 @@ class PauseSubState extends MusicBeatSubstate
 	var menuItems:Array<String> = [
 		'Resume',
 		'Restart Song',
+		'Options',
 		PlayState.isStoryMode ? "Exit to Menu" : "Exit to Freeplay"
 	];
 	var curSelected:Int = 0;
@@ -29,6 +31,11 @@ class PauseSubState extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		super();
+
+		if (PlayState.chartingMode == true)
+		{
+			menuItems.insert(2, "Exit Charting Mode");
+		}
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 0;
@@ -103,25 +110,28 @@ class PauseSubState extends MusicBeatSubstate
 
 		if (accepted)
 		{
-			var daSelected:String = menuItems[curSelected];
-
-			switch (daSelected)
+			switch (menuItems[curSelected])
 			{
 				case "Resume":
 					close();
-				case "Restart Song":
-					FlxG.resetState();
-				case "Exit to Menu":
-					FlxG.switchState(new StoryMenuState());
-				case "Exit to Freeplay":
-					FlxG.switchState(new FreeplayState());
-			}
-		}
 
-		if (FlxG.keys.justPressed.J)
-		{
-			// for reference later!
-			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
+				case "Restart Song":
+					restartSong();
+
+				case "Options":
+					FlxG.switchState(new OptionsState());
+					OptionsState.isPlayStated = true;
+
+				case "Exit Charting Mode":
+					restartSong();
+					PlayState.chartingMode = false;
+
+				case "Exit to Menu":
+					exit("storymode");
+
+				case "Exit to Freeplay":
+					exit("freeplay");
+			}
 		}
 	}
 
@@ -130,6 +140,24 @@ class PauseSubState extends MusicBeatSubstate
 		pauseMusic.destroy();
 
 		super.destroy();
+	}
+
+	function restartSong()
+	{
+		FlxG.resetState();
+	}
+
+	function exit(state:String)
+	{
+		if (state == "freeplay")
+			FlxG.switchState(new FreeplayState());
+		else if (state == "storymode")
+			FlxG.switchState(new StoryMenuState());
+		else
+			FlxG.switchState(new MainMenuState());
+
+		PlayState.chartingMode = false;
+		OptionsState.isPlayStated = false;
 	}
 
 	function changeSelection(change:Int = 0):Void

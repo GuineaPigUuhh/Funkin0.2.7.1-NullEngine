@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' - Null Engine" file="NullEngine" packageName="com.capybaracoding.nullEngine" package="com.capybaracoding.nullEngine" main="Main" version="0.2.7.1" company="CapybaraCoding" />
+	<app title="Friday Night Funkin': Null Engine" file="NullEngine" packageName="com.capybaracoding.nullEngine" package="com.capybaracoding.nullEngine" main="Main" version="0.2.7.1" company="CapybaraCoding" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -58,10 +58,11 @@
 	<assets path="assets/shared"   library="shared"   exclude="*.ogg" if="web"/>
 	<assets path="assets/shared"   library="shared"   exclude="*.mp3" unless="web"/>
 
-	<assets path="other/batExport/launch.bat" rename="Launch.bat" embed='false'/>
-	<assets path="other/batExport/launch_with_log.bat" rename="Launch_With_Log.bat" embed='false'/>
+	<assets path="buildNumber.txt" embed='false'/>
+	<assets path="batExport/launch.bat" rename="Launch.bat" embed='false'/>
+	<assets path="batExport/launch_with_log.bat" rename="Launch_With_Log.bat" embed='false'/>
 
-	<assets path='example_mods' rename='mods' embed='false'/>
+	<assets path='mods' embed='false'/>
 	<assets path="assets/fonts" embed='false'/>
 
 	<!-- <template path='mods' /> -->
@@ -83,6 +84,8 @@
 
 	<haxelib name="hscript" />
 	<haxelib name="SScript" />
+
+	<haxelib name="flxanimate" /> 	<!--Cool System! YIPPPPPPPPPEEEEE-->
 
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
@@ -133,10 +136,10 @@
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 	
-	<icon path="other/icons/icon16.png" size='16'/>
-	<icon path="other/icons/icon32.png" size='32'/>
-	<icon path="other/icons/icon64.png" size='64'/>
-	<icon path="other/icons/iconOG.png" />
+	<icon path="art/icons/icon16.png" size='16'/>
+	<icon path="art/icons/icon32.png" size='32'/>
+	<icon path="art/icons/icon64.png" size='64'/>
+	<icon path="art/icons/iconOG.png" />
 
 
 	<!-- <haxedef name="SKIP_TO_PLAYSTATE" if="debug" /> -->

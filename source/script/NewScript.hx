@@ -2,6 +2,10 @@ package script;
 
 import SScript;
 import flixel.FlxG;
+import flxanimate.FlxAnimate;
+import modding.ModPaths;
+
+using StringTools;
 
 class NewScript extends SScript
 {
@@ -29,6 +33,7 @@ class NewScript extends SScript
 		// FLIXEL
 		set('FlxG', FlxG);
 		set('FlxBasic', flixel.FlxBasic);
+		set('FlxMath', flixel.math.FlxMath);
 		set('FlxObject', flixel.FlxObject);
 		set('FlxSprite', flixel.FlxSprite);
 		set('FlxSound', flixel.system.FlxSound);
@@ -41,6 +46,9 @@ class NewScript extends SScript
 		set('FlxTween', flixel.tweens.FlxTween);
 		set('FlxEase', flixel.tweens.FlxEase);
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
+
+		// CUSTOM FLIXEL!
+		set('FlxAnimate', FlxAnimate);
 
 		// GAME
 		set('Character', Character);

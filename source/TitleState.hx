@@ -59,8 +59,9 @@ class TitleState extends MusicBeatState
 		if (FlxG.save.data.flashing == null)
 			Save.saveSettings();
 
+		// laodCrew!
 		Save.loadSettings();
-
+		PlayerSettings.player1.controls.loadKeyBinds();
 		Highscore.load();
 
 		#if FREEPLAY
@@ -194,7 +195,7 @@ class TitleState extends MusicBeatState
 
 	function getIntroTextShit():Array<Array<String>>
 	{
-		var fullText:String = Assets.getText(Paths.txt('introText'));
+		var fullText:String = Assets.getText(Paths.txt('textFiles/introText'));
 
 		var firstArray:Array<String> = fullText.split('\n');
 		var swagGoodArray:Array<Array<String>> = [];

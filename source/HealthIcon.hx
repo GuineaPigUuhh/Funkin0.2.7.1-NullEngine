@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import modding.ModPaths;
 import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
@@ -23,8 +24,6 @@ class HealthIcon extends FlxSprite
 	public var curCharacter:String = 'face';
 	public var isPlayer:Bool = false;
 
-	var file:String = "";
-
 	public function new(curCharacter:String = 'face', isPlayer:Bool = false)
 	{
 		super();
@@ -40,21 +39,18 @@ class HealthIcon extends FlxSprite
 	{
 		super.update(elapsed);
 
+		angle = FlxMath.lerp(0, angle, FlxMath.bound(1 - (elapsed * 3), 0, 1));
+
 		if (sprTracker != null)
 			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
 	}
 
 	public function changeIcon(curCharacter:String = 'face')
 	{
-		file = ModPaths.image('icons/${curCharacter}');
-		if (!FileSystem.exists(file))
-			file = Paths.image('icons/${curCharacter}');
+		var path:String = 'icons/${curCharacter}';
 
-		if (!FileSystem.exists(file))
-			curCharacter = 'face';
-
-		loadGraphic(file);
-		loadGraphic(file, true, 150, 150);
+		loadGraphic(CoolUtil.configGraphic(path));
+		loadGraphic(CoolUtil.configGraphic(path), true, 150, 150);
 
 		animation.add(curCharacter, [0], 0, false, isPlayer);
 		animation.add(curCharacter + "-losing", [1], 0, false, isPlayer);
@@ -76,11 +72,18 @@ class HealthIcon extends FlxSprite
 		animation.play(name);
 	}
 
-	public function beatHitIcon()
+	var iconBopNumber:Float = 22;
+
+	public function iconBop(_beat:Int, player:Bool)
 	{
 		scale.set(1.15, 1.15);
 		updateHitbox();
 
 		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.quadOut});
+
+		if (_beat % 4 == 0)
+		{
+			angle = (player == true ? -iconBopNumber : iconBopNumber);
+		}
 	}
 }

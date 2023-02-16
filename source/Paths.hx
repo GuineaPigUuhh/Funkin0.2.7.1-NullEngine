@@ -5,6 +5,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
+import modding.ModPaths;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 #if sys
@@ -110,12 +111,12 @@ class Paths
 
 	inline static public function voices(song:String)
 	{
-		return 'assets/data/songs/${song.toLowerCase()}/audio/Voices.$SOUND_EXT';
+		return getPath('data/songs/${song.toLowerCase()}/audio/Voices.$SOUND_EXT', MUSIC, null);
 	}
 
 	inline static public function inst(song:String)
 	{
-		return 'assets/data/songs/${song.toLowerCase()}/audio/Inst.$SOUND_EXT';
+		return getPath('data/songs/${song.toLowerCase()}/audio/Inst.$SOUND_EXT', MUSIC, null);
 	}
 
 	inline static public function image(key:String, ?library:String)

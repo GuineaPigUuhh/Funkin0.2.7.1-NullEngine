@@ -29,8 +29,6 @@ enum abstract Action(String) to String from String
 	var ACCEPT = "accept";
 	var BACK = "back";
 	var PAUSE = "pause";
-	var RESET = "reset";
-	var CHEAT = "cheat";
 }
 #else
 @:enum
@@ -51,8 +49,6 @@ abstract Action(String) to String from String
 	var ACCEPT = "accept";
 	var BACK = "back";
 	var PAUSE = "pause";
-	var RESET = "reset";
-	var CHEAT = "cheat";
 }
 #end
 
@@ -73,11 +69,9 @@ enum Control
 	LEFT;
 	RIGHT;
 	DOWN;
-	RESET;
 	ACCEPT;
 	BACK;
 	PAUSE;
-	CHEAT;
 }
 
 enum KeyboardScheme
@@ -109,8 +103,6 @@ class Controls extends FlxActionSet
 	var _accept = new FlxActionDigital(Action.ACCEPT);
 	var _back = new FlxActionDigital(Action.BACK);
 	var _pause = new FlxActionDigital(Action.PAUSE);
-	var _reset = new FlxActionDigital(Action.RESET);
-	var _cheat = new FlxActionDigital(Action.CHEAT);
 
 	#if (haxe >= "4.0.0")
 	var byName:Map<String, FlxActionDigital> = [];
@@ -196,16 +188,6 @@ class Controls extends FlxActionSet
 	inline function get_PAUSE()
 		return _pause.check();
 
-	public var RESET(get, never):Bool;
-
-	inline function get_RESET()
-		return _reset.check();
-
-	public var CHEAT(get, never):Bool;
-
-	inline function get_CHEAT()
-		return _cheat.check();
-
 	#if (haxe >= "4.0.0")
 	public function new(name, scheme = None)
 	{
@@ -226,13 +208,11 @@ class Controls extends FlxActionSet
 		add(_accept);
 		add(_back);
 		add(_pause);
-		add(_reset);
-		add(_cheat);
 
 		for (action in digitalActions)
 			byName[action.name] = action;
 
-		setKeyboardScheme(scheme, false);
+		setKeyboardScheme(scheme);
 	}
 	#else
 	public function new(name, scheme:KeyboardScheme = null)
@@ -254,15 +234,13 @@ class Controls extends FlxActionSet
 		add(_accept);
 		add(_back);
 		add(_pause);
-		add(_reset);
-		add(_cheat);
 
 		for (action in digitalActions)
 			byName[action.name] = action;
 
 		if (scheme == null)
 			scheme = None;
-		setKeyboardScheme(scheme, false);
+		setKeyboardScheme(scheme);
 	}
 	#end
 
@@ -308,8 +286,6 @@ class Controls extends FlxActionSet
 			case ACCEPT: _accept;
 			case BACK: _back;
 			case PAUSE: _pause;
-			case RESET: _reset;
-			case CHEAT: _cheat;
 		}
 	}
 
@@ -351,10 +327,6 @@ class Controls extends FlxActionSet
 				func(_back, JUST_PRESSED);
 			case PAUSE:
 				func(_pause, JUST_PRESSED);
-			case RESET:
-				func(_reset, JUST_PRESSED);
-			case CHEAT:
-				func(_cheat, JUST_PRESSED);
 		}
 	}
 
@@ -487,7 +459,7 @@ class Controls extends FlxActionSet
 		}
 	}
 
-	public function setKeyboardScheme(scheme:KeyboardScheme, reset = true)
+	public function setKeyboardScheme(scheme:KeyboardScheme)
 	{
 		loadKeyBinds();
 	}
@@ -496,20 +468,17 @@ class Controls extends FlxActionSet
 	{
 		removeKeyboard();
 
-		inline bindKeys(Control.UP, [getControlInputs(2), getControlInputs(6)]);
-		inline bindKeys(Control.DOWN, [getControlInputs(1), getControlInputs(5)]);
-		inline bindKeys(Control.LEFT, [getControlInputs(0), getControlInputs(4)]);
-		inline bindKeys(Control.RIGHT, [getControlInputs(3), getControlInputs(7)]);
+		inline bindKeys(Control.UP, [getInput(Save.keyUP), getInput(Save.keyUPalt)]);
+		inline bindKeys(Control.DOWN, [getInput(Save.keyDOWN), getInput(Save.keyDOWNalt)]);
+		inline bindKeys(Control.LEFT, [getInput(Save.keyLEFT), getInput(Save.keyLEFTalt)]);
+		inline bindKeys(Control.RIGHT, [getInput(Save.keyRIGHT), getInput(Save.keyRIGHTalt)]);
 		inline bindKeys(Control.ACCEPT, [Z, ENTER]);
 		inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
-		inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
-		inline bindKeys(Control.RESET, [R]);
+		inline bindKeys(Control.PAUSE, [ENTER, ESCAPE]);
 	}
 
-	function getControlInputs(number:Int)
-	{
-		return FlxKey.fromString(Save.controls[number]);
-	}
+	function getInput(name:String)
+		return FlxKey.fromString(name);
 
 	function removeKeyboard()
 	{
@@ -577,8 +546,7 @@ class Controls extends FlxActionSet
 			Control.DOWN => [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN],
 			Control.LEFT => [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT],
 			Control.RIGHT => [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT],
-			Control.PAUSE => [START],
-			Control.RESET => [Y]
+			Control.PAUSE => [START]
 		]);
 		#else
 		addGamepadLiteral(id, [
@@ -589,10 +557,7 @@ class Controls extends FlxActionSet
 			Control.DOWN => [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN, RIGHT_STICK_DIGITAL_DOWN],
 			Control.LEFT => [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT, RIGHT_STICK_DIGITAL_LEFT],
 			Control.RIGHT => [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT, RIGHT_STICK_DIGITAL_RIGHT],
-			Control.PAUSE => [START],
-			// Swap Y and X for switch
-			Control.RESET => [Y],
-			Control.CHEAT => [X]
+			Control.PAUSE => [START]
 		]);
 		#end
 	}

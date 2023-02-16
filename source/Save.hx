@@ -14,11 +14,17 @@ class Save
 	public static var noteSplash:Bool = true;
 	public static var isDownscroll:Bool = false;
 
-	public static var lightStrumsCpu:Bool = true;
-
 	public static var modSelected:String = "";
 
-	public static var controls:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT", "A", "S", "W", "D"];
+	public static var keyUP:String = 'UP';
+	public static var keyDOWN:String = 'DOWN';
+	public static var keyLEFT:String = 'LEFT';
+	public static var keyRIGHT:String = 'RIGHT';
+
+	public static var keyUPalt:String = 'W';
+	public static var keyDOWNalt:String = 'S';
+	public static var keyLEFTalt:String = 'A';
+	public static var keyRIGHTalt:String = 'D';
 
 	public static function saveSettings()
 	{
@@ -29,11 +35,18 @@ class Save
 		FlxG.save.data.antialiasing = antialiasing;
 		FlxG.save.data.noteSplash = noteSplash;
 		FlxG.save.data.isDownscroll = isDownscroll;
-		FlxG.save.data.controls = controls;
-
-		FlxG.save.data.lightStrumsCpu = lightStrumsCpu;
 
 		FlxG.save.data.modSelected = modSelected;
+
+		FlxG.save.data.keyUP = keyUP;
+		FlxG.save.data.keyDOWN = keyDOWN;
+		FlxG.save.data.keyLEFT = keyLEFT;
+		FlxG.save.data.keyRIGHT = keyRIGHT;
+
+		FlxG.save.data.keyUPalt = keyUPalt;
+		FlxG.save.data.keyDOWNalt = keyDOWNalt;
+		FlxG.save.data.keyLEFTalt = keyLEFTalt;
+		FlxG.save.data.keyRIGHTalt = keyRIGHTalt;
 
 		FlxG.save.flush();
 
@@ -52,16 +65,29 @@ class Save
 			antialiasing = FlxG.save.data.antialiasing;
 		if (FlxG.save.data.noteSplash != null)
 			noteSplash = FlxG.save.data.noteSplash;
-		if (FlxG.save.data.controls != null)
-			controls = FlxG.save.data.controls;
 		if (FlxG.save.data.isDownscroll != null)
 			isDownscroll = FlxG.save.data.isDownscroll;
 
-		if (FlxG.save.data.lightStrumsCpu != null)
-			lightStrumsCpu = FlxG.save.data.lightStrumsCpu;
-
 		if (FlxG.save.data.modSelected != null)
 			modSelected = FlxG.save.data.modSelected;
+
+		if (FlxG.save.data.keyUP != null)
+			keyUP = FlxG.save.data.keyUP;
+		if (FlxG.save.data.keyDOWN != null)
+			keyDOWN = FlxG.save.data.keyDOWN;
+		if (FlxG.save.data.keyLEFT != null)
+			keyLEFT = FlxG.save.data.keyLEFT;
+		if (FlxG.save.data.keyRIGHT != null)
+			keyRIGHT = FlxG.save.data.keyRIGHT;
+
+		if (FlxG.save.data.keyUPalt != null)
+			keyUPalt = FlxG.save.data.keyUPalt;
+		if (FlxG.save.data.keyDOWNalt != null)
+			keyDOWNalt = FlxG.save.data.keyDOWNalt;
+		if (FlxG.save.data.keyLEFTalt != null)
+			keyLEFTalt = FlxG.save.data.keyLEFTalt;
+		if (FlxG.save.data.keyRIGHTalt != null)
+			keyRIGHTalt = FlxG.save.data.keyRIGHTalt;
 
 		trace('Load Settings');
 	}

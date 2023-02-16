@@ -25,6 +25,7 @@ import flixel.ui.FlxButton;
 import flixel.ui.FlxSpriteButton;
 import flixel.util.FlxColor;
 import haxe.Json;
+import jsonData.ChartJSON;
 import lime.utils.Assets;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
@@ -85,7 +86,7 @@ class ChartingState extends MusicBeatState
 	{
 		curSection = lastSection;
 
-		ChartJSON.getJSON('chartList');
+		ChartJSON.getJSON();
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
 		bg.color = 0xFF4D4D4D;
@@ -204,7 +205,7 @@ class ChartingState extends MusicBeatState
 
 		var reloadSongJson:FlxButton = new FlxButton(reloadSong.x, saveButton.y + 30, "Reload JSON", function()
 		{
-			loadJson(_song.song.toLowerCase());
+			loadJson(_song.song.toLowerCase(), "hard");
 		});
 
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, 'load autosave', loadAutosave);
@@ -222,7 +223,7 @@ class ChartingState extends MusicBeatState
 		var girlfriends:Array<String> = ChartJSON.girlfriends;
 		var stages:Array<String> = ChartJSON.stages;
 
-		var extGroupsPlayers:Int = 30;
+		var extGroupsPlayers:Int = 125;
 
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(boyfriends, true), function(character:String)
 		{
@@ -230,27 +231,28 @@ class ChartingState extends MusicBeatState
 		});
 		player1DropDown.selectedLabel = _song.player1;
 
-		var player2DropDown = new FlxUIDropDownMenu(player1DropDown.x, player1DropDown.y + extGroupsPlayers,
+		var player2DropDown = new FlxUIDropDownMenu(player1DropDown.x + extGroupsPlayers, player1DropDown.y,
 			FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
 			_song.player2 = characters[Std.parseInt(character)];
 		});
 		player2DropDown.selectedLabel = _song.player2;
 
-		var player3DropDown = new FlxUIDropDownMenu(player1DropDown.x, player2DropDown.y + extGroupsPlayers,
-			FlxUIDropDownMenu.makeStrIdLabelArray(girlfriends, true), function(character:String)
-		{
-			_song.player3 = girlfriends[Std.parseInt(character)];
-		});
+		var player3DropDown = new FlxUIDropDownMenu(player1DropDown.x, player2DropDown.y + 30, FlxUIDropDownMenu.makeStrIdLabelArray(girlfriends, true),
+			function(character:String)
+			{
+				_song.player3 = girlfriends[Std.parseInt(character)];
+			});
 		player3DropDown.selectedLabel = _song.player3;
 
-		var stageDropDown = new FlxUIDropDownMenu(player1DropDown.x, player3DropDown.y + extGroupsPlayers,
+		var stageDropDown = new FlxUIDropDownMenu(player1DropDown.x + extGroupsPlayers, player3DropDown.y,
 			FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(character:String)
 		{
 			_song.stage = stages[Std.parseInt(character)];
 		});
 		stageDropDown.selectedLabel = _song.stage;
-		var check_mute_inst = new FlxUICheckBox(10, stageDropDown.y + extGroupsPlayers, null, null, "Mute Instrumental (in editor)", 100);
+
+		var check_mute_inst = new FlxUICheckBox(10, stageDropDown.y + 40, null, null, "Mute Instrumental (in editor)", 100);
 		check_mute_inst.checked = false;
 		check_mute_inst.callback = function()
 		{
@@ -399,10 +401,10 @@ class ChartingState extends MusicBeatState
 			// vocals.stop();
 		}
 
-		FlxG.sound.playMusic(Paths.inst(daSong), 0.6);
+		FlxG.sound.playMusic(CoolUtil.getInst(daSong), 0.6);
 
 		// WONT WORK FOR TUTORIAL OR TEST SONG!!! REDO LATER
-		vocals = new FlxSound().loadEmbedded(Paths.voices(daSong));
+		vocals = new FlxSound().loadEmbedded(CoolUtil.getVocal(daSong));
 		FlxG.sound.list.add(vocals);
 
 		FlxG.sound.music.pause();
@@ -1080,9 +1082,9 @@ class ChartingState extends MusicBeatState
 		return noteData;
 	}
 
-	function loadJson(song:String):Void
+	function loadJson(song:String, diff:String):Void
 	{
-		PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
+		PlayState.SONG = Song.loadFromJson(diff.toLowerCase(), song.toLowerCase());
 		FlxG.resetState();
 	}
 

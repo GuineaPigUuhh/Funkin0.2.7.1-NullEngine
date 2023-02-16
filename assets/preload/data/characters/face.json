@@ -1,77 +1,75 @@
 {
-    "animations":[
+    "anims":[
         {
-            "offsets": [
-				-5,
-				0
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "idle",
-			"indices": [],
-			"name": "idle"
+            "animName":"idle",
+            "animPrefix":"idle",
+            "indices":[],
+            "fps":24,
+            "loop":false,
+            "offsets":{
+                "x":0,
+                "y":0
+            }
         },
         {
-            "offsets": [
-				-15,
-				25
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singUP",
-			"indices": [],
-			"name": "up"
+            "animName":"singUP",
+            "animPrefix":"up",
+            "indices":[],
+            "fps":24,
+            "loop":false,
+            "offsets":{
+                "x":141,
+                "y":77
+            }
         },
         {
-            "offsets": [
-				-5,
-				-50
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singDOWN",
-			"indices": [],
-			"name": "down"
+            "animName":"singDOWN",
+            "animPrefix":"down",
+            "indices":[],
+            "fps":24,
+            "loop":false,
+            "offsets":{
+                "x":77,
+                "y":-13
+            }
         },
         {
-            "offsets": [
-				-20,
-				-36
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singRIGHT",
-			"indices": [],
-			"name": "right"
+            "animName":"singLEFT",
+            "animPrefix":"left",
+            "indices":[],
+            "fps":24,
+            "loop":false,
+            "offsets":{
+                "x":-10,
+                "y":0
+            }
         },
         {
-            "offsets": [
-				55,
-				0
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singLEFT",
-			"indices": [],
-			"name": "left"
+            "animName":"singRIGHT",
+            "animPrefix":"right",
+            "indices":[],
+            "fps":24,
+            "loop":false,
+            "offsets":{
+                "x":-12,
+                "y":0
+            }
         }
     ],
-	"atlasType":"sparrowAtlas",
-    "defaultIdle":"idle",
-	"healthBarColor":"666666",
-	"healthIcon":"face",
-	"spritesheet":"characters/face",
-    "isGf":false,
-    "flipX":false,
-    "antialiasing":true,
-	"singDuration":4,
-    "scale":1.2,
-    "cameraPos":[
-		0,
-		0
-    ],
-	"charPos":[
-		60,
-		420
-    ]
+    "prefs":{
+        "spriteSheet":"characters/face",
+        "icon":"face",
+        "antialiasing":true,
+        "singDuration":4,
+        "isGF":false,
+        "setScale":1.2,
+        "cameraOffset":{
+            "x":0,
+            "y":0
+        },
+        "charOffset":{
+            "x":200,
+            "y":400
+        }
+    }
 }

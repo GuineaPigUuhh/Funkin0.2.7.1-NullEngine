@@ -4,10 +4,17 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
+import haxe.Exception;
 import haxe.Json;
 import haxe.format.JsonParser;
+import haxe.xml.Access;
+import jsonData.CharacterJSON;
 import lime.utils.Assets;
+import modding.ModPaths;
 import openfl.utils.Assets as OpenFlAssets;
+import script.NewScript;
 
 using StringTools;
 
@@ -15,42 +22,6 @@ using StringTools;
 import sys.FileSystem;
 import sys.io.File;
 #end
-
-enum abstract AtlasType(String) // why did I put this code WHYEEEEEE
-{
-	public var XML = "sparrowAtlas";
-	public var TEXT = "packerAtlas";
-	public var PNG = "png";
-}
-
-typedef CharacterFile =
-{
-	var animations:Array<Animation>;
-	var atlasType:AtlasType;
-	var pngSpecifications:Array<Int>; // code cool
-
-	var defaultIdle:String;
-	var isGf:Bool;
-	var flipX:Bool;
-	var antialiasing:Bool;
-	var scale:Float;
-	var singDuration:Float;
-	var cameraPos:Array<Float>;
-	var charPos:Array<Float>;
-	var healthBarColor:String;
-	var healthIcon:String;
-	var spritesheet:String;
-}
-
-typedef Animation =
-{
-	var anim:String;
-	var name:String;
-	var fps:Int;
-	var loop:Bool;
-	var indices:Array<Int>;
-	var offsets:Array<Int>;
-}
 
 class Character extends FlxSprite
 {
@@ -72,10 +43,47 @@ class Character extends FlxSprite
 	var DEFAULT_CHARACTER:String = "face";
 	var vanillaCharsPath:String = "characters/";
 
-	public var cameraPosition:Array<Float> = [0, 0];
-	public var charPosition:Array<Float> = [0, 0];
+	public var cameraPosition:FlxPoint = new FlxPoint(0, 0);
+	public var charPosition:FlxPoint = new FlxPoint(0, 0);
 
-	var existsMAP:Bool = false;
+	var xPOS:Float = 0;
+	var yPOS:Float = 0;
+
+	public function new(xPOS:Float, yPOS:Float, curCharacter:String, ?isPlayer:Bool = false)
+	{
+		this.xPOS = xPOS;
+		this.yPOS = yPOS;
+		this.isPlayer = isPlayer;
+
+		this.curCharacter = curCharacter;
+
+		super(xPOS, yPOS);
+
+		animOffsets = new Map<String, Array<Dynamic>>();
+
+		createCharacter(this.curCharacter);
+	}
+
+	function createCharacter(char:String)
+	{
+		var tex:FlxAtlasFrames;
+		antialiasing = Save.antialiasing;
+
+		getMAP();
+
+		var fileSys = FileSystem.exists(CharacterJSON.jsonPath(char));
+		if (fileSys)
+			generateJSONcharacter(char);
+		else
+			generateSOURCEcharacter(char);
+
+		dance();
+
+		if (isPlayer)
+		{
+			flipX = !flipX;
+		}
+	}
 
 	function getMAP()
 	{
@@ -103,7 +111,7 @@ class Character extends FlxSprite
 			"bf" => "bf",
 			"bf-car" => "bf",
 			"bf-christmas" => "bf",
-			"bf-pixel" => "bf",
+			"bf-pixel" => "bf-pixel",
 			"dad" => "dad",
 			"gf" => "gf",
 			"mom" => "mom",
@@ -119,43 +127,43 @@ class Character extends FlxSprite
 		];
 
 		// for hard code Characters
-		var getVariable = "";
 		if (charactersColors.exists(curCharacter))
-		{
-			getVariable = charactersColors.get(curCharacter);
-
-			healthBarColor = getVariable;
-			existsMAP = true;
-		}
-
+			healthBarColor = charactersColors.get(curCharacter);
 		if (charactersIcons.exists(curCharacter))
-		{
-			getVariable = charactersIcons.get(curCharacter);
-
 			healthIcon = charactersIcons.get(curCharacter);
-			existsMAP = true;
-		}
 	}
 
-	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
+	public function getCamPos(gf:Bool = false) // IS SUS
 	{
-		super(x, y);
+		var midpoint = getMidpoint();
+		var point:FlxPoint = null;
 
-		animOffsets = new Map<String, Array<Dynamic>>();
+		if (gf == true) // if IsGF
+		{
+			point = new FlxPoint(midpoint.x, midpoint.y);
+		}
+		else if (isPlayer == true)
+		{
+			point = new FlxPoint(midpoint.x - 100, midpoint.y - 100);
+		}
+		else
+		{
+			point = new FlxPoint(midpoint.x + 150, midpoint.y - 100);
+		}
 
-		curCharacter = character;
-		this.isPlayer = isPlayer;
+		point.x += cameraPosition.x;
+		point.y += cameraPosition.y;
 
-		var tex:FlxAtlasFrames;
-		antialiasing = Save.antialiasing;
+		return point;
+	}
 
-		getMAP();
-
-		switch (curCharacter)
+	function generateSOURCEcharacter(char:String)
+	{
+		switch (char)
 		{
 			case 'gf':
 				// GIRLFRIEND CODE
-				setTex(vanillaCharsPath + "GF_assets", XML);
+				setTex(vanillaCharsPath + "GF_assets", "XML");
 
 				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
 				animation.addByPrefix('singLEFT', 'GF left note', 24, false);
@@ -186,7 +194,7 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'gf-christmas':
-				setTex(vanillaCharsPath + "gfChristmas", XML);
+				setTex(vanillaCharsPath + "gfChristmas", "XML");
 
 				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
 				animation.addByPrefix('singLEFT', 'GF left note', 24, false);
@@ -217,7 +225,7 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'gf-car':
-				setTex(vanillaCharsPath + "gfCar", XML);
+				setTex(vanillaCharsPath + "gfCar", "XML");
 
 				animation.addByIndices('singUP', 'GF Dancing Beat Hair blowing CAR', [0], "", 24, false);
 				animation.addByIndices('danceLeft', 'GF Dancing Beat Hair blowing CAR', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
@@ -230,7 +238,7 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'gf-pixel':
-				setTex(vanillaCharsPath + "gfPixel", XML);
+				setTex(vanillaCharsPath + "gfPixel", "XML");
 
 				animation.addByIndices('singUP', 'GF IDLE', [2], "", 24, false);
 				animation.addByIndices('danceLeft', 'GF IDLE', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
@@ -247,13 +255,13 @@ class Character extends FlxSprite
 
 			case 'dad':
 				// DAD ANIMATION LOADING CODE
-				setTex(vanillaCharsPath + "DADDY_DEAREST", XML);
+				setTex(vanillaCharsPath + "DADDY_DEAREST", "XML");
 
-				animation.addByPrefix('idle', 'Dad idle dance', 24);
-				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24);
-				animation.addByPrefix('singRIGHT', 'Dad Sing Note RIGHT', 24);
-				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24);
-				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
+				animation.addByPrefix('idle', 'Dad idle dance', 24, false);
+				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24, false);
+				animation.addByPrefix('singRIGHT', 'Dad Sing Note RIGHT', 24, false);
+				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24, false);
+				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24, false);
 
 				addOffset('idle');
 				addOffset("singUP", -6, 50);
@@ -263,7 +271,7 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 			case 'spooky':
-				setTex(vanillaCharsPath + "spooky_kids_assets", XML);
+				setTex(vanillaCharsPath + "spooky_kids_assets", "XML");
 
 				animation.addByPrefix('singUP', 'spooky UP NOTE', 24, false);
 				animation.addByPrefix('singDOWN', 'spooky DOWN note', 24, false);
@@ -282,7 +290,7 @@ class Character extends FlxSprite
 
 				playAnim('danceRight');
 			case 'mom':
-				setTex(vanillaCharsPath + "Mom_Assets", XML);
+				setTex(vanillaCharsPath + "Mom_Assets", "XML");
 
 				animation.addByPrefix('idle', "Mom Idle", 24, false);
 				animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
@@ -301,7 +309,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'mom-car':
-				setTex(vanillaCharsPath + "momCar", XML);
+				setTex(vanillaCharsPath + "momCar", "XML");
 
 				animation.addByPrefix('idle', "Mom Idle", 24, false);
 				animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
@@ -319,7 +327,7 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 			case 'monster':
-				setTex(vanillaCharsPath + "Monster_Assets", XML);
+				setTex(vanillaCharsPath + "Monster_Assets", "XML");
 
 				animation.addByPrefix('idle', 'monster idle', 24, false);
 				animation.addByPrefix('singUP', 'monster up note', 24, false);
@@ -334,7 +342,7 @@ class Character extends FlxSprite
 				addOffset("singDOWN", -30, -40);
 				playAnim('idle');
 			case 'monster-christmas':
-				setTex(vanillaCharsPath + "monsterChristmas", XML);
+				setTex(vanillaCharsPath + "monsterChristmas", "XML");
 
 				animation.addByPrefix('idle', 'monster idle', 24, false);
 				animation.addByPrefix('singUP', 'monster up note', 24, false);
@@ -349,7 +357,7 @@ class Character extends FlxSprite
 				addOffset("singDOWN", -40, -94);
 				playAnim('idle');
 			case 'pico':
-				setTex(vanillaCharsPath + "Pico_FNF_assetss", XML);
+				setTex(vanillaCharsPath + "Pico_FNF_assetss", "XML");
 
 				animation.addByPrefix('idle', "Pico Idle Dance", 24);
 				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
@@ -387,7 +395,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf':
-				setTex(vanillaCharsPath + "BOYFRIEND", XML);
+				setTex(vanillaCharsPath + "BOYFRIEND", "XML");
 
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -429,7 +437,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf-christmas':
-				setTex(vanillaCharsPath + "bfChristmas", XML);
+				setTex(vanillaCharsPath + "bfChristmas", "XML");
 
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -457,7 +465,7 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-car':
-				setTex(vanillaCharsPath + "bfCar", XML);
+				setTex(vanillaCharsPath + "bfCar", "XML");
 
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -482,7 +490,7 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-pixel':
-				setTex(vanillaCharsPath + "bfPixel", XML);
+				setTex(vanillaCharsPath + "bfPixel", "XML");
 
 				animation.addByPrefix('idle', 'BF IDLE', 24, false);
 				animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
@@ -516,7 +524,7 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-pixel-dead':
-				setTex(vanillaCharsPath + "bfPixelsDEAD", XML);
+				setTex(vanillaCharsPath + "bfPixelsDEAD", "XML");
 
 				animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
 				animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
@@ -535,7 +543,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'senpai':
-				setTex(vanillaCharsPath + "senpai", XML);
+				setTex(vanillaCharsPath + "senpai", "XML");
 
 				animation.addByPrefix('idle', 'Senpai Idle', 24, false);
 				animation.addByPrefix('singUP', 'SENPAI UP NOTE', 24, false);
@@ -556,7 +564,7 @@ class Character extends FlxSprite
 
 				antialiasing = false;
 			case 'senpai-angry':
-				setTex(vanillaCharsPath + "senpai", XML);
+				setTex(vanillaCharsPath + "senpai", "XML");
 
 				animation.addByPrefix('idle', 'Angry Senpai Idle', 24, false);
 				animation.addByPrefix('singUP', 'Angry Senpai UP NOTE', 24, false);
@@ -577,7 +585,7 @@ class Character extends FlxSprite
 				antialiasing = false;
 
 			case 'spirit':
-				setTex(vanillaCharsPath + "spirit", TEXT);
+				setTex(vanillaCharsPath + "spirit", "TEXT");
 
 				animation.addByPrefix('idle', "idle spirit_", 24, false);
 				animation.addByPrefix('singUP', "up_", 24, false);
@@ -599,7 +607,7 @@ class Character extends FlxSprite
 				antialiasing = false;
 
 			case 'parents-christmas':
-				setTex(vanillaCharsPath + "mom_dad_christmas_assets", XML);
+				setTex(vanillaCharsPath + "mom_dad_christmas_assets", "XML");
 
 				animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
 				animation.addByPrefix('singUP', 'Parent Up Note Dad', 24, false);
@@ -624,100 +632,55 @@ class Character extends FlxSprite
 				addOffset("singDOWN-alt", -30, -27);
 
 				playAnim('idle');
+		}
+	}
 
-			default:
-				var vanillaPath:Bool = false;
+	function generateJSONcharacter(char:String)
+	{
+		CharacterJSON.getJSON(char);
 
-				var checkJSON = ModPaths.json('characters/${curCharacter}');
-				if (!FileSystem.exists(checkJSON))
-				{
-					vanillaPath = true;
-					checkJSON = Paths.json('characters/${curCharacter}');
-				}
+		frames = Paths.getSparrowAtlas(CharacterJSON.prefs.spriteSheet);
 
-				var file:CharacterFile = Json.parse(File.getContent(checkJSON));
+		var antiChar = CharacterJSON.prefs.antialiasing;
+		antialiasing = (antiChar ? Save.antialiasing : false);
 
-				var isPng:Bool = false;
-				var pngPath:String = ModPaths.image(file.spritesheet);
+		isGf = CharacterJSON.prefs.isGF;
+		flipX = (CharacterJSON.prefs.flipX == true);
 
-				var texAlt = ModPaths.getSparrowAtlas(file.spritesheet);
-				switch (file.atlasType)
-				{
-					default:
-						file.atlasType = XML;
-					case XML:
-						if (vanillaPath == true) texAlt = Paths.getSparrowAtlas(file.spritesheet);
-					case TEXT:
-						texAlt = ModPaths.getPackerAtlas(file.spritesheet);
-						if (vanillaPath == true) texAlt = Paths.getPackerAtlas(file.spritesheet);
-					case PNG:
-						isPng = true;
-						if (vanillaPath == true) pngPath = Paths.image(file.spritesheet);
-				}
+		var getSingDuration = CharacterJSON.prefs.singDuration;
+		singDuration = getSingDuration;
 
-				if (isPng == true)
-					loadGraphic(pngPath, true, file.pngSpecifications[0], file.pngSpecifications[1]);
-				else
-					frames = texAlt; // amongus
+		healthIcon = CharacterJSON.prefs.icon;
+		healthBarColor = CharacterJSON.prefs.healthBarColor;
 
-				flipX = file.flipX;
+		cameraPosition.x = CharacterJSON.prefs.cameraOffset.x;
+		cameraPosition.y = CharacterJSON.prefs.cameraOffset.y;
 
-				if (file.antialiasing)
-					antialiasing = Save.antialiasing;
-				else
-					antialiasing = false;
+		charPosition.x = CharacterJSON.prefs.charOffset.x;
+		charPosition.y = CharacterJSON.prefs.charOffset.y;
 
-				if (file.scale != 1)
-				{
-					setGraphicSize(Std.int(width * file.scale));
-					updateHitbox();
-				}
-
-				if (file.healthBarColor != null || file.healthBarColor.length > 0)
-					healthBarColor = file.healthBarColor;
-
-				if (file.healthIcon != null || file.healthBarColor.length > 0)
-					healthIcon = file.healthIcon;
-
-				singDuration = file.singDuration;
-
-				isGf = file.isGf;
-
-				cameraPosition = file.cameraPos;
-				charPosition = file.charPos;
-
-				if (file.animations != null && file.animations.length > 0)
-				{
-					for (animArray in file.animations)
-					{
-						if (isPng == true)
-						{
-							animation.add(animArray.anim, animArray.indices, animArray.fps, !!animArray.loop);
-						}
-						else if (animArray.indices != null && animArray.indices.length > 0 && isPng == false)
-						{
-							animation.addByIndices(animArray.anim, animArray.name, animArray.indices, "", animArray.fps, !!animArray.loop);
-						}
-						else if (isPng == false)
-						{
-							animation.addByPrefix(animArray.anim, animArray.name, animArray.fps, !!animArray.loop);
-						}
-
-						if (animArray.offsets != null && animArray.offsets.length > 1)
-						{
-							addOffset(animArray.anim, animArray.offsets[0], animArray.offsets[1]);
-						}
-					}
-				}
-
-				playAnim(file.defaultIdle);
+		if (CharacterJSON.prefs.setScale != 1)
+		{
+			scale.set(CharacterJSON.prefs.setScale, CharacterJSON.prefs.setScale);
+			updateHitbox();
 		}
 
-		dance();
-
-		if (isPlayer)
+		if (CharacterJSON.anims != null && CharacterJSON.anims.length > 0)
 		{
-			flipX = !flipX;
+			for (charAnims in CharacterJSON.anims)
+			{
+				if (charAnims.indices != null && charAnims.indices.length > 0)
+				{
+					animation.addByIndices(charAnims.animName, charAnims.animPrefix, charAnims.indices, "", charAnims.fps, charAnims.loop);
+				}
+				else
+				{
+					animation.addByPrefix(charAnims.animName, charAnims.animPrefix, charAnims.fps, charAnims.loop);
+				}
+
+				if (charAnims.offsets != null)
+					addOffset(charAnims.animName, charAnims.offsets.x, charAnims.offsets.y);
+			}
 		}
 	}
 
@@ -767,16 +730,28 @@ class Character extends FlxSprite
 		super.update(elapsed);
 	}
 
-	function setTex(path:String, hereAtlasType:AtlasType)
+	public inline function getIcon()
+	{
+		var icon = ((healthIcon != null) ? healthIcon : curCharacter);
+		return icon;
+	}
+
+	public inline function getHealthColor()
+	{
+		var color = FlxColor.fromString("#" + healthBarColor);
+		return color;
+	}
+
+	function setTex(path:String, hereAtlasType:String)
 	{
 		var export:FlxAtlasFrames = Paths.getSparrowAtlas("characters/face");
 		switch (hereAtlasType)
 		{
 			default:
-				hereAtlasType = XML;
-			case XML:
+				hereAtlasType = "XML";
+			case "XML":
 				export = Paths.getSparrowAtlas(path);
-			case TEXT:
+			case "TEXT":
 				export = Paths.getPackerAtlas(path);
 		}
 
@@ -799,6 +774,11 @@ class Character extends FlxSprite
 			animation.getByName('singRIGHTmiss').frames = oldLeftMiss;
 			animation.getByName('singLEFTmiss').frames = oldRightMiss;
 		}
+
+		var oldRight = animOffsets["singRIGHT"];
+		var oldLeft = animOffsets["singLEFT"];
+		animOffsets["singRIGHT"] = oldLeft;
+		animOffsets["singLEFT"] = oldRight;
 	}
 
 	private var danced:Bool = false;

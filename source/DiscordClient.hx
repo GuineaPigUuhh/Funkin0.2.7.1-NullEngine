@@ -5,19 +5,17 @@ import discord_rpc.DiscordRpc;
 
 using StringTools;
 
-typedef DiscordJson =
-{
-	var clientID:String;
-	var largeImageText:String;
-};
-
 class DiscordClient
 {
+	static var _id:String = "1061291748988571709";
+	static var _largeText:String = "FNF' Null Engine!";
+	static var _largeImage:String = "icon";
+
 	public function new()
 	{
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "1061291748988571709",
+			clientID: _id,
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
@@ -28,7 +26,6 @@ class DiscordClient
 		{
 			DiscordRpc.process();
 			sleep(2);
-			// trace("Discord Client Update");
 		}
 
 		DiscordRpc.shutdown();
@@ -44,8 +41,8 @@ class DiscordClient
 		DiscordRpc.presence({
 			details: "In the Menus",
 			state: null,
-			largeImageKey: 'icon',
-			largeImageText: "FNF' Null Engine!"
+			largeImageKey: _largeImage,
+			largeImageText: _largeText
 		});
 	}
 
@@ -80,14 +77,11 @@ class DiscordClient
 		DiscordRpc.presence({
 			details: details,
 			state: state,
-			largeImageKey: 'icon',
-			largeImageText: "FNF' Null Engine!",
+			largeImageKey: _largeImage,
+			largeImageText: _largeText,
 			smallImageKey: smallImageKey,
-			// Obtained times are in milliseconds so they are divided so Discord can use it
 			startTimestamp: Std.int(startTimestamp / 1000),
 			endTimestamp: Std.int(endTimestamp / 1000)
 		});
-
-		// trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
 }

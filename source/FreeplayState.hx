@@ -16,7 +16,9 @@ import flixel.tweens.misc.ColorTween;
 import flixel.util.FlxColor;
 import haxe.Json;
 import haxe.format.JsonParser;
+import jsonData.WeekJSON;
 import lime.utils.Assets;
+import modding.ModPaths;
 
 using StringTools;
 
@@ -27,8 +29,6 @@ import sys.io.File;
 
 class FreeplayState extends MusicBeatState
 {
-	public var freeplayData:StoryMenuState.WeekJSON;
-
 	var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
@@ -49,11 +49,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		var weekPath:String = ModPaths.json("weekList");
-		if (!FileSystem.exists(weekPath))
-			weekPath = Paths.json("weekList");
-
-		freeplayData = Json.parse(Assets.getText(weekPath));
+		WeekJSON.getJSON();
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -66,10 +62,10 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-		for (i in 0...freeplayData.weeks.length)
+		for (i in 0...WeekJSON.weeks.length)
 		{
-			if (freeplayData.weeks[i].hideInFreePlay == false)
-				addWeek(freeplayData.weeks[i].weekSongs, freeplayData.weeks[i].songColor, i, freeplayData.weeks[i].songIcons);
+			if (WeekJSON.weeks[i].hideInFreePlay == false)
+				addWeek(WeekJSON.weeks[i].weekSongs, WeekJSON.weeks[i].songColor, i, WeekJSON.weeks[i].songIcons);
 		}
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
@@ -199,7 +195,7 @@ class FreeplayState extends MusicBeatState
 		if (FlxG.keys.justPressed.SPACE)
 		{
 			#if PRELOAD_ALL
-			FlxG.sound.playMusic(CoolUtil.getInst(songs[curSelected].songName.toLowerCase()), 0);
+			FlxG.sound.playMusic(CoolUtil.getInst(songs[curSelected].songName), 0);
 			#end
 		}
 
@@ -233,7 +229,15 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		#end
 
-		diffText.text = '< ' + CoolUtil.difficultyArray[curDifficulty] + ' >';
+		diffText.text = switch (CoolUtil.difficultyArray[curDifficulty].length)
+		{
+			case 0:
+				'';
+			case 1:
+				CoolUtil.difficultyArray[0];
+			case _:
+				'< ' + CoolUtil.difficultyArray[curDifficulty] + ' >';
+		}
 	}
 
 	var colorTween:ColorTween;

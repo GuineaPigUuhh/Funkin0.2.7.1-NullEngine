@@ -62,14 +62,15 @@ class Main extends Sprite
 		{
 			var ratioX:Float = stageWidth / gameOptions.gameWidth;
 			var ratioY:Float = stageHeight / gameOptions.gameHeight;
-			
+
 			gameOptions.zoom = Math.min(ratioX, ratioY);
 
 			gameOptions.gameWidth = Math.ceil(stageWidth / gameOptions.zoom);
 			gameOptions.gameHeight = Math.ceil(stageHeight / gameOptions.zoom);
 		}
 
-		addChild(new FlxGame(gameOptions.gameWidth, gameOptions.gameHeight, gameOptions.initialState,#if (flixel < "5.0.0") gameOptions.zoom,#end gameOptions.framerate, gameOptions.framerate, gameOptions.skipSplash, gameOptions.startFullscreen));
+		addChild(new funkin.Game(gameOptions.gameWidth, gameOptions.gameHeight, gameOptions.initialState, #if (flixel < "5.0.0") gameOptions.zoom, #end
+			gameOptions.framerate, gameOptions.framerate, gameOptions.skipSplash, gameOptions.startFullscreen));
 
 		#if !mobile
 		addChild(new FPS(10, 3));

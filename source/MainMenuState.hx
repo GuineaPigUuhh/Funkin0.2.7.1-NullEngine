@@ -16,10 +16,12 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import flxanimate.FlxAnimate;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.app.Application;
 import lime.utils.Assets;
+import modding.ModPaths;
 
 using StringTools;
 
@@ -34,19 +36,19 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'options', 'mods', 'credits'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'credits', 'options'];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
 	override function create()
 	{
+		CoolUtil.setMouseSprite(FlxG.mouse, "mouseSprite");
+
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
-
-		trace(Save.controls);
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -87,16 +89,17 @@ class MainMenuState extends MusicBeatState
 			var defaultImage:String = "donate";
 
 			var file = ModPaths.getSparrowAtlas('mainMenuAssets/' + optionShit[i]);
-			var idleAnim = optionShit[i] + " basic";
-			var selectedAnim = optionShit[i] + " white";
+			var idleAnim:String = optionShit[i] + " basic";
+			var selectedAnim:String = optionShit[i] + " white";
 
-			var fileExists = ModPaths.image('mainMenuAssets/' + optionShit[i]);
+			var fileExists:String = ModPaths.image('mainMenuAssets/' + optionShit[i]);
 
 			if (!FileSystem.exists(fileExists))
 			{
 				file = Paths.getSparrowAtlas('mainMenuAssets/${optionShit[i]}');
 				fileExists = Paths.image('mainMenuAssets/' + optionShit[i]);
 			}
+
 			if (!FileSystem.exists(fileExists))
 			{
 				file = Paths.getSparrowAtlas('mainMenuAssets/' + defaultImage);
@@ -120,6 +123,8 @@ class MainMenuState extends MusicBeatState
 		// NG.core.calls.event.logEvent('swag').send();
 
 		changeItem();
+
+		// add(mouseSprite);
 
 		super.create();
 	}
@@ -203,9 +208,7 @@ class MainMenuState extends MusicBeatState
 			case "options":
 				FlxG.switchState(new options.OptionsState());
 			case "credits":
-				FlxG.switchState(new customState.CreditsState());
-			case "mods":
-				FlxG.switchState(new ModState());
+				FlxG.switchState(new CreditsState());
 		}
 	}
 
