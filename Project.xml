@@ -85,6 +85,8 @@
 	<haxelib name="hscript" />
 	<haxelib name="SScript" />
 
+	<haxelib name="random" />
+
 	<haxelib name="flxanimate" /> 	<!--Cool System! YIPPPPPPPPPEEEEE-->
 
 	<!--In case you want to use the ui package-->

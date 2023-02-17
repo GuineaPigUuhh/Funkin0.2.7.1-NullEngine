@@ -24,6 +24,11 @@ class HealthIcon extends FlxSprite
 	public var curCharacter:String = 'face';
 	public var isPlayer:Bool = false;
 
+	/**
+	 * this is used to update the animation
+	 */
+	public var getVar:String;
+
 	public function new(curCharacter:String = 'face', isPlayer:Bool = false)
 	{
 		super();
@@ -43,6 +48,32 @@ class HealthIcon extends FlxSprite
 
 		if (sprTracker != null)
 			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
+	}
+
+	public function updateAnim(health:Float)
+	{
+		if (isPlayer)
+		{
+			if (health < 20) // boyfriend losing
+			{
+				playAnimation(getVar + "-losing");
+			}
+			else
+			{
+				playAnimation(getVar);
+			}
+		}
+		else
+		{
+			if (health > 80) // dad Losing
+			{
+				playAnimation(getVar + "-losing");
+			}
+			else
+			{
+				playAnimation(getVar);
+			}
+		}
 	}
 
 	public function changeIcon(curCharacter:String = 'face')

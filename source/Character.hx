@@ -14,7 +14,6 @@ import jsonData.CharacterJSON;
 import lime.utils.Assets;
 import modding.ModPaths;
 import openfl.utils.Assets as OpenFlAssets;
-import script.NewScript;
 
 using StringTools;
 
@@ -69,8 +68,6 @@ class Character extends FlxSprite
 		var tex:FlxAtlasFrames;
 		antialiasing = Save.antialiasing;
 
-		getMAP();
-
 		var fileSys = FileSystem.exists(CharacterJSON.jsonPath(char));
 		if (fileSys)
 			generateJSONcharacter(char);
@@ -89,7 +86,6 @@ class Character extends FlxSprite
 	{
 		var charactersColors:Map<String, String> = [
 			// for source code Characters
-			"bf" => "31B0D1",
 			"bf-car" => "31B0D1",
 			"bf-christmas" => "31B0D1",
 			"bf-pixel" => "7BD6F6",
@@ -108,7 +104,6 @@ class Character extends FlxSprite
 		];
 
 		var charactersIcons:Map<String, String> = [
-			"bf" => "bf",
 			"bf-car" => "bf",
 			"bf-christmas" => "bf",
 			"bf-pixel" => "bf-pixel",
@@ -159,6 +154,8 @@ class Character extends FlxSprite
 
 	function generateSOURCEcharacter(char:String)
 	{
+		getMAP();
+
 		switch (char)
 		{
 			case 'gf':
@@ -389,48 +386,6 @@ class Character extends FlxSprite
 				addOffset("singRIGHTmiss", -60, 41);
 				addOffset("singLEFTmiss", 62, 64);
 				addOffset("singDOWNmiss", 210, -28);
-
-				playAnim('idle');
-
-				flipX = true;
-
-			case 'bf':
-				setTex(vanillaCharsPath + "BOYFRIEND", "XML");
-
-				animation.addByPrefix('idle', 'BF idle dance', 24, false);
-				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
-				animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
-				animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
-				animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
-				animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
-				animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
-				animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
-				animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
-				animation.addByPrefix('hey', 'BF HEY', 24, false);
-
-				animation.addByPrefix('firstDeath', "BF dies", 24, false);
-				animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
-				animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
-
-				animation.addByPrefix('scared', 'BF idle shaking', 24);
-
-				addOffset('idle', -5);
-				addOffset("singUP", -29, 27);
-				addOffset("singRIGHT", -38, -7);
-				addOffset("singLEFT", 12, -6);
-				addOffset("singDOWN", -10, -50);
-				addOffset("singUPmiss", -29, 27);
-				addOffset("singRIGHTmiss", -30, 21);
-				addOffset("singLEFTmiss", 12, 24);
-				addOffset("singDOWNmiss", -11, -19);
-				addOffset("hey", 7, 4);
-				addOffset('firstDeath', 37, 11);
-				addOffset('deathLoop', 37, 5);
-				addOffset('deathConfirm', 37, 69);
-				addOffset('scared', -4);
-
-				if (isPlayer == false)
-					flipAnimations();
 
 				playAnim('idle');
 
