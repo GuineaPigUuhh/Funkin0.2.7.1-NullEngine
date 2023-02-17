@@ -43,7 +43,6 @@ haxelib install flxanimate
 ```
 #### 3: Installing Git Library
 - Run `haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc`
-- Run `haxelib git SScript https://github.com/TheWorldMachinima/SScript`
 
 #### 4: Compiling the Game
 Enable These Options in Visual Studio Community 2019
