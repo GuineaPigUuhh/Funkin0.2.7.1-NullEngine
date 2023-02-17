@@ -521,7 +521,8 @@ class PlayState extends MusicBeatState
 					add(bg);
 				}
 			default:
-				if (!FileSystem.exists(Paths.hscript('data/stages/' + curStage)))
+				var _stagePath = Paths.hscript('data/stages/' + curStage);
+				if (!FileSystem.exists(_stagePath))
 				{
 					curStage = 'stage';
 
@@ -582,7 +583,7 @@ class PlayState extends MusicBeatState
 		boyfriend = new Character(BOYFRIEND_POS[0], BOYFRIEND_POS[1], SONG.player1, true);
 		characterPosition(boyfriend);
 
-		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
+		var camPos:FlxPoint = new FlxPoint(dad.getCamPos().x, dad.getCamPos().y);
 
 		switch (SONG.player2)
 		{
