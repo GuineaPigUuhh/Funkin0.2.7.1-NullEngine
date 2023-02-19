@@ -16,7 +16,7 @@ class CheckBox extends FlxSprite
 	{
 		super(x, y);
 
-		frames = Paths.getSparrowAtlas('checkBox');
+		frames = Paths.getSparrowAtlas('menus/options/checkBox');
 		animation.addByPrefix("true", "checkTrueAnim", 24, false);
 		animation.addByPrefix("false", "checkFalseAnim", 24, false);
 

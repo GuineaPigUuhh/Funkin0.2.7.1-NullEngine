@@ -68,7 +68,7 @@ class FreeplayState extends MusicBeatState
 				addWeek(WeekJSON.weeks[i].weekSongs, WeekJSON.weeks[i].songColor, i, WeekJSON.weeks[i].songIcons);
 		}
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menus/menuDesat'));
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();

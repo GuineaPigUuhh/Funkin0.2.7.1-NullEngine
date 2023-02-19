@@ -49,7 +49,7 @@ class Preferences extends MusicBeatSubstate
 	{
 		super.create();
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBG'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuBG'));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;
@@ -65,9 +65,6 @@ class Preferences extends MusicBeatSubstate
 		grpCheckBoxes = new FlxTypedGroup<CheckBox>();
 		add(grpCheckBoxes);
 		add(bfAnti);
-
-		trace("Oops I'm Here To Warn You That The Trace Below Is To Copy Put In UpdatePrefs");
-		trace(newOptions);
 
 		for (i in 0...newOptions.length)
 		{
@@ -153,17 +150,20 @@ class Preferences extends MusicBeatSubstate
 		{
 			if (controls.ACCEPT)
 			{
-				FlxG.sound.play(Paths.sound('confirmMenu'));
-
-				youCanPress = false;
-				stopSpam = true;
-				FlxFlicker.flicker(grpOptions.members[curSelected], 1, 0.06, true, false, function(flick:FlxFlicker)
+				if (newOptions[curSelected][2] == "Bool")
 				{
-					youCanPress = true;
-					stopSpam = false;
+					FlxG.sound.play(Paths.sound('confirmMenu'));
 
-					changeStatus();
-				});
+					youCanPress = false;
+					stopSpam = true;
+					FlxFlicker.flicker(grpOptions.members[curSelected], 1, 0.06, true, false, function(flick:FlxFlicker)
+					{
+						youCanPress = true;
+						stopSpam = false;
+
+						changeStatus();
+					});
+				}
 			}
 		}
 	}

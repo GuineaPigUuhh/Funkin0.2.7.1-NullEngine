@@ -88,7 +88,7 @@ class ChartingState extends MusicBeatState
 
 		ChartJSON.getJSON();
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuDesat'));
 		bg.color = 0xFF4D4D4D;
 		bg.scrollFactor.set();
 		add(bg);

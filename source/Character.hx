@@ -40,7 +40,7 @@ class Character extends FlxSprite
 	public var healthIcon:String = "face";
 
 	var DEFAULT_CHARACTER:String = "face";
-	var vanillaCharsPath:String = "characters/";
+	var vanillaCharsPath:String = "characters/spritesheets/";
 
 	public var cameraPosition:FlxPoint = new FlxPoint(0, 0);
 	public var charPosition:FlxPoint = new FlxPoint(0, 0);
@@ -594,7 +594,7 @@ class Character extends FlxSprite
 	{
 		CharacterJSON.getJSON(char);
 
-		frames = Paths.getSparrowAtlas(CharacterJSON.prefs.spriteSheet);
+		frames = Paths.getSparrowAtlas("characters/spritesheets/" + CharacterJSON.prefs.spriteSheet);
 
 		var antiChar = CharacterJSON.prefs.antialiasing;
 		antialiasing = (antiChar ? Save.antialiasing : false);

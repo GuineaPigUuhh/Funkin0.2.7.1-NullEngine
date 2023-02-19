@@ -78,7 +78,7 @@ class HealthIcon extends FlxSprite
 
 	public function changeIcon(curCharacter:String = 'face')
 	{
-		var path:String = 'icons/${curCharacter}';
+		var path:String = 'characters/icons/${curCharacter}';
 
 		loadGraphic(CoolUtil.configGraphic(path));
 		loadGraphic(CoolUtil.configGraphic(path), true, 150, 150);

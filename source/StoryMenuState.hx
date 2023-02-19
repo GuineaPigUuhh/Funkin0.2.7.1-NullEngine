@@ -78,7 +78,7 @@ class StoryMenuState extends MusicBeatState
 		rankText.size = scoreText.size;
 		rankText.screenCenter(X);
 
-		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
+		var ui_tex = Paths.getSparrowAtlas('menus/storyMode/UI');
 		var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
 
 		grpWeekText = new FlxTypedGroup<MenuItem>();
@@ -268,7 +268,7 @@ class StoryMenuState extends MusicBeatState
 
 		sprDifficulty.offset.x = 0;
 
-		sprDifficulty.loadGraphic(Paths.image("menuDifficulties/" + CoolUtil.difficultyArray[curDifficulty].toLowerCase()));
+		sprDifficulty.loadGraphic(Paths.image("menus/storyMode/difficulties/" + CoolUtil.difficultyArray[curDifficulty].toLowerCase()));
 
 		sprDifficulty.x = leftArrow.x + 60;
 		sprDifficulty.x += (308 - sprDifficulty.width) / 3;

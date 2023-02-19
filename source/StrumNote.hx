@@ -15,6 +15,8 @@ class StrumNote extends FlxSprite
 
 		reloadNote();
 		scrollFactor.set();
+
+		addNote();
 	}
 
 	override function update(elapsed:Float)
@@ -32,7 +34,7 @@ class StrumNote extends FlxSprite
 		switch (PlayState.curStage)
 		{
 			case 'school' | 'schoolEvil':
-				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
+				loadGraphic(Paths.image('ui/pixel/notes'), true, 17, 17);
 				animation.add('green', [6]);
 				animation.add('red', [7]);
 				animation.add('blue', [5]);
@@ -63,7 +65,7 @@ class StrumNote extends FlxSprite
 				}
 
 			default:
-				frames = Paths.getSparrowAtlas('NOTE_assets');
+				frames = Paths.getSparrowAtlas('ui/default/staticArrows');
 				animation.addByPrefix('green', 'arrowUP');
 				animation.addByPrefix('blue', 'arrowDOWN');
 				animation.addByPrefix('purple', 'arrowLEFT');
@@ -95,7 +97,7 @@ class StrumNote extends FlxSprite
 		updateHitbox();
 	}
 
-	public function addNote()
+	function addNote()
 	{
 		playAnim('static');
 		x += Note.swagWidth * noteData;

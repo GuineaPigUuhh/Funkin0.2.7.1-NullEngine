@@ -45,7 +45,7 @@ class ControlsState extends MusicBeatState
 	{
 		persistentUpdate = persistentDraw = true;
 
-		var menuBG:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBGBlue'));
+		var menuBG:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menus/menuBGBlue'));
 		menuBG.scrollFactor.set();
 		menuBG.updateHitbox();
 		menuBG.screenCenter();

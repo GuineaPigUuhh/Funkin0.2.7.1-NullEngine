@@ -22,6 +22,8 @@ class Main extends Sprite
 		startFullscreen: false
 	};
 
+	public static var instance:Main;
+
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
@@ -32,6 +34,8 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+
+		instance = this;
 
 		if (stage != null)
 		{
@@ -73,7 +77,7 @@ class Main extends Sprite
 			gameOptions.framerate, gameOptions.framerate, gameOptions.skipSplash, gameOptions.startFullscreen));
 
 		#if !mobile
-		addChild(new FPS(10, 3));
+		addChild(new NullInfo(10, 3));
 		#end
 	}
 }

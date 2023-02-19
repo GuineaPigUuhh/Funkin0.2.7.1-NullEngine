@@ -40,30 +40,14 @@
 
 	<classpath name="source" />
 
-	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
-	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web"/>
-	
-	<!-- <define name="PRELOAD_ALL" /> -->
-	<define name="PRELOAD_ALL" unless="web" />
-	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
-	
-	<section if="PRELOAD_ALL">
-		<library name="shared"   preload="true" />
-	</section>
-	
-	<section if="NO_PRELOAD_ALL">
-		<library name="shared"   preload="false" />
-	</section>
-	
-	<assets path="assets/shared"   library="shared"   exclude="*.ogg" if="web"/>
-	<assets path="assets/shared"   library="shared"   exclude="*.mp3" unless="web"/>
+	<assets path="assets"/>
+	<assets path='mods'/>
 
 	<assets path="buildNumber.txt" embed='false'/>
+
 	<assets path="batExport/launch.bat" rename="Launch.bat" embed='false'/>
 	<assets path="batExport/launch_with_log.bat" rename="Launch_With_Log.bat" embed='false'/>
 
-	<assets path='mods' embed='false'/>
-	<assets path="assets/fonts" embed='false'/>
 
 	<!-- <template path='mods' /> -->
 
@@ -86,7 +70,6 @@
 	<haxelib name="SScript" />
 
 	<haxelib name="random" />
-
 	<haxelib name="flxanimate" /> 	<!--Cool System! YIPPPPPPPPPEEEEE-->
 
 	<!--In case you want to use the ui package-->

@@ -23,7 +23,7 @@ class MenuItem extends FlxSpriteGroup
 	{
 		super(x, y);
 		week = new FlxSprite();
-		var path:String = 'storymenu/' + weekName;
+		var path:String = 'menus/storyMode/weeks/' + weekName;
 
 		week.loadGraphic(CoolUtil.configGraphic(path));
 

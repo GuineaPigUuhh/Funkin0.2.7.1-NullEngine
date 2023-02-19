@@ -36,14 +36,14 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'credits', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
 	override function create()
 	{
-		CoolUtil.setMouseSprite(FlxG.mouse, "mouseSprite");
+		// CoolUtil.setMouseSprite(FlxG.mouse, "mouseSprite");
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -60,7 +60,7 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menus/menuBG'));
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = Save.antialiasing;
@@ -70,7 +70,7 @@ class MainMenuState extends MusicBeatState
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menus/menuDesat'));
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
@@ -88,21 +88,23 @@ class MainMenuState extends MusicBeatState
 
 			var defaultImage:String = "donate";
 
-			var file = ModPaths.getSparrowAtlas('mainMenuAssets/' + optionShit[i]);
+			var funkinLocal:String = 'menus/main/items/';
+
+			var file = ModPaths.getSparrowAtlas(funkinLocal + optionShit[i]);
 			var idleAnim:String = optionShit[i] + " basic";
 			var selectedAnim:String = optionShit[i] + " white";
 
-			var fileExists:String = ModPaths.image('mainMenuAssets/' + optionShit[i]);
+			var fileExists:String = ModPaths.image(funkinLocal + optionShit[i]);
 
 			if (!FileSystem.exists(fileExists))
 			{
-				file = Paths.getSparrowAtlas('mainMenuAssets/${optionShit[i]}');
-				fileExists = Paths.image('mainMenuAssets/' + optionShit[i]);
+				file = Paths.getSparrowAtlas(funkinLocal + optionShit[i]);
+				fileExists = Paths.image(funkinLocal + optionShit[i]);
 			}
 
 			if (!FileSystem.exists(fileExists))
 			{
-				file = Paths.getSparrowAtlas('mainMenuAssets/' + defaultImage);
+				file = Paths.getSparrowAtlas(funkinLocal + defaultImage);
 				idleAnim = defaultImage + " basic";
 				selectedAnim = defaultImage + " white";
 			}
@@ -123,8 +125,6 @@ class MainMenuState extends MusicBeatState
 		// NG.core.calls.event.logEvent('swag').send();
 
 		changeItem();
-
-		// add(mouseSprite);
 
 		super.create();
 	}
@@ -207,8 +207,6 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new FreeplayState());
 			case "options":
 				FlxG.switchState(new options.OptionsState());
-			case "credits":
-				FlxG.switchState(new CreditsState());
 		}
 	}
 

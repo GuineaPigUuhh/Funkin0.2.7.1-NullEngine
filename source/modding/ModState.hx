@@ -40,7 +40,7 @@ class ModState extends MusicBeatState
 	{
 		super.create();
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('engine_stuff/menuDesatGradient'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuDesat'));
 		menuBG.color = 0xFF4D4D4D;
 		menuBG.screenCenter();
 		menuBG.updateHitbox();
