@@ -13,6 +13,7 @@ class Save
 	public static var antialiasing:Bool = true;
 	public static var noteSplash:Bool = true;
 	public static var isDownscroll:Bool = false;
+	public static var freeplayCutscene:Bool = false;
 
 	public static var modSelected:String = "";
 
@@ -35,6 +36,7 @@ class Save
 		FlxG.save.data.antialiasing = antialiasing;
 		FlxG.save.data.noteSplash = noteSplash;
 		FlxG.save.data.isDownscroll = isDownscroll;
+		FlxG.save.data.freeplayCutscene = freeplayCutscene;
 
 		FlxG.save.data.modSelected = modSelected;
 
@@ -67,6 +69,8 @@ class Save
 			noteSplash = FlxG.save.data.noteSplash;
 		if (FlxG.save.data.isDownscroll != null)
 			isDownscroll = FlxG.save.data.isDownscroll;
+		if (FlxG.save.data.freeplayCutscene != null)
+			freeplayCutscene = FlxG.save.data.freeplayCutscene;
 
 		if (FlxG.save.data.modSelected != null)
 			modSelected = FlxG.save.data.modSelected;

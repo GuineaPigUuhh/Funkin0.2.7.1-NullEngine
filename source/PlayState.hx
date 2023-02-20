@@ -763,7 +763,7 @@ class PlayState extends MusicBeatState
 
 		startingSong = true;
 
-		if (isStoryMode)
+		if (isStoryMode && !Save.freeplayCutscene || !isStoryMode && Save.freeplayCutscene)
 		{
 			switch (curSong.toLowerCase())
 			{
@@ -840,7 +840,7 @@ class PlayState extends MusicBeatState
 		red.scrollFactor.set();
 
 		var senpaiEvil:FlxSprite = new FlxSprite();
-		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
+		senpaiEvil.frames = Paths.getSparrowAtlas('cutscenes/senpaiCrazy');
 		senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
 		senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * 6));
 		senpaiEvil.scrollFactor.set();
@@ -1777,15 +1777,17 @@ class PlayState extends MusicBeatState
 
 	function spawnSplash(x:Float, y:Float, data:Int)
 	{
-		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-		splash.execute(x, y, data);
-		grpNoteSplashes.add(splash);
+		if (Save.noteSplash)
+		{
+			var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
+			splash.execute(x, y, data);
+			grpNoteSplashes.add(splash);
+		}
 	}
 
 	private function popUpScore(daNote:Note):Void
 	{
 		var noteDiff:Float = Math.abs(daNote.strumTime - Conductor.songPosition);
-		// boyfriend.playAnim('hey');
 		vocals.volume = 1;
 
 		var placement:String = Std.string(combo);
@@ -1793,7 +1795,6 @@ class PlayState extends MusicBeatState
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.55;
-		//
 
 		var rating:FlxSprite = new FlxSprite();
 
@@ -1873,10 +1874,8 @@ class PlayState extends MusicBeatState
 		var seperatedScore:Array<Int> = [];
 
 		seperatedScore.push(Math.floor(combo / 100));
-		if (combo >= 10)
-			seperatedScore.push(Math.floor((combo - (seperatedScore[0] * 100)) / 10));
-		if (combo >= 100)
-			seperatedScore.push(combo % 10);
+		seperatedScore.push(Math.floor((combo - (seperatedScore[0] * 100)) / 10));
+		seperatedScore.push(combo % 10);
 
 		var daLoop:Int = 0;
 		for (i in seperatedScore)

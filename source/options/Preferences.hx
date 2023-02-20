@@ -26,13 +26,7 @@ class Preferences extends MusicBeatSubstate
 	var bfAnti:Character;
 	var falseBeatHit:Int = 1;
 
-	var newOptions:Array<Array<Dynamic>> = [
-		["GhostTapping", Save.ghostTapping, "Bool"],
-		["Flashing", Save.flashing, "Bool"],
-		["Antialiasing", Save.antialiasing, "Bool"],
-		["NoteSplash", Save.noteSplash, "Bool"],
-		["DownScroll", Save.isDownscroll, "Bool"]
-	];
+	var newOptions:Array<Array<Dynamic>> = [];
 
 	var youCanPress:Bool = false;
 	var stopSpam:Bool = false;
@@ -47,6 +41,8 @@ class Preferences extends MusicBeatSubstate
 
 	override function create()
 	{
+		updatePrefs(); // create options
+
 		super.create();
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuBG'));
@@ -161,14 +157,14 @@ class Preferences extends MusicBeatSubstate
 						youCanPress = true;
 						stopSpam = false;
 
-						changeStatus();
+						changePrefs();
 					});
 				}
 			}
 		}
 	}
 
-	function changeStatus()
+	function changePrefs()
 	{
 		switch (newOptions[curSelected][0])
 		{
@@ -192,11 +188,14 @@ class Preferences extends MusicBeatSubstate
 				{
 					Save.isDownscroll = !Save.isDownscroll;
 				}
+			case "Freeplay Cutscene":
+				{
+					Save.freeplayCutscene = !Save.freeplayCutscene;
+				}
 			default:
 				trace("Error: On Change Options");
 		}
 		updatePrefs();
-
 		grpCheckBoxes.members[curSelected].value = newOptions[curSelected][1];
 	}
 
@@ -207,7 +206,8 @@ class Preferences extends MusicBeatSubstate
 			["Flashing", Save.flashing, "Bool"],
 			["Antialiasing", Save.antialiasing, "Bool"],
 			["NoteSplash", Save.noteSplash, "Bool"],
-			["DownScroll", Save.isDownscroll, "Bool"]
+			["DownScroll", Save.isDownscroll, "Bool"],
+			["Freeplay Cutscene", Save.freeplayCutscene, "Bool"]
 		];
 	}
 
