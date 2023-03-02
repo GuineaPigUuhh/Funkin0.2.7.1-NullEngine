@@ -3,8 +3,8 @@ package;
 import Section.SwagSection;
 import haxe.Json;
 import haxe.format.JsonParser;
-import modding.ModPaths;
 import lime.utils.Assets;
+import modding.ModPaths;
 
 using StringTools;
 
@@ -50,9 +50,10 @@ class Song
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var path:String = ModPaths.json("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase());
+		var path:String = Paths.getModPath("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase() + ".json");
 		if (!FileSystem.exists(path))
-			path = Paths.json("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase());
+			path = Paths.getPreloadPath("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase() + ".json");
+
 		var getJSON = File.getContent(path).trim();
 
 		var rawJson = getJSON;

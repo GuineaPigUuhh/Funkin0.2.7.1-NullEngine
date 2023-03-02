@@ -24,17 +24,13 @@ class HealthIcon extends FlxSprite
 	public var curCharacter:String = 'face';
 	public var isPlayer:Bool = false;
 
-	/**
-	 * this is used to update the animation
-	 */
-	public var getVar:String;
-
 	public function new(curCharacter:String = 'face', isPlayer:Bool = false)
 	{
 		super();
 
 		this.curCharacter = curCharacter;
 		this.isPlayer = isPlayer;
+
 		scrollFactor.set();
 
 		changeIcon(curCharacter);
@@ -56,22 +52,22 @@ class HealthIcon extends FlxSprite
 		{
 			if (health < 20) // boyfriend losing
 			{
-				playAnimation(getVar + "-losing");
+				playAnimation(curCharacter + "-losing");
 			}
 			else
 			{
-				playAnimation(getVar);
+				playAnimation(curCharacter);
 			}
 		}
 		else
 		{
 			if (health > 80) // dad Losing
 			{
-				playAnimation(getVar + "-losing");
+				playAnimation(curCharacter + "-losing");
 			}
 			else
 			{
-				playAnimation(getVar);
+				playAnimation(curCharacter);
 			}
 		}
 	}
@@ -85,17 +81,25 @@ class HealthIcon extends FlxSprite
 
 		animation.add(curCharacter, [0], 0, false, isPlayer);
 		animation.add(curCharacter + "-losing", [1], 0, false, isPlayer);
+
 		animation.play(curCharacter);
 
-		if (curCharacter.endsWith('-pixel'))
-			antialiasing = false;
-		else
-			antialiasing = Save.antialiasing;
+		antialiasing = checkAntialiasing();
 	}
 
-	public function playFrame(num:Int)
+	function checkAntialiasing()
 	{
-		animation.curAnim.curFrame = num;
+		var noAntialiasingChars:Array<String> = ["senpai", "senpai-angry", "spirit"];
+		var varAnti = Save.antialiasing;
+
+		for (char in noAntialiasingChars)
+		{
+			if (curCharacter == char)
+			{
+				return false;
+			}
+		}
+		return varAnti;
 	}
 
 	public function playAnimation(name:String)
@@ -103,18 +107,19 @@ class HealthIcon extends FlxSprite
 		animation.play(name);
 	}
 
-	var iconBopNumber:Float = 22;
+	var iconBop:Float = 1.15;
+	var iconAngle:Float = 22;
 
-	public function iconBop(_beat:Int, player:Bool)
+	public function bop(_beat:Int)
 	{
-		scale.set(1.15, 1.15);
+		scale.set(iconBop, iconBop);
 		updateHitbox();
 
 		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.quadOut});
 
 		if (_beat % 4 == 0)
 		{
-			angle = (player == true ? -iconBopNumber : iconBopNumber);
+			angle = (isPlayer == true ? -iconAngle : iconAngle);
 		}
 	}
 }

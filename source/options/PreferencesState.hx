@@ -16,7 +16,7 @@ import modding.ModState;
 
 using StringTools;
 
-class OptionsState extends MusicBeatState
+class PreferencesState extends MusicBeatState
 {
 	var selector:FlxText;
 
@@ -24,9 +24,7 @@ class OptionsState extends MusicBeatState
 
 	var optionsCool:Alphabet;
 
-	public static var isPlayStated:Bool = false;
-
-	public var options:Array<String> = ["preferences", "controls", "mods", "exit"];
+	public var options:Array<String> = ["gameplay", "appearance", "graphics", "exit"];
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 
@@ -36,7 +34,7 @@ class OptionsState extends MusicBeatState
 	{
 		super.create();
 
-		OptionsState.stopSpam = false;
+		PreferencesState.stopSpam = false;
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuBG'));
 		menuBG.updateHitbox();
@@ -55,7 +53,7 @@ class OptionsState extends MusicBeatState
 
 	function addOptions(idddd:Int)
 	{
-		optionsCool = new Alphabet(0, 50 + (idddd * 100), options[idddd], true, false);
+		optionsCool = new Alphabet(0, 100 + (idddd * 100), options[idddd], true, false);
 		optionsCool.screenCenter(X);
 		optionsCool.isMenuItem = false;
 		optionsCool.targetY = idddd;
@@ -83,10 +81,7 @@ class OptionsState extends MusicBeatState
 			{
 				stopSpam = true;
 
-				if (isPlayStated == false)
-					FlxG.switchState(new MainMenuState());
-				else
-					FlxG.switchState(new PlayState());
+				FlxG.switchState(new options.OptionsState());
 			}
 
 			if (controls.ACCEPT)
@@ -98,17 +93,14 @@ class OptionsState extends MusicBeatState
 				{
 					switch (options[curSelected])
 					{
-						case "preferences":
-							FlxG.switchState(new options.PreferencesState());
-						case "controls":
-							FlxG.switchState(new options.ControlsState());
-						case "mods":
-							FlxG.switchState(new ModState());
+						case "gameplay":
+							FlxG.state.openSubState(new options.categories.Gameplay());
+						case "appearance":
+							FlxG.state.openSubState(new options.categories.Appearance());
+						case "graphics":
+							FlxG.state.openSubState(new options.categories.Graphics());
 						case "exit":
-							if (isPlayStated == false)
-								FlxG.switchState(new MainMenuState());
-							else
-								FlxG.switchState(new PlayState());
+							FlxG.switchState(new options.OptionsState());
 						default:
 							CoolLogSystem.error('Option Not Configured');
 					}

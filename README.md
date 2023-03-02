@@ -1,10 +1,11 @@
 # FNF': Null Engine
-![logo](art/nulllogo.gif)
+![logo](art/nullengine/nulllogo.gif)
 
 ### What is Null Engine?
 It's Any Engine
+<details> 
+  <summary><h2>Credits</h2></summary>
 
-### Credits
 ##### Null Engine:
 - CapybaraCoding - Programmer
 - Sloow - Somenthing
@@ -26,6 +27,8 @@ It's Any Engine
 - Script System
 - Cool Hud
 
+</details>
+
 ### What are the Requirements?
 
 #### 1: Installing the Import Stuff
@@ -38,7 +41,6 @@ It's Any Engine
 haxelib install flixel 
 haxelib install flixel-addons
 haxelib install flixel-ui
-haxelib install random
 haxelib install flxanimate
 ```
 #### 3: Installing Git Library
@@ -53,5 +55,5 @@ If Windows 11
 - Windows 11 SDK (10.0.22000.0)
 
 #### 5: Final
-run this code to fix the camera bug
+Run this Code to Fix the Camera Bug
 - `haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons`

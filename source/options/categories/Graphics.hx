@@ -1,4 +1,4 @@
-package options;
+package options.categories;
 
 import Character;
 import flash.text.TextField;
@@ -16,7 +16,7 @@ import lime.utils.Assets;
 
 using StringTools;
 
-class Preferences extends MusicBeatSubstate
+class Graphics extends MusicBeatSubstate
 {
 	var selector:FlxText;
 
@@ -67,6 +67,7 @@ class Preferences extends MusicBeatSubstate
 			optionsCool = new Alphabet(0, 50 + (i * 50), newOptions[i][0], false, false);
 			if (newOptions[i][2] == "Bool")
 				optionsCool.xAdd = 125;
+
 			optionsCool.isMenuItem = true;
 			optionsCool.targetY = i;
 			grpOptions.add(optionsCool);
@@ -134,7 +135,7 @@ class Preferences extends MusicBeatSubstate
 
 		if (controls.BACK)
 		{
-			OptionsState.stopSpam = false;
+			PreferencesState.stopSpam = false;
 			stopSpam = true;
 
 			Save.saveSettings();
@@ -144,71 +145,52 @@ class Preferences extends MusicBeatSubstate
 
 		if (youCanPress == true)
 		{
-			if (controls.ACCEPT)
+			if (newOptions[curSelected][2] == "Bool")
 			{
-				if (newOptions[curSelected][2] == "Bool")
+				if (controls.ACCEPT)
 				{
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 
 					youCanPress = false;
 					stopSpam = true;
-					FlxFlicker.flicker(grpOptions.members[curSelected], 1, 0.06, true, false, function(flick:FlxFlicker)
+					FlxFlicker.flicker(grpOptions.members[curSelected], 1, 0.04, true, false, function(flick:FlxFlicker)
 					{
 						youCanPress = true;
 						stopSpam = false;
 
-						changePrefs();
+						changePrefs("Bool");
 					});
 				}
 			}
 		}
 	}
 
-	function changePrefs()
+	function changePrefs(type:String)
 	{
-		switch (newOptions[curSelected][0])
+		switch (type)
 		{
-			case "GhostTapping":
+			case "Bool":
 				{
-					Save.ghostTapping = !Save.ghostTapping;
+					switch (newOptions[curSelected][0])
+					{
+						case "Antialiasing":
+							{
+								Save.antialiasing = !Save.antialiasing;
+							}
+
+						default:
+							trace("Error: On Change Options");
+					}
+
+					updatePrefs();
+					grpCheckBoxes.members[curSelected].value = newOptions[curSelected][1];
 				}
-			case "Flashing":
-				{
-					Save.flashing = !Save.flashing;
-				}
-			case "Antialiasing":
-				{
-					Save.antialiasing = !Save.antialiasing;
-				}
-			case "NoteSplash":
-				{
-					Save.noteSplash = !Save.noteSplash;
-				}
-			case "DownScroll":
-				{
-					Save.isDownscroll = !Save.isDownscroll;
-				}
-			case "Freeplay Cutscene":
-				{
-					Save.freeplayCutscene = !Save.freeplayCutscene;
-				}
-			default:
-				trace("Error: On Change Options");
 		}
-		updatePrefs();
-		grpCheckBoxes.members[curSelected].value = newOptions[curSelected][1];
 	}
 
 	function updatePrefs()
 	{
-		newOptions = [
-			["GhostTapping", Save.ghostTapping, "Bool"],
-			["Flashing", Save.flashing, "Bool"],
-			["Antialiasing", Save.antialiasing, "Bool"],
-			["NoteSplash", Save.noteSplash, "Bool"],
-			["DownScroll", Save.isDownscroll, "Bool"],
-			["Freeplay Cutscene", Save.freeplayCutscene, "Bool"]
-		];
+		newOptions = [["Antialiasing", Save.antialiasing, "Bool"]];
 	}
 
 	function changeSelection(change:Int = 0)

@@ -1,8 +1,10 @@
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 
-class StrumNote extends FlxSprite
+class StaticNote extends FlxSprite
 {
 	public var noteData:Int = 0;
 	public var player:Int = 0;
@@ -95,6 +97,26 @@ class StrumNote extends FlxSprite
 				}
 		}
 		updateHitbox();
+	}
+
+	public function noteTween(data:Int, down:Bool)
+	{
+		var alphaReturn:Float = 1;
+		if (!Save.staticArrowsAlpha)
+			alphaReturn = 0.9;
+
+		if (down)
+		{
+			y += 10;
+			alpha = 0;
+			FlxTween.tween(this, {y: y - 10, alpha: alphaReturn}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * data)});
+		}
+		else
+		{
+			y -= 10;
+			alpha = 0;
+			FlxTween.tween(this, {y: y + 10, alpha: alphaReturn}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * data)});
+		}
 	}
 
 	function addNote()

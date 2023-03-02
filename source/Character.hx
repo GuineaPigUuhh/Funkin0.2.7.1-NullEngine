@@ -594,7 +594,13 @@ class Character extends FlxSprite
 	{
 		CharacterJSON.getJSON(char);
 
-		frames = Paths.getSparrowAtlas("characters/spritesheets/" + CharacterJSON.prefs.spriteSheet);
+		var funkinSprite = Paths.getSparrowAtlas("characters/spritesheets/" + CharacterJSON.prefs.spriteSheet);
+
+		var textFile = Paths.getPreloadPath("characters/spritesheets/" + CharacterJSON.prefs.spriteSheet + ".txt");
+		if (FileSystem.exists(textFile))
+			funkinSprite = Paths.getPackerAtlas("characters/spritesheets/" + CharacterJSON.prefs.spriteSheet);
+
+		frames = funkinSprite;
 
 		var antiChar = CharacterJSON.prefs.antialiasing;
 		antialiasing = (antiChar ? Save.antialiasing : false);

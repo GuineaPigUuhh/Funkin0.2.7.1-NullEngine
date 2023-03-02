@@ -86,9 +86,6 @@ class MenuCharacter extends FlxSprite
 
 	public function playAnim(name:String)
 	{
-		if (name == 'idle')
-			animation.play(character + "-idle");
-		if (name == 'confirm')
-			animation.play(character + "-confirm");
+		animation.play(character + "-" + name);
 	}
 }

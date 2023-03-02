@@ -24,11 +24,15 @@ class NoteSplash extends FlxSprite
 	var json:JsonData;
 	var notes:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
 
-	public function new(x:Float, y:Float, data:Int)
+	public var skin:String = "default";
+
+	public function new(x:Float, y:Float, data:Int, skin:String = "default")
 	{
 		super(x, y);
 
-		loadAssets("default");
+		this.skin = skin;
+
+		loadAssets(skin);
 
 		execute(x, y, data);
 	}

@@ -9,18 +9,11 @@ import sys.io.File;
 
 class FunkinScript
 {
-	var parser:Parser;
-	var interp:Interp;
+	var parser:Parser = new Parser();
+	var interp:Interp = new Interp();
 
-	public var allowTrace:Bool = false;
-
-	public function new(file:String, traces:Bool = false)
+	public function new(file:String)
 	{
-		parser = new Parser();
-		interp = new Interp();
-
-		allowTrace = traces;
-
 		parser.allowTypes = true;
 		parser.allowJSON = true;
 		parser.allowMetadata = true;
@@ -31,14 +24,6 @@ class FunkinScript
 		{
 			var getScript = parser.parseString(File.getContent(file));
 			interp.execute(getScript);
-		}
-	}
-
-	public function traceFunkin(traceAA:String)
-	{
-		if (allowTrace)
-		{
-			trace("[SCRIPT] - " + traceAA);
 		}
 	}
 
@@ -79,17 +64,19 @@ class FunkinScript
 		set('Conductor', Conductor);
 		// set('PlayState', PlayState);
 		set('Paths', Paths);
+
+		set('CoolLogSystem', CoolLogSystem);
+
+		set('createLog', CoolLogSystem.log);
+		set('createError', CoolLogSystem.error);
+		set('createWarning', CoolLogSystem.warning);
 	}
 
 	public function set(name:String, value:Dynamic)
-	{
 		interp.variables.set(name, value);
-	}
 
 	public function get(name:String)
-	{
 		return interp.variables.get(name);
-	}
 
 	public function call(name:String, value:Array<Dynamic>)
 	{

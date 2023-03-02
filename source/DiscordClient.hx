@@ -10,17 +10,18 @@ class DiscordClient
 	static var _id:String = "1061291748988571709";
 	static var _largeText:String = "FNF' Null Engine!";
 	static var _largeImage:String = "icon";
+	static var logColor:Int = CoolLogSystem.CYAN;
 
 	public function new()
 	{
-		trace("Discord Client starting...");
+		CoolLogSystem.log("Discord Client starting...", logColor);
 		DiscordRpc.start({
 			clientID: _id,
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
 		});
-		trace("Discord Client started.");
+		CoolLogSystem.log("Discord Client started.", logColor);
 
 		while (true)
 		{
@@ -48,12 +49,12 @@ class DiscordClient
 
 	static function onError(_code:Int, _message:String)
 	{
-		trace('Error! $_code : $_message');
+		CoolLogSystem.error('Error! $_code : $_message');
 	}
 
 	static function onDisconnected(_code:Int, _message:String)
 	{
-		trace('Disconnected! $_code : $_message');
+		CoolLogSystem.log('Disconnected! $_code : $_message', logColor);
 	}
 
 	public static function initialize()
@@ -62,7 +63,7 @@ class DiscordClient
 		{
 			new DiscordClient();
 		});
-		trace("Discord Client initialized");
+		CoolLogSystem.log('Discord Client initialized', logColor);
 	}
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float)

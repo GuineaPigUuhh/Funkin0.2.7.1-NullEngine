@@ -194,9 +194,7 @@ class FreeplayState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.SPACE)
 		{
-			#if PRELOAD_ALL
 			FlxG.sound.playMusic(CoolUtil.getInst(songs[curSelected].songName), 0);
-			#end
 		}
 
 		if (controls.BACK)
@@ -208,14 +206,12 @@ class FreeplayState extends MusicBeatState
 		if (FlxG.keys.justPressed.ENTER)
 		{
 			var poop:String = CoolUtil.formatSong(curDifficulty);
-			trace(poop);
 
 			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 
 			PlayState.storyWeek = songs[curSelected].week;
-			trace('CUR WEEK' + PlayState.storyWeek);
 
 			LoadingState.loadAndSwitchState(new PlayState());
 		}

@@ -12,14 +12,19 @@ import openfl.display.BitmapData;
 
 class NullSupport
 {
+	public static var imagesLoaded:Map<String, Bool> = new Map<String, Bool>();
+
 	static public function addModGraphic(key:String):FlxGraphic
 	{
 		if (FileSystem.exists(ModPaths.image(key)))
 		{
-			var newBitmap:BitmapData = BitmapData.fromFile(ModPaths.image(key));
-			var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(newBitmap, false, key);
-			newGraphic.persist = true;
-			FlxG.bitmap.addGraphic(newGraphic);
+			if (!imagesLoaded.exists(key))
+			{
+				var newBitmap:BitmapData = BitmapData.fromFile(ModPaths.image(key));
+				var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(newBitmap, false, key);
+				newGraphic.persist = true;
+				FlxG.bitmap.addGraphic(newGraphic);
+			}
 
 			return FlxG.bitmap.get(key);
 		}

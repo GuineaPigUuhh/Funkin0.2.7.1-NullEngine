@@ -52,9 +52,9 @@ class ModState extends MusicBeatState
 			mods = FileSystem.readDirectory('${modFolder}/');
 		else
 		{
-			trace("ERROR: No Mod Folder"); // cool system!
-			FlxG.switchState(new options.OptionsState());
-			trace("Creating the Mods Folder...");
+			CoolLogSystem.error("No Mod Folder");
+			FlxG.resetState();
+			CoolLogSystem.log("Creating the Mods Folder...", CoolLogSystem.GREEN);
 			FileSystem.createDirectory(checkMODpath);
 		}
 

@@ -49,7 +49,7 @@ class NullInfo extends TextField
 		defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont("assets/fonts/vcr.ttf").fontName, 14, 0xFFFFFFFF, true);
 		autoSize = LEFT;
 		multiline = true;
-		alpha = 0.65;
+		alpha = 0.8;
 		text = "";
 
 		cacheCount = 0;
@@ -97,7 +97,7 @@ class NullInfo extends TextField
 
 		text += "RAM: " + memoryMegas + " MB\n";
 
-		text += "Null Engine v" + File.getContent("buildNumber.txt");
+		text += "Null Engine v" + Main.nullText;
 
 		text += "\n";
 	}

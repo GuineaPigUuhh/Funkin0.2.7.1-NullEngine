@@ -13,6 +13,8 @@ class Save
 	public static var antialiasing:Bool = true;
 	public static var noteSplash:Bool = true;
 	public static var isDownscroll:Bool = false;
+	public static var middleScroll:Bool = false;
+
 	public static var freeplayCutscene:Bool = false;
 
 	public static var modSelected:String = "";
@@ -27,6 +29,9 @@ class Save
 	public static var keyLEFTalt:String = 'A';
 	public static var keyRIGHTalt:String = 'D';
 
+	public static var staticArrowsAlpha:Bool = true;
+	public static var susArrowsAlpha:Bool = true;
+
 	public static function saveSettings()
 	{
 		// saveSettings();
@@ -37,6 +42,7 @@ class Save
 		FlxG.save.data.noteSplash = noteSplash;
 		FlxG.save.data.isDownscroll = isDownscroll;
 		FlxG.save.data.freeplayCutscene = freeplayCutscene;
+		FlxG.save.data.middleScroll = middleScroll;
 
 		FlxG.save.data.modSelected = modSelected;
 
@@ -50,9 +56,12 @@ class Save
 		FlxG.save.data.keyLEFTalt = keyLEFTalt;
 		FlxG.save.data.keyRIGHTalt = keyRIGHTalt;
 
+		FlxG.save.data.staticArrowsAlpha = staticArrowsAlpha;
+		FlxG.save.data.susArrowsAlpha = susArrowsAlpha;
+
 		FlxG.save.flush();
 
-		trace('Save Settings');
+		CoolLogSystem.log("Save Settings", CoolLogSystem.CYAN);
 	}
 
 	public static function loadSettings()
@@ -71,6 +80,8 @@ class Save
 			isDownscroll = FlxG.save.data.isDownscroll;
 		if (FlxG.save.data.freeplayCutscene != null)
 			freeplayCutscene = FlxG.save.data.freeplayCutscene;
+		if (FlxG.save.data.middleScroll != null)
+			middleScroll = FlxG.save.data.middleScroll;
 
 		if (FlxG.save.data.modSelected != null)
 			modSelected = FlxG.save.data.modSelected;
@@ -93,6 +104,11 @@ class Save
 		if (FlxG.save.data.keyRIGHTalt != null)
 			keyRIGHTalt = FlxG.save.data.keyRIGHTalt;
 
-		trace('Load Settings');
+		if (FlxG.save.data.staticArrowsAlpha != null)
+			staticArrowsAlpha = FlxG.save.data.staticArrowsAlpha;
+		if (FlxG.save.data.susArrowsAlpha != null)
+			susArrowsAlpha = FlxG.save.data.susArrowsAlpha;
+
+		CoolLogSystem.log("Load Settings", CoolLogSystem.CYAN);
 	}
 }

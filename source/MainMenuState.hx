@@ -36,7 +36,7 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
+	var optionShit:Array<String> = [];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -82,6 +82,26 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
+		createOption("story mode", function()
+		{
+			FlxG.switchState(new StoryMenuState()); // I made this options system because I was bored
+		});
+
+		createOption("freeplay", function()
+		{
+			FlxG.switchState(new FreeplayState());
+		});
+
+		createOption("kickstarter", function()
+		{
+			selectedDonate();
+		});
+
+		createOption("options", function()
+		{
+			FlxG.switchState(new options.OptionsState());
+		});
+
 		for (i in 0...optionShit.length)
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
@@ -117,12 +137,11 @@ class MainMenuState extends MusicBeatState
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
-			menuItem.scrollFactor.set(0, 0.8);
+			menuItem.scrollFactor.set(0, 0);
 			menuItem.antialiasing = Save.antialiasing;
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);
-		// NG.core.calls.event.logEvent('swag').send();
 
 		changeItem();
 
@@ -160,7 +179,8 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				selectedSomethin = true;
+				if (optionShit[curSelected] != "kickstarter")
+					selectedSomethin = true;
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 
 				if (Save.flashing == true)
@@ -168,21 +188,22 @@ class MainMenuState extends MusicBeatState
 
 				menuItems.forEach(function(spr:FlxSprite)
 				{
-					if (curSelected != spr.ID)
+					if (curSelected != spr.ID && optionShit[curSelected] != "kickstarter")
 					{
 						FlxTween.tween(spr, {alpha: 0}, 0.4, {
 							ease: FlxEase.quadOut,
 							onComplete: function(twn:FlxTween)
 							{
-								spr.kill();
+								if (optionShit[curSelected] != "kickstarter")
+									spr.kill();
 							}
 						});
 					}
 					else
 					{
-						FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
+						FlxFlicker.flicker(menuItems.members[curSelected], 1, 0.06, true, false, function(flick:FlxFlicker)
 						{
-							selectState();
+							selectOption();
 						});
 					}
 				});
@@ -197,17 +218,30 @@ class MainMenuState extends MusicBeatState
 		});
 	}
 
-	function selectState()
+	var callbackOptions:Array<() -> Void> = [];
+
+	function createOption(name:String, callback:() -> Void)
 	{
-		switch (optionShit[curSelected])
+		optionShit.push(name);
+		callbackOptions.push(callback);
+	}
+
+	function selectOption()
+	{
+		var daChoice:String = optionShit[curSelected];
+
+		for (i in 0...callbackOptions.length)
 		{
-			case "story mode":
-				FlxG.switchState(new StoryMenuState());
-			case "freeplay":
-				FlxG.switchState(new FreeplayState());
-			case "options":
-				FlxG.switchState(new options.OptionsState());
+			if (optionShit[curSelected] == optionShit[i])
+			{
+				callbackOptions[i]();
+			}
 		}
+	}
+
+	function selectedDonate()
+	{
+		FlxG.openURL('https://www.kickstarter.com/projects/funkin/friday-night-funkin-the-full-ass-game/');
 	}
 
 	function changeItem(huh:Int = 0)
@@ -216,15 +250,17 @@ class MainMenuState extends MusicBeatState
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.animation.play('idle');
-
 			if (spr.ID == curSelected)
 			{
 				spr.animation.play('selected');
 				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
+				spr.centerOffsets();
 			}
-
-			spr.updateHitbox();
+			else
+			{
+				spr.animation.play('idle');
+				spr.updateHitbox();
+			}
 		});
 	}
 }

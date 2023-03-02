@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="kickstarter.png">
+	<!-- Created with Adobe Animate version 22.0.3.179 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="kickstarter basic0000" x="0" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter basic0001" x="0" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter basic0002" x="0" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter basic0003" x="558" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter basic0004" x="558" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter basic0005" x="558" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter basic0006" x="1116" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter basic0007" x="1116" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter basic0008" x="1116" y="0" width="558" height="139"/>
+	<SubTexture name="kickstarter white0000" x="0" y="139" width="838" height="216" frameX="-3" frameY="0" frameWidth="841" frameHeight="216"/>
+	<SubTexture name="kickstarter white0001" x="838" y="139" width="836" height="216" frameX="0" frameY="0" frameWidth="841" frameHeight="216"/>
+	<SubTexture name="kickstarter white0002" x="0" y="355" width="833" height="207" frameX="-2" frameY="-6" frameWidth="841" frameHeight="216"/>
+</TextureAtlas>

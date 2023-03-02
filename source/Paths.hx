@@ -82,13 +82,23 @@ class Paths
 
 	inline static public function hscript(key:String, ?library:String)
 	{
-		var modFile:String = ModPaths.hscript(key);
-		var vanillaFile = getPath('$key.hx', TEXT, library);
+		var modFile:String = "";
+		var vanillaFile = "";
 
-		if (FileSystem.exists(modFile))
+		var file = getPath('$key.hx', TEXT, library);
+		if (FileSystem.exists(file))
+			vanillaFile = file;
+
+		if (FileSystem.exists(ModPaths.hscript(key)))
+			modFile = ModPaths.hscript(key);
+
+		if (modFile != "")
 			return modFile;
-		else
+
+		if (vanillaFile != "")
 			return vanillaFile;
+
+		return null;
 	}
 
 	inline static public function json(key:String, ?library:String)
@@ -113,12 +123,12 @@ class Paths
 
 	inline static public function voices(song:String)
 	{
-		return getPath('data/songs/${song.toLowerCase()}/audio/Voices.$SOUND_EXT', MUSIC, null);
+		return getPreloadPath('songs/${song.toLowerCase()}/audio/Voices.$SOUND_EXT');
 	}
 
 	inline static public function inst(song:String)
 	{
-		return getPath('data/songs/${song.toLowerCase()}/audio/Inst.$SOUND_EXT', MUSIC, null);
+		return getPreloadPath('songs/${song.toLowerCase()}/audio/Inst.$SOUND_EXT');
 	}
 
 	inline static public function image(key:String, ?library:String)

@@ -13,14 +13,19 @@ using StringTools;
 class Main extends Sprite
 {
 	var gameOptions = {
-		gameWidth: 1280,
-		gameHeight: 720,
+		width: 1280,
+		height: 720,
 		initialState: TitleState,
 		zoom: -1.0,
 		framerate: 60,
 		skipSplash: true,
 		startFullscreen: false
 	};
+
+	public static var nullType:String = "beta";
+	public static var nullVersion:String = "0.3.1";
+
+	public static var nullText:String = nullVersion + " " + "[" + nullType.toUpperCase() + "]";
 
 	public static var instance:Main;
 
@@ -64,16 +69,16 @@ class Main extends Sprite
 
 		if (gameOptions.zoom == -1)
 		{
-			var ratioX:Float = stageWidth / gameOptions.gameWidth;
-			var ratioY:Float = stageHeight / gameOptions.gameHeight;
+			var ratioX:Float = stageWidth / gameOptions.width;
+			var ratioY:Float = stageHeight / gameOptions.height;
 
 			gameOptions.zoom = Math.min(ratioX, ratioY);
 
-			gameOptions.gameWidth = Math.ceil(stageWidth / gameOptions.zoom);
-			gameOptions.gameHeight = Math.ceil(stageHeight / gameOptions.zoom);
+			gameOptions.width = Math.ceil(stageWidth / gameOptions.zoom);
+			gameOptions.height = Math.ceil(stageHeight / gameOptions.zoom);
 		}
 
-		addChild(new funkin.Game(gameOptions.gameWidth, gameOptions.gameHeight, gameOptions.initialState, #if (flixel < "5.0.0") gameOptions.zoom, #end
+		addChild(new funkin.Game(gameOptions.width, gameOptions.height, gameOptions.initialState, #if (flixel < "5.0.0") gameOptions.zoom, #end
 			gameOptions.framerate, gameOptions.framerate, gameOptions.skipSplash, gameOptions.startFullscreen));
 
 		#if !mobile
