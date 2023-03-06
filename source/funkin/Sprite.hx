@@ -1,8 +1,8 @@
 package funkin;
 
+import Paths;
 import flixel.FlxSprite;
 import modding.ModPaths;
-import Paths;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -110,10 +110,15 @@ class Sprite extends FlxSprite
 		animation.play(name, force, reversed, frame);
 
 		var getOffset = animOffsets.get(name);
+
 		if (animOffsets.exists(name))
+		{
 			offset.set(getOffset[0], getOffset[1]);
+		}
 		else
+		{
 			offset.set(0, 0);
+		}
 	}
 
 	public function addOffset(name:String, array:Array<Float>)

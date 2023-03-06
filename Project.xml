@@ -38,8 +38,14 @@
 	<set name="BUILD_DIR" value="export/release" unless="debug" />
 	<set name="BUILD_DIR" value="export/32bit" if="32bit" />
 
-	<define name="IS_CMD" />
+	<define name="COLORED_LOGS" />
+	<!-- 
+		It will make your logs super cool,
+		if you use this option you will have to have the microsoft store terminal
+	-->
+
 	<define name="VIDEO_SUPPORT" if="desktop" unless="32bits"/>
+	<define name="ALLOWED_LOGS" if="test"/>
 
 	<classpath name="source" />
 

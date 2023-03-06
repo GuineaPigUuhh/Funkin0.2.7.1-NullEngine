@@ -102,7 +102,7 @@ class PreferencesState extends MusicBeatState
 						case "exit":
 							FlxG.switchState(new options.OptionsState());
 						default:
-							CoolLogSystem.error('Option Not Configured');
+							Logs.error('Option Not Configured');
 					}
 				});
 			}

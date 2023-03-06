@@ -1,35 +1,59 @@
-package;
+package scripting;
 
 import flixel.FlxG;
 import hscript.*;
+import scripting.*;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
 #end
 
-class FunkinScript
+class NullScript extends Script
 {
-	public var interp:Interp;
-
-	public function new(file:String)
+	public override function onCreate(path:String)
 	{
+		super.onCreate(path);
+
 		interp = new Interp();
-		var parser:Parser = new Parser();
+		parser = new Parser();
 
 		parser.allowTypes = true;
 		parser.allowJSON = true;
 		parser.allowMetadata = true;
 
-		preset();
-
-		if (FileSystem.exists(file))
-		{
-			var getScript = parser.parseString(File.getContent(file));
-			interp.execute(getScript);
-		}
+		createPreset = true;
 	}
 
-	public function preset()
+	public override function onLoad()
+	{
+		var getScript = parser.parseString(File.getContent(path));
+		interp.execute(getScript);
+	}
+
+	public override function set(name:String, value:Dynamic)
+		interp.variables.set(name, value);
+
+	public override function get(name:String)
+		return interp.variables.get(name);
+
+	public override function onCall(name:String, value:Array<Dynamic>)
+	{
+		if (interp == null)
+			return null;
+
+		var func = get(name);
+		if (func != null)
+		{
+			if (value != null && value.length > 0)
+				return Reflect.callMethod(null, func, value);
+			else
+				return func;
+		}
+
+		return null;
+	}
+
+	public override function preset()
 	{
 		var daState = FlxG.state;
 
@@ -67,44 +91,10 @@ class FunkinScript
 		// set('PlayState', PlayState);
 		set('Paths', Paths);
 
-		set('CoolLogSystem', CoolLogSystem);
+		set('Logs', Logs);
 
-		set('createLog', CoolLogSystem.log);
-		set('createError', CoolLogSystem.error);
-		set('createWarning', CoolLogSystem.warning);
-	}
-
-	public function set(name:String, value:Dynamic)
-		interp.variables.set(name, value);
-
-	public function get(name:String)
-		return interp.variables.get(name);
-
-	public function call(name:String, value:Array<Dynamic>)
-	{
-		if (value == null)
-			value = [];
-
-		if (interp == null)
-		{
-			return null;
-		}
-		if (interp.variables.exists(name))
-		{
-			var functionH = interp.variables.get(name);
-			if (value == null)
-			{
-				var result = null;
-				result = functionH();
-				return result;
-			}
-			else
-			{
-				var result = null;
-				result = Reflect.callMethod(null, functionH, value);
-				return result;
-			}
-		}
-		return null;
+		set('createLog', Logs.log);
+		set('createError', Logs.error);
+		set('createWarning', Logs.warning);
 	}
 }

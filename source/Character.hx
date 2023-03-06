@@ -152,6 +152,19 @@ class Character extends FlxSprite
 		return point;
 	}
 
+	public function setCharacterPosition(ggff:Character)
+	{
+		if (isGf || curCharacter.startsWith('gf')) // if trans?
+		{
+			setPosition(PlayState.GF_POS[0], PlayState.GF_POS[1]);
+			scrollFactor.set(0.95, 0.95);
+			ggff.visible = false;
+		}
+
+		x += charPosition.x;
+		y += charPosition.y;
+	}
+
 	function generateSOURCEcharacter(char:String)
 	{
 		getMAP();

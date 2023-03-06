@@ -28,7 +28,6 @@ class HealthIcon extends FlxSprite
 	{
 		super();
 
-		this.curCharacter = curCharacter;
 		this.isPlayer = isPlayer;
 
 		scrollFactor.set();
@@ -74,6 +73,7 @@ class HealthIcon extends FlxSprite
 
 	public function changeIcon(curCharacter:String = 'face')
 	{
+		this.curCharacter = curCharacter;
 		var path:String = 'characters/icons/${curCharacter}';
 
 		loadGraphic(CoolUtil.configGraphic(path));
@@ -107,7 +107,7 @@ class HealthIcon extends FlxSprite
 		animation.play(name);
 	}
 
-	var iconBop:Float = 1.15;
+	var iconBop:Float = 1.2;
 	var iconAngle:Float = 22;
 
 	public function bop(_beat:Int)

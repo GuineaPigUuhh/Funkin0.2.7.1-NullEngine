@@ -2,7 +2,8 @@
 ![logo](art/nullengine/nulllogo.gif)
 
 ### What is Null Engine?
-It's Any Engine
+the Null Engine is an Alternative Engine for those who are tired of using the same engine.
+
 <details> 
   <summary><h2>Credits</h2></summary>
 
@@ -21,11 +22,18 @@ It's Any Engine
 - PhantomArcade3K and Evilsk8r - Art
 - Kawaisprite - Musician
 
-### What Features Does the Engine Have?
+</details>
+
+<details>  
+  <summary><h2>What Features Does the Engine Have?</h2></summary>
+
 - GhostTapping
 - Easy Modding
-- Script System
+- HScript System
+- Multiple Scripts
 - Cool Hud
+- Cool Log System (you has to use the Microsoft terminal application and remove the IS_CMD option in Project.xml)
+- 
 
 </details>
 

@@ -270,7 +270,7 @@ class ControlsState extends MusicBeatState
 			keys[curSelected] = tempKey;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 
-			CoolLogSystem.error('ERRO ON CHANGE KEY.');
+			Logs.error('ERRO ON CHANGE KEY.');
 			keyWarning.alpha = 1;
 
 			warningTween.cancel();

@@ -61,7 +61,7 @@ class Save
 
 		FlxG.save.flush();
 
-		CoolLogSystem.log("Save Settings", CoolLogSystem.CYAN);
+		Logs.log("Save Settings", Logs.CYAN);
 	}
 
 	public static function loadSettings()
@@ -109,6 +109,6 @@ class Save
 		if (FlxG.save.data.susArrowsAlpha != null)
 			susArrowsAlpha = FlxG.save.data.susArrowsAlpha;
 
-		CoolLogSystem.log("Load Settings", CoolLogSystem.CYAN);
+		Logs.log("Load Settings", Logs.CYAN);
 	}
 }
