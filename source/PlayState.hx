@@ -187,6 +187,9 @@ class PlayState extends MusicBeatState
 	var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
 	var songScripts:ScriptPack;
+	var globalScripts:ScriptPack;
+
+	var stageScript:NullScript;
 
 	var iconsArray:Array<HealthIcon> = [];
 
@@ -254,7 +257,13 @@ class PlayState extends MusicBeatState
 		curStage = SONG.stage;
 
 		songScripts = new ScriptPack(Paths.getPreloadPath('songs/${SONG.song.toLowerCase()}/scripts/'));
+		globalScripts = new ScriptPack(Paths.getPreloadPath('data/global_scripts/'));
 
+		stageScript = new NullScript(Script.getScriptPath('data/stages/${curStage}'));
+		if (stageScript.fileExists)
+			stageScript.load();
+
+		globalScripts.call("onCreate", []);
 		songScripts.call("onCreate", []);
 
 		if (SONG.stage == null || SONG.stage.length < 1)
@@ -521,6 +530,8 @@ class PlayState extends MusicBeatState
 					add(bg);
 				}
 			default:
+				stageScript.call("onCreateStage", []);
+
 				var _stagePath = Paths.hscript('data/stages/' + curStage);
 				if (!FileSystem.exists(_stagePath))
 				{
@@ -842,35 +853,45 @@ class PlayState extends MusicBeatState
 		}
 
 		songScripts.call("onCreatePost", []);
-		setFNFvars();
+		globalScripts.call("onCreatePost", []);
+
+		setFNFvars([globalScripts, songScripts, stageScript]);
 
 		super.create();
 	}
 
-	function setFNFvars()
+	function setFNFvars(scripts:Array<Dynamic>)
 	{
-		songScripts.set("instance", PlayState.instance);
+		for (i in scripts)
+		{
+			if (Std.isOfType(i, NullScript) || Std.isOfType(i, Script) || Std.isOfType(i, ScriptPack))
+			{
+				// Logs.create({message: "Is Trueeee UHUM", type: "trace", color: Logs.YELLOW});
 
-		songScripts.set("gf", gf);
-		songScripts.set("boyfriend", boyfriend);
-		songScripts.set("dad", dad);
+				i.set("instance", PlayState.instance);
 
-		songScripts.set("cpuStrums", cpuStrums);
-		songScripts.set("strumLineNotes", strumLineNotes);
-		songScripts.set("playerStrums", playerStrums);
+				i.set("gf", gf);
+				i.set("boyfriend", boyfriend);
+				i.set("dad", dad);
 
-		songScripts.set("playVideo", playVideo);
-		songScripts.set("changeHealth", changeHealth);
+				i.set("cpuStrums", cpuStrums);
+				i.set("strumLineNotes", strumLineNotes);
+				i.set("playerStrums", playerStrums);
 
-		songScripts.set("songName", SONG.song.toLowerCase());
+				i.set("playVideo", playVideo);
+				i.set("changeHealth", changeHealth);
 
-		songScripts.set("songScore", songScore);
-		songScripts.set("songMisses", songMisses);
-		songScripts.set("songAccuracy", songAccuracy);
+				i.set("songName", SONG.song.toLowerCase());
 
-		songScripts.set("curStage", curStage);
-		songScripts.set("curBeat", curBeat);
-		songScripts.set("curStep", curStep);
+				i.set("songScore", songScore);
+				i.set("songMisses", songMisses);
+				i.set("songAccuracy", songAccuracy);
+
+				i.set("curStage", curStage);
+				i.set("curBeat", curBeat);
+				i.set("curStep", curStep);
+			}
+		}
 	}
 
 	function schoolIntro(?dialogueBox:DialogueBox):Void
@@ -1301,7 +1322,10 @@ class PlayState extends MusicBeatState
 	{
 		getRating();
 
-		scoreTxt.text = 'Score: ${songScore}' + divider + 'Misses: ${songMisses}' + divider + 'Accuracy: ${truncateFloat(songAccuracy, 2)}%';
+		scoreTxt.text = 'Score: ${songScore}';
+		scoreTxt.text += divider + 'Misses: ${songMisses}';
+		scoreTxt.text += divider + 'Accuracy: ${truncateFloat(songAccuracy, 2)}%';
+
 		if (songRating != "?" && songRatingFC != "?")
 			scoreTxt.text += ' [${songRating}${divider}${songRatingFC}]';
 
@@ -1442,11 +1466,12 @@ class PlayState extends MusicBeatState
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 
-	var iconOffset:Int = 26;
-
 	override public function update(elapsed:Float)
 	{
+		globalScripts.call("onUpdate", [elapsed]);
 		songScripts.call("onUpdate", [elapsed]);
+		stageScript.call("onUpdate", [elapsed]);
+
 		switch (curStage)
 		{
 			case 'philly':
@@ -1479,12 +1504,7 @@ class PlayState extends MusicBeatState
 
 		for (icon in iconsArray)
 		{
-			if (icon.isPlayer)
-				icon.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
-			else
-				icon.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (icon.width - iconOffset);
-
-			icon.updateHitbox();
+			icon.setIconX();
 		}
 
 		if (!isStoryMode) // anticheat BRUHHHH
@@ -1663,13 +1683,7 @@ class PlayState extends MusicBeatState
 
 				if (getDownScroll(daNote))
 				{
-					if (daNote.isSustainNote && daNote.wasGoodHit)
-					{
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
-					}
-					else
+					if (daNote.mustPress && !endingSong && (daNote.tooLate || !daNote.wasGoodHit))
 					{
 						noteMiss(daNote.noteData);
 					}
@@ -1687,7 +1701,9 @@ class PlayState extends MusicBeatState
 		if (!inCutscene)
 			keyShit();
 
+		globalScripts.call("onUpdatePost", [elapsed]);
 		songScripts.call("onUpdatePost", [elapsed]);
+		stageScript.call("onUpdatePost", [elapsed]);
 	}
 
 	function openChartEditor()
@@ -1792,9 +1808,13 @@ class PlayState extends MusicBeatState
 		}
 
 		if (daNote.isSustainNote == false)
+		{
 			daNote.x = strumMembers.x;
+		}
 		else
+		{
 			daNote.x = strumMembers.x + 35;
+		}
 	}
 
 	function changeFocus(charFocus:String)
@@ -1909,7 +1929,6 @@ class PlayState extends MusicBeatState
 		}
 
 		rating.loadGraphic(Paths.image(localPath));
-		rating.cameras = [camHUD];
 		rating.screenCenter();
 		rating.x = coolText.x - 40;
 		rating.y -= 60;
@@ -1919,7 +1938,6 @@ class PlayState extends MusicBeatState
 
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/default/combo'));
 		comboSpr.screenCenter();
-		comboSpr.cameras = [camHUD];
 		comboSpr.x = coolText.x;
 		comboSpr.acceleration.y = 600;
 		comboSpr.velocity.y -= 150;
@@ -1959,7 +1977,6 @@ class PlayState extends MusicBeatState
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(localPathNum));
 			numScore.screenCenter();
 			numScore.x = coolText.x + (43 * daLoop) - 90;
-			numScore.cameras = [camHUD];
 			numScore.y += 80;
 
 			if (!curStage.startsWith('school'))
@@ -2289,6 +2306,7 @@ class PlayState extends MusicBeatState
 
 			updateAccuracy();
 
+			globalScripts.call("onPlayerHit", [daNote]);
 			songScripts.call("onPlayerHit", [daNote]);
 		}
 	}
@@ -2321,6 +2339,7 @@ class PlayState extends MusicBeatState
 		notes.remove(daNote, true);
 		daNote.destroy();
 
+		globalScripts.call("onCpuHit", [daNote]);
 		songScripts.call("onCpuHit", [daNote]);
 	}
 
@@ -2419,7 +2438,9 @@ class PlayState extends MusicBeatState
 			resyncVocals();
 		}
 
+		globalScripts.call("onStepHit", [curStep]);
 		songScripts.call("onStepHit", [curStep]);
+		stageScript.call("onStepHit", [curStep]);
 	}
 
 	var lightningStrikeBeat:Int = 0;
@@ -2475,7 +2496,7 @@ class PlayState extends MusicBeatState
 		}
 
 		for (icon in iconsArray)
-			icon.bop(curBeat);
+			icon.bop();
 
 		if (dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing'))
 		{
@@ -2536,7 +2557,9 @@ class PlayState extends MusicBeatState
 			lightningStrikeShit();
 		}
 
+		globalScripts.call("onBeatHit", [curBeat]);
 		songScripts.call("onBeatHit", [curBeat]);
+		stageScript.call("onBeatHit", [curBeat]);
 	}
 
 	var curLight:Int = 0;

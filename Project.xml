@@ -46,6 +46,7 @@
 
 	<define name="VIDEO_SUPPORT" if="desktop" unless="32bits"/>
 	<define name="ALLOWED_LOGS" if="test"/>
+	<define name="ALLOWED_SCRIPTS" />
 
 	<classpath name="source" />
 

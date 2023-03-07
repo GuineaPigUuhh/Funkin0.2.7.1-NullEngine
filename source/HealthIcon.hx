@@ -1,6 +1,8 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.FlxState;
 import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -39,8 +41,6 @@ class HealthIcon extends FlxSprite
 	{
 		super.update(elapsed);
 
-		angle = FlxMath.lerp(0, angle, FlxMath.bound(1 - (elapsed * 3), 0, 1));
-
 		if (sprTracker != null)
 			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
 	}
@@ -51,22 +51,22 @@ class HealthIcon extends FlxSprite
 		{
 			if (health < 20) // boyfriend losing
 			{
-				playAnimation(curCharacter + "-losing");
+				playAnim(curCharacter + "-losing");
 			}
 			else
 			{
-				playAnimation(curCharacter);
+				playAnim(curCharacter);
 			}
 		}
 		else
 		{
 			if (health > 80) // dad Losing
 			{
-				playAnimation(curCharacter + "-losing");
+				playAnim(curCharacter + "-losing");
 			}
 			else
 			{
-				playAnimation(curCharacter);
+				playAnim(curCharacter);
 			}
 		}
 	}
@@ -89,7 +89,7 @@ class HealthIcon extends FlxSprite
 
 	function checkAntialiasing()
 	{
-		var noAntialiasingChars:Array<String> = ["senpai", "senpai-angry", "spirit"];
+		var noAntialiasingChars:Array<String> = ["senpai", "senpai-angry", "spirit", "bf-pixel"];
 		var varAnti = Save.antialiasing;
 
 		for (char in noAntialiasingChars)
@@ -102,24 +102,33 @@ class HealthIcon extends FlxSprite
 		return varAnti;
 	}
 
-	public function playAnimation(name:String)
+	public function playAnim(name:String)
 	{
 		animation.play(name);
 	}
 
-	var iconBop:Float = 1.2;
-	var iconAngle:Float = 22;
+	var iconBop:Float = 1.25;
 
-	public function bop(_beat:Int)
+	private var bopTween:FlxTween = null;
+
+	public function bop()
 	{
 		scale.set(iconBop, iconBop);
-		updateHitbox();
+		if (bopTween != null)
+			bopTween.cancel();
 
-		FlxTween.tween(scale, {x: 1, y: 1}, Conductor.crochet / 2000, {ease: FlxEase.quadOut});
+		bopTween = FlxTween.tween(scale, {x: 1, y: 1}, 0.2, {ease: FlxEase.circOut});
+		// updateHitbox();
+	}
 
-		if (_beat % 4 == 0)
-		{
-			angle = (isPlayer == true ? -iconAngle : iconAngle);
-		}
+	var iconOffset = 26;
+
+	public function setIconX()
+	{
+		var healthballer = PlayState.instance.healthBar;
+		if (isPlayer)
+			x = healthballer.x + (healthballer.width * (FlxMath.remapToRange(healthballer.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
+		else
+			x = healthballer.x + (healthballer.width * (FlxMath.remapToRange(healthballer.percent, 0, 100, 100, 0) * 0.01)) - (width - iconOffset);
 	}
 }

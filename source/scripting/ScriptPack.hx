@@ -15,8 +15,12 @@ class ScriptPack
 	public var scripts:Array<NullScript> = [];
 	public var pushedScripts:Array<String> = [];
 
+	public var folder:String = "";
+
 	public function new(folder:String)
 	{
+		this.folder = folder;
+
 		if (FileSystem.exists(folder))
 		{
 			for (file in FileSystem.readDirectory(folder))

@@ -13,9 +13,6 @@ class Script
 
 	public var fileExists = FileSystem.exists("");
 
-	public var interp:Interp;
-	public var parser:Parser;
-
 	public var createPreset:Bool = false;
 
 	public function new(path:String)
@@ -35,10 +32,9 @@ class Script
 
 	public function load()
 	{
-		if (interp != null)
-		{
-			onLoad();
-		}
+		#if ALLOWED_SCRIPTS
+		onLoad();
+		#end
 	}
 
 	public static function getScriptPath(path:String)

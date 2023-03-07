@@ -123,7 +123,7 @@
         }
     ],
     "prefs":{
-        "spriteSheet":"BOYFRIEND",
+        "spriteSheet":"bf",
         "flipX":true,
         "icon":"bf",
         "healthBarColor":"31B0D1",

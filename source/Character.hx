@@ -48,6 +48,8 @@ class Character extends FlxSprite
 	var xPOS:Float = 0;
 	var yPOS:Float = 0;
 
+	public var isGameOver:Bool = false;
+
 	public function new(xPOS:Float, yPOS:Float, curCharacter:String, ?isPlayer:Bool = false)
 	{
 		this.xPOS = xPOS;
@@ -404,6 +406,24 @@ class Character extends FlxSprite
 
 				flipX = true;
 
+			case 'bf-gameOver':
+				setTex(vanillaCharsPath + "bf-dead", "XML");
+
+				animation.addByPrefix('firstDeath', "BF dies", 24, false);
+				animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
+				animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
+
+				animation.play('firstDeath');
+
+				addOffset('firstDeath', -10, 0);
+				addOffset('deathLoop', -10, 0);
+				addOffset('deathConfirm', -10, 0);
+
+				playAnim('firstDeath');
+
+				flipX = true;
+				isGameOver = true;
+
 			case 'bf-christmas':
 				setTex(vanillaCharsPath + "bfChristmas", "XML");
 
@@ -509,6 +529,7 @@ class Character extends FlxSprite
 				updateHitbox();
 				antialiasing = false;
 				flipX = true;
+				isGameOver = true;
 
 			case 'senpai':
 				setTex(vanillaCharsPath + "senpai", "XML");

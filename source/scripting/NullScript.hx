@@ -10,6 +10,9 @@ import sys.io.File;
 
 class NullScript extends Script
 {
+	public var interp:Interp;
+	public var parser:Parser;
+
 	public override function onCreate(path:String)
 	{
 		super.onCreate(path);
@@ -41,15 +44,14 @@ class NullScript extends Script
 		if (interp == null)
 			return null;
 
-		var func = get(name);
-		if (func != null)
+		if (interp.variables.exists(name))
 		{
-			if (value != null && value.length > 0)
-				return Reflect.callMethod(null, func, value);
-			else
-				return func;
-		}
+			var functionH = get(name);
 
+			var result = null;
+			result = Reflect.callMethod(null, functionH, value);
+			return result;
+		}
 		return null;
 	}
 
@@ -92,6 +94,8 @@ class NullScript extends Script
 		set('Paths', Paths);
 
 		set('Logs', Logs);
+
+		set('createCustom', Logs.create);
 
 		set('createLog', Logs.log);
 		set('createError', Logs.error);
