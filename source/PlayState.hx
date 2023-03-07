@@ -135,7 +135,7 @@ class PlayState extends MusicBeatState
 
 	public var songScore:Int = 0;
 	public var songMisses:Int = 0;
-	public var songAccuracy:Float = 0.00;
+	public var songAccuracy:Float = 100.00;
 
 	public var songRating:String = "?";
 	public var songRatingFC:String = "?";
@@ -1320,12 +1320,11 @@ class PlayState extends MusicBeatState
 
 	function updateScoreTxt(playTween:Bool = false)
 	{
-		getRating();
-
 		scoreTxt.text = 'Score: ${songScore}';
 		scoreTxt.text += divider + 'Misses: ${songMisses}';
 		scoreTxt.text += divider + 'Accuracy: ${truncateFloat(songAccuracy, 2)}%';
 
+		getRating();
 		if (songRating != "?" && songRatingFC != "?")
 			scoreTxt.text += ' [${songRating}${divider}${songRatingFC}]';
 
@@ -1398,15 +1397,8 @@ class PlayState extends MusicBeatState
 		totalPlayed += 1;
 		songAccuracy = totalNotesHit / totalPlayed * 100;
 
-		if (songAccuracy >= 100)
-		{
-			songAccuracy = 100;
-		}
-
-		if (songAccuracy <= 0)
-		{
-			songAccuracy = 0;
-		}
+		if (songAccuracy >= 100.00)
+			songAccuracy = 100.00;
 	}
 
 	function changeHealth(noob:Float = 0, fuction:String = "")
@@ -2200,8 +2192,6 @@ class PlayState extends MusicBeatState
 		songMisses += 1;
 		songScore -= 10;
 
-		updateScoreTxt(false);
-
 		if (combo > 5 && gf.animOffsets.exists('sad'))
 			gf.playAnim('sad');
 
@@ -2214,6 +2204,7 @@ class PlayState extends MusicBeatState
 		boyfriend.playSingAnimations(direction, "miss", false);
 
 		updateAccuracy();
+		updateScoreTxt(false);
 	}
 
 	function badNoteCheck(direct:Int = 0, nighttt:Bool = false)
@@ -2273,10 +2264,8 @@ class PlayState extends MusicBeatState
 				popUpScore(daNote);
 				combo += 1;
 			}
-			else
-				totalNotesHit += 1;
 
-			updateScoreTxt(true);
+			totalNotesHit += 1;
 
 			changeHealth(0.023, "add");
 
@@ -2305,6 +2294,7 @@ class PlayState extends MusicBeatState
 			daNote.destroy();
 
 			updateAccuracy();
+			updateScoreTxt(true);
 
 			globalScripts.call("onPlayerHit", [daNote]);
 			songScripts.call("onPlayerHit", [daNote]);
