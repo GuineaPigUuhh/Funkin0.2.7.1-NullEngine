@@ -32,7 +32,7 @@ the Null Engine is an Alternative Engine for those who are tired of using the sa
 - HScript System
 - Multiple Scripts
 - Cool Hud
-- Cool Log System (you has to use the Microsoft terminal application and remove the IS_CMD option in Project.xml)
+- Cool Log System
 - 
 
 </details>

@@ -78,11 +78,11 @@ class Main extends Sprite
 			gameOptions.height = Math.ceil(stageHeight / gameOptions.zoom);
 		}
 
-		addChild(new funkin.Game(gameOptions.width, gameOptions.height, gameOptions.initialState, #if (flixel < "5.0.0") gameOptions.zoom, #end
+		addChild(new game.null_stuff.NullGm(gameOptions.width, gameOptions.height, gameOptions.initialState, #if (flixel < "5.0.0") gameOptions.zoom, #end
 			gameOptions.framerate, gameOptions.framerate, gameOptions.skipSplash, gameOptions.startFullscreen));
 
 		#if !mobile
-		addChild(new NullInfo(10, 3));
+		addChild(new game.null_stuff.NullInfo(10, 3));
 		#end
 	}
 }
