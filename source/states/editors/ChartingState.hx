@@ -1,6 +1,8 @@
 package states.editors;
 
 import data.ChartData;
+import dependency.MusicBeatState;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
@@ -36,6 +38,7 @@ import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
+import utils.CoolUtil;
 
 using StringTools;
 

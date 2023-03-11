@@ -15,7 +15,7 @@ class Main extends Sprite
 	var gameOptions = {
 		width: 1280,
 		height: 720,
-		initialState: TitleState,
+		initialState: states.TitleState,
 		zoom: -1.0,
 		framerate: 60,
 		skipSplash: true,

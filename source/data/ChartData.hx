@@ -1,5 +1,7 @@
 package data;
 
+import dependency.ModPaths;
+import dependency.Paths;
 import haxe.Json;
 import haxe.format.JsonParser;
 

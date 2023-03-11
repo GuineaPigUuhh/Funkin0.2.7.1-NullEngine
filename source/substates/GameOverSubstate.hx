@@ -1,5 +1,7 @@
 package substates;
 
+import dependency.MusicBeatSubstate;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSubState;
@@ -8,6 +10,8 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import game.Conductor;
 import game.sprites.Character;
+import states.LoadingState;
+import states.PlayState;
 import states.menus.FreeplayState;
 import states.menus.StoryMenuState;
 

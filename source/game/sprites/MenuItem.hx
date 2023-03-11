@@ -7,6 +7,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import openfl.utils.Assets as OpenFlAssets;
+import utils.CoolUtil;
 #if sys
 import sys.FileSystem;
 import sys.io.File;

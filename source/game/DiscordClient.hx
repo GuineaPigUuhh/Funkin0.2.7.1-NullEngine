@@ -1,6 +1,7 @@
 package game;
 
 import Sys.sleep;
+import dependency.Logs;
 import discord_rpc.DiscordRpc;
 
 using StringTools;

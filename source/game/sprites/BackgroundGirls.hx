@@ -1,7 +1,9 @@
 package game.sprites;
 
+import dependency.Paths;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
+import utils.CoolUtil;
 
 class BackgroundGirls extends FlxSprite
 {

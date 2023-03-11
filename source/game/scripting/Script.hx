@@ -1,5 +1,6 @@
 package game.scripting;
 
+import dependency.Paths;
 import hscript.*;
 #if sys
 import sys.FileSystem;

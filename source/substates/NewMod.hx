@@ -1,5 +1,7 @@
-package game.modding;
+package substates;
 
+import dependency.MusicBeatSubstate;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxBackdrop;
@@ -12,6 +14,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import states.menus.ModMenuState;
+import utils.CoolUtil;
 
 class NewMod extends MusicBeatSubstate
 {
@@ -60,7 +63,6 @@ class NewMod extends MusicBeatSubstate
 				FlxG.mouse.visible = false;
 
 				stopSpam = true;
-				trace("Bye Bye!");
 				FlxG.state.closeSubState();
 			}
 		}

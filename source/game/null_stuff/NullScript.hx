@@ -88,19 +88,19 @@ class NullScript extends Script
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
 		// funkin
-		set('Alphabet', Alphabet);
-		set('CoolUtil', CoolUtil);
-		set('Character', Character);
-		set('Conductor', Conductor);
+		set('Alphabet', game.sprites.Alphabet);
+		set('CoolUtil', utils.CoolUtil);
+		set('Character', game.sprites.Character);
+		set('Conductor', game.Conductor);
 		// set('PlayState', PlayState);
-		set('Paths', Paths);
-		set('ClientPrefs', ClientPrefs);
-		set('Logs', Logs);
+		set('Paths', dependency.Paths);
+		set('ClientPrefs', dependency.ClientPrefs);
+		set('Logs', dependency.Logs);
 
-		set('createCustom', Logs.create);
+		set('createCustom', dependency.Logs.create);
 
-		set('createLog', Logs.log);
-		set('createError', Logs.error);
-		set('createWarning', Logs.warning);
+		set('createLog', dependency.Logs.log);
+		set('createError', dependency.Logs.error);
+		set('createWarning', dependency.Logs.warning);
 	}
 }

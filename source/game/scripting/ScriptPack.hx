@@ -1,5 +1,6 @@
 package game.scripting;
 
+import dependency.Logs;
 import game.null_stuff.NullScript;
 import game.scripting.*;
 import hscript.*;

@@ -4,6 +4,8 @@ package states.menus;
 import game.DiscordClient;
 #end
 import data.WeekData;
+import dependency.MusicBeatState;
+import dependency.Paths;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -22,6 +24,8 @@ import game.sprites.HealthIcon;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
+import states.PlayState;
+import utils.CoolUtil;
 
 using StringTools;
 

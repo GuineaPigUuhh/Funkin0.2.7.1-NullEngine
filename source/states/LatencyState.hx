@@ -1,37 +1,52 @@
 package states;
 
+import dependency.MusicBeatState;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import game.Conductor;
+import game.sprites.Note;
+import game.sprites.StaticNote;
 
+/**
+ * uhum bilau funny
+ */
 class LatencyState extends FlxState
 {
 	var offsetText:FlxText;
 	var noteGrp:FlxTypedGroup<Note>;
-	var strumLine:FlxSprite;
+	var staticNote:StaticNote;
 
 	override function create()
 	{
 		FlxG.sound.playMusic(Paths.sound('soundTest'));
+
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuBG'));
+		menuBG.updateHitbox();
+		menuBG.screenCenter();
+		add(menuBG);
+
+		staticNote = new StaticNote(0, 100, 2, 0);
+		staticNote.screenCenter(X);
+		staticNote.isPlayStated = false;
+		add(staticNote);
 
 		noteGrp = new FlxTypedGroup<Note>();
 		add(noteGrp);
 
 		for (i in 0...32)
 		{
-			var note:Note = new Note(Conductor.crochet * i, 1);
+			var note:Note = new Note(Conductor.crochet * i, 2, null, false, 0);
+			note.screenCenter(X);
 			noteGrp.add(note);
 		}
 
-		offsetText = new FlxText();
+		offsetText = new FlxText(0, 0);
 		offsetText.screenCenter();
 		add(offsetText);
-
-		strumLine = new FlxSprite(FlxG.width / 2, 100).makeGraphic(FlxG.width, 5);
-		add(strumLine);
 
 		Conductor.changeBPM(120);
 
@@ -50,9 +65,14 @@ class LatencyState extends FlxState
 			multiply = 10;
 
 		if (FlxG.keys.justPressed.RIGHT)
+		{
 			Conductor.offset += 1 * multiply;
+		}
+
 		if (FlxG.keys.justPressed.LEFT)
+		{
 			Conductor.offset -= 1 * multiply;
+		}
 
 		if (FlxG.keys.justPressed.SPACE)
 		{
@@ -63,11 +83,13 @@ class LatencyState extends FlxState
 
 		noteGrp.forEach(function(daNote:Note)
 		{
-			daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * 0.45);
-			daNote.x = strumLine.x + 30;
+			daNote.y = (staticNote.y - (Conductor.songPosition - daNote.strumTime) * 0.45);
+			daNote.x = staticNote.x;
 
-			if (daNote.y < strumLine.y)
+			if (daNote.y < staticNote.y)
+			{
 				daNote.kill();
+			}
 		});
 
 		super.update(elapsed);

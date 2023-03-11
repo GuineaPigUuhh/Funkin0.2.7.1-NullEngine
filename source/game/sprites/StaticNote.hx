@@ -1,15 +1,20 @@
 package game.sprites;
 
+import dependency.ClientPrefs;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import states.PlayState;
+import utils.CoolUtil;
 
 class StaticNote extends FlxSprite
 {
 	public var noteData:Int = 0;
 	public var player:Int = 0;
+	public var isPlayStated:Bool = true;
 
 	public function new(x:Float, y:Float, data:Int, player:Int)
 	{
@@ -122,9 +127,12 @@ class StaticNote extends FlxSprite
 	function addNote()
 	{
 		playAnim('static');
-		x += Note.swagWidth * noteData;
-		x += 50;
-		x += ((FlxG.width / 2) * player);
+		if (isPlayStated)
+		{
+			x += Note.swagWidth * noteData;
+			x += 50;
+			x += ((FlxG.width / 2) * player);
+		}
 	}
 
 	public function playAnim(anim:String, ?force:Bool = false)

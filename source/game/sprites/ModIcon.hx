@@ -1,4 +1,4 @@
-package game.modding;
+package game.sprites;
 
 import flixel.FlxSprite;
 import states.menus.ModMenuState;

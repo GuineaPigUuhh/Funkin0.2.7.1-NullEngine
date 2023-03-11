@@ -1,5 +1,8 @@
 package states.menus;
 
+import dependency.Logs;
+import dependency.MusicBeatState;
+import dependency.Paths;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -27,7 +30,7 @@ class OptionsState extends MusicBeatState
 
 	public static var isPlayStated:Bool = false;
 
-	public var options:Array<String> = ["preferences", "mods", "exit"];
+	public var options:Array<String> = ["preferences", "offset", "mods", "exit"];
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 
@@ -101,6 +104,8 @@ class OptionsState extends MusicBeatState
 							case "controls":
 								FlxG.switchState(new options.ControlsState());
 						 */
+						case "offset":
+							FlxG.switchState(new LatencyState());
 						case "mods":
 							FlxG.switchState(new ModMenuState());
 						case "exit":

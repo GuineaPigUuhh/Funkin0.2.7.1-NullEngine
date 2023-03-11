@@ -1,6 +1,9 @@
 package game.sprites;
 
 import data.CharacterData;
+import dependency.ClientPrefs;
+import dependency.ModPaths;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.animation.FlxBaseAnimation;
@@ -13,6 +16,8 @@ import haxe.format.JsonParser;
 import haxe.xml.Access;
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
+import states.PlayState;
+import utils.CoolUtil;
 
 using StringTools;
 

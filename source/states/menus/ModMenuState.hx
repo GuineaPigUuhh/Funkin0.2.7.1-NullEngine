@@ -1,5 +1,9 @@
 package states.menus;
 
+import dependency.ClientPrefs;
+import dependency.Logs;
+import dependency.MusicBeatState;
+import dependency.Paths;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -11,13 +15,14 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import game.modding.ModIcon;
-import game.modding.NewMod;
 import game.sprites.Alphabet;
+import game.sprites.ModIcon;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
 import states.menus.OptionsState;
+import substates.NewMod;
+import utils.CoolUtil;
 
 using StringTools;
 

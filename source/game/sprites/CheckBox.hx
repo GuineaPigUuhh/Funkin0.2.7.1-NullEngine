@@ -2,6 +2,8 @@ package game.sprites;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import dependency.Paths;
+import utils.CoolUtil;
 
 class CheckBox extends FlxSprite
 {

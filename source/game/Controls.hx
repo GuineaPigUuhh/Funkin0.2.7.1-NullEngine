@@ -1,5 +1,7 @@
 package game;
 
+import dependency.ClientPrefs;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.input.FlxInput;
 import flixel.input.actions.FlxAction;
@@ -10,6 +12,7 @@ import flixel.input.actions.FlxActionSet;
 import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
+import utils.CoolUtil;
 
 #if (haxe >= "4.0.0")
 enum abstract Action(String) to String from String

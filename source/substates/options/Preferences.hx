@@ -1,5 +1,8 @@
 package substates.options;
 
+import dependency.Logs;
+import dependency.MusicBeatSubstate;
+import dependency.Paths;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;

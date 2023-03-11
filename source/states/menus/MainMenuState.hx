@@ -1,5 +1,8 @@
 package states.menus;
 
+import dependency.ModPaths;
+import dependency.MusicBeatState;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -18,7 +21,9 @@ import haxe.Json;
 import haxe.format.JsonParser;
 import lime.app.Application;
 import lime.utils.Assets;
+import states.menus.FreeplayState;
 import states.menus.OptionsState;
+import states.menus.StoryMenuState;
 
 using StringTools;
 

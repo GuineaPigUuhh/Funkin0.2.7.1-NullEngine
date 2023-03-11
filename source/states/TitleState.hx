@@ -4,6 +4,7 @@ package states;
 import game.DiscordClient;
 import sys.thread.Thread;
 #end
+import dependency.MusicBeatState;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -32,6 +33,9 @@ import game.sprites.Alphabet;
 import lime.app.Application;
 import openfl.Assets;
 import states.menus.MainMenuState;
+import dependency.ClientPrefs;
+import dependency.Paths;
+import utils.CoolUtil;
 
 using StringTools;
 

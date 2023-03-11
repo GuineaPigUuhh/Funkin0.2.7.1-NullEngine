@@ -1,6 +1,9 @@
 package game;
 
+import dependency.ClientPrefs;
+import dependency.Paths;
 import flixel.FlxG;
+import utils.CoolUtil;
 
 class Highscore
 {

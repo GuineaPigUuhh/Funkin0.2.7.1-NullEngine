@@ -6,6 +6,8 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
+import dependency.Paths;
+import utils.CoolUtil;
 
 using StringTools;
 

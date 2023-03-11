@@ -4,6 +4,9 @@ import game.songData.Section.SwagSection;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
+import dependency.ClientPrefs;
+import dependency.Paths;
+
 
 using StringTools;
 

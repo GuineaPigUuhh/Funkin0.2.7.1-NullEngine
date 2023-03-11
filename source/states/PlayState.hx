@@ -3,6 +3,10 @@ package states;
 #if desktop
 import game.DiscordClient;
 #end
+import dependency.ClientPrefs;
+import dependency.ModPaths;
+import dependency.MusicBeatState;
+import dependency.Paths;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -57,6 +61,9 @@ import openfl.filters.ShaderFilter;
 import openfl.utils.Assets as OpenFlAssets;
 import states.menus.FreeplayState;
 import states.menus.StoryMenuState;
+import substates.GameOverSubstate;
+import substates.PauseSubState;
+import utils.CoolUtil;
 
 using StringTools;
 

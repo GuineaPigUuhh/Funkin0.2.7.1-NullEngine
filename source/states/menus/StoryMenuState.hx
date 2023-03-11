@@ -4,6 +4,8 @@ package states.menus;
 import game.DiscordClient;
 #end
 import data.WeekData;
+import dependency.MusicBeatState;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
@@ -24,6 +26,7 @@ import haxe.format.JsonParser;
 import lime.net.curl.CURLCode;
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
+import utils.CoolUtil;
 
 using StringTools;
 

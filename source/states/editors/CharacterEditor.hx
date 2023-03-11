@@ -1,5 +1,6 @@
 package states.editors;
 
+import dependency.MusicBeatState;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;

@@ -1,5 +1,7 @@
 package substates;
 
+import dependency.MusicBeatSubstate;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -14,10 +16,12 @@ import flixel.util.FlxColor;
 import game.Controls.Control;
 import game.Controls;
 import game.sprites.Alphabet;
+import states.PlayState;
 import states.menus.FreeplayState;
 import states.menus.MainMenuState;
 import states.menus.OptionsState;
 import states.menus.StoryMenuState;
+import utils.CoolUtil;
 
 class PauseSubState extends MusicBeatSubstate
 {
