@@ -90,6 +90,7 @@ class TitleState extends MusicBeatState
 			startIntro();
 		});
 
+		#if CHECK_FOR_UPDATES
 		if (!closedState)
 		{
 			var http = new haxe.Http("https://raw.githubusercontent.com/GuineaPigCode/FNF-NullEngine/main/github.json");
@@ -122,10 +123,10 @@ class TitleState extends MusicBeatState
 
 			http.request();
 		}
+		#end
 
 		#if desktop
 		DiscordClient.initialize();
-
 		Application.current.onExit.add(function(exitCode)
 		{
 			DiscordClient.shutdown();
