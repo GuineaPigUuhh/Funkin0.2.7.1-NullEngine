@@ -31,9 +31,8 @@ the Null Engine is an Alternative Engine for those who are tired of using the sa
 - Easy Modding
 - HScript System
 - Multiple Scripts
-- Cool Hud
 - Cool Log System
-- 
+- Source organized
 
 </details>
 
@@ -65,3 +64,6 @@ If Windows 11
 #### 5: Final
 Run this Code to Fix the Camera Bug
 - `haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons`
+
+### Thanks for looking at this engine!
+![thanks](art/nullengine/thanks.png)
