@@ -52,7 +52,6 @@
 	<classpath name="source" />
 
 	<assets path="assets"/>
-	<assets path='mods'/>
 
 	<!-- NOTE FOR FUTURE SELF SINCE FONTS ARE ALWAYS FUCKY 
 		TO FIX ONE OF THEM, I CONVERTED IT TO OTF. DUNNO IF YOU NEED TO
@@ -122,10 +121,10 @@
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 	
-	<icon path="art/icons/icon16.png" size='16'/>
-	<icon path="art/icons/icon32.png" size='32'/>
-	<icon path="art/icons/icon64.png" size='64'/>
-	<icon path="art/icons/iconOG.png" />
+	<icon path="assets/images/flixel/icons/icon16.png" size='16'/>
+	<icon path="assets/images/flixel/icons/icon32.png" size='32'/>
+	<icon path="assets/images/flixel/icons/icon64.png" size='64'/>
+	<icon path="assets/images/flixel/icons/iconOG.png" />
 
 
 	<!-- <haxedef name="SKIP_TO_PLAYSTATE" if="debug" /> -->

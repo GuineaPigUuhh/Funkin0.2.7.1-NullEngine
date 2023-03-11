@@ -1,12 +1,11 @@
 package game.songData;
 
+import dependency.ClientPrefs;
+import dependency.Paths;
 import game.songData.Section.SwagSection;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
-import dependency.ClientPrefs;
-import dependency.Paths;
-
 
 using StringTools;
 
@@ -52,12 +51,9 @@ class Song
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var path:String = Paths.getModPath("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase() + ".json");
-		if (!FileSystem.exists(path))
-			path = Paths.getPreloadPath("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase() + ".json");
+		var path:String = Paths.getPreloadPath("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase() + ".json");
 
 		var getJSON = File.getContent(path).trim();
-
 		var rawJson = getJSON;
 
 		while (!rawJson.endsWith("}"))

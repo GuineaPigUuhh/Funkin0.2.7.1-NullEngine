@@ -1,6 +1,5 @@
 package states.menus;
 
-import dependency.ModPaths;
 import dependency.MusicBeatState;
 import dependency.Paths;
 import flixel.FlxG;
@@ -110,29 +109,11 @@ class MainMenuState extends MusicBeatState
 		for (i in 0...optionShit.length)
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
-
-			var defaultImage:String = "donate";
-
 			var funkinLocal:String = 'menus/main/items/';
 
-			var file = ModPaths.getSparrowAtlas(funkinLocal + optionShit[i]);
+			var file = Paths.getSparrowAtlas(funkinLocal + optionShit[i]);
 			var idleAnim:String = optionShit[i] + " basic";
 			var selectedAnim:String = optionShit[i] + " white";
-
-			var fileExists:String = ModPaths.image(funkinLocal + optionShit[i]);
-
-			if (!FileSystem.exists(fileExists))
-			{
-				file = Paths.getSparrowAtlas(funkinLocal + optionShit[i]);
-				fileExists = Paths.image(funkinLocal + optionShit[i]);
-			}
-
-			if (!FileSystem.exists(fileExists))
-			{
-				file = Paths.getSparrowAtlas(funkinLocal + defaultImage);
-				idleAnim = defaultImage + " basic";
-				selectedAnim = defaultImage + " white";
-			}
 
 			menuItem.frames = file;
 			menuItem.animation.addByPrefix('idle', idleAnim, 24);

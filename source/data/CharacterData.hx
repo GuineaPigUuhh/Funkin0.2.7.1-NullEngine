@@ -1,6 +1,5 @@
 package data;
 
-import dependency.ModPaths;
 import dependency.Paths;
 import haxe.Json;
 import haxe.format.JsonParser;
@@ -57,9 +56,7 @@ class CharacterData
 
 	public static function getJSON(char:String)
 	{
-		var path:String = ModPaths.json('characters/${char}');
-		if (!FileSystem.exists(path))
-			path = Paths.json('characters/${char}');
+		var path:String = Paths.json('characters/${char}');
 
 		var charJSON:CharacterINFO = Json.parse(File.getContent(path));
 
@@ -69,9 +66,7 @@ class CharacterData
 
 	public static function jsonPath(char:String)
 	{
-		var path:String = ModPaths.json('characters/${char}');
-		if (!FileSystem.exists(path))
-			path = Paths.json('characters/${char}');
+		var path:String = Paths.json('characters/${char}');
 
 		return path;
 	}

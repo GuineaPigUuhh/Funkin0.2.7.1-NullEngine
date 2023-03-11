@@ -1,5 +1,6 @@
 package game.sprites;
 
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -25,7 +26,7 @@ class MenuItem extends FlxSpriteGroup
 		week = new FlxSprite();
 		var path:String = 'menus/storyMode/weeks/' + weekName;
 
-		week.loadGraphic(CoolUtil.configGraphic(path));
+		week.loadGraphic(Paths.image(path));
 
 		add(week);
 	}

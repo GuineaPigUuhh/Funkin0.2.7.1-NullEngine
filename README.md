@@ -1,5 +1,5 @@
 # FNF': Null Engine
-![logo](art/nullengine/nulllogo.gif)
+![logo](art/nullengine/NullEngine.png)
 
 ### What is Null Engine?
 the Null Engine is an Alternative Engine for those who are tired of using the same engine.
@@ -64,6 +64,3 @@ If Windows 11
 #### 5: Final
 Run this Code to Fix the Camera Bug
 - `haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons`
-
-### Thanks for looking at this engine!
-![thanks](art/nullengine/thanks.png)

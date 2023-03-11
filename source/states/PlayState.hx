@@ -4,7 +4,6 @@ package states;
 import game.DiscordClient;
 #end
 import dependency.ClientPrefs;
-import dependency.ModPaths;
 import dependency.MusicBeatState;
 import dependency.Paths;
 import flixel.FlxBasic;
@@ -547,7 +546,7 @@ class PlayState extends MusicBeatState
 			default:
 				stageScript.call("onCreateStage", []);
 
-				var _stagePath = Paths.hscript('data/stages/' + curStage);
+				var _stagePath = Script.getScriptPath('data/stages/' + curStage);
 				if (!FileSystem.exists(_stagePath))
 				{
 					curStage = 'stage'; // BILAU GIGANTE
@@ -1476,9 +1475,7 @@ class PlayState extends MusicBeatState
 				startCountdown();
 		}
 
-		var checkVideo:String = ModPaths.video(name);
-		if (!FileSystem.exists(checkVideo))
-			checkVideo = Paths.video(name);
+		var checkVideo = Paths.video(name);
 
 		video.playVideo(checkVideo);
 		#end

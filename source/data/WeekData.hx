@@ -1,6 +1,5 @@
 package data;
 
-import dependency.ModPaths;
 import dependency.Paths;
 import haxe.Json;
 import haxe.format.JsonParser;
@@ -35,9 +34,7 @@ class WeekData
 
 	public static function getJSON()
 	{
-		var path:String = ModPaths.json('weekList');
-		if (!FileSystem.exists(path))
-			path = Paths.json('weekList');
+		var path:String = Paths.json('weekList');
 
 		var weekJSON:WeekList = Json.parse(File.getContent(path));
 

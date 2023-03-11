@@ -20,8 +20,7 @@ class ClientPrefs
 		"freeplayCutscene" => false,
 		"noteSplash" => false,
 		"middleScroll" => false,
-		"isDownscroll" => false,
-		"modSelected" => ""
+		"isDownscroll" => false
 	];
 
 	public static var controls:Map<String, Array<FlxKey>> = [

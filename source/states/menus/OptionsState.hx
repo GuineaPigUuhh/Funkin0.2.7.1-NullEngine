@@ -16,7 +16,6 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import game.sprites.Alphabet;
 import lime.utils.Assets;
-import states.menus.ModMenuState;
 
 using StringTools;
 
@@ -30,7 +29,7 @@ class OptionsState extends MusicBeatState
 
 	public static var isPlayStated:Bool = false;
 
-	public var options:Array<String> = ["preferences", "offset", "mods", "exit"];
+	public var options:Array<String> = ["preferences", "offset", "exit"];
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 
@@ -106,8 +105,6 @@ class OptionsState extends MusicBeatState
 						 */
 						case "offset":
 							FlxG.switchState(new LatencyState());
-						case "mods":
-							FlxG.switchState(new ModMenuState());
 						case "exit":
 							exit();
 						default:

@@ -59,9 +59,7 @@ class MenuCharacter extends FlxSprite
 			default:
 				var path = 'images/menus/storyMode/characters/${character}.json';
 
-				var checkJSON = Paths.getModPath(path);
-				if (!FileSystem.exists(checkJSON))
-					checkJSON = Paths.getPreloadPath(path);
+				var checkJSON = Paths.getPreloadPath(path);
 
 				var char:MenuCharacterInfo = Json.parse(Assets.getText(checkJSON));
 

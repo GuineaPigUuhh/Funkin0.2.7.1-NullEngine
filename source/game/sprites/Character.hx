@@ -2,7 +2,6 @@ package game.sprites;
 
 import data.CharacterData;
 import dependency.ClientPrefs;
-import dependency.ModPaths;
 import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;

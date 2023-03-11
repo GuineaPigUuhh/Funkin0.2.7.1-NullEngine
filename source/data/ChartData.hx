@@ -1,6 +1,5 @@
 package data;
 
-import dependency.ModPaths;
 import dependency.Paths;
 import haxe.Json;
 import haxe.format.JsonParser;
@@ -29,9 +28,7 @@ class ChartData
 
 	public static function getJSON()
 	{
-		var path:String = ModPaths.json('chartList');
-		if (!FileSystem.exists(path))
-			path = Paths.json('chartList');
+		var path:String = Paths.json('chartList');
 
 		var chartJSON:ListJson = Json.parse(File.getContent(path));
 

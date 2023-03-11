@@ -59,11 +59,6 @@ class Paths
 		return 'assets/$file';
 	}
 
-	inline static public function getModPath(file:String)
-	{
-		return 'mods/${FlxG.save.data.modSelected}/$file';
-	}
-
 	inline static public function file(file:String, type:AssetType = TEXT, ?library:String)
 	{
 		return getPath(file, type, library);
@@ -77,27 +72,6 @@ class Paths
 	inline static public function xml(key:String, ?library:String)
 	{
 		return getPath('data/$key.xml', TEXT, library);
-	}
-
-	inline static public function hscript(key:String, ?library:String)
-	{
-		var modFile:String = "";
-		var vanillaFile = "";
-
-		var file = getPath('$key.hx', TEXT, library);
-		if (FileSystem.exists(file))
-			vanillaFile = file;
-
-		if (FileSystem.exists(ModPaths.hscript(key)))
-			modFile = ModPaths.hscript(key);
-
-		if (modFile != "")
-			return modFile;
-
-		if (vanillaFile != "")
-			return vanillaFile;
-
-		return null;
 	}
 
 	inline static public function json(key:String, ?library:String)
@@ -137,13 +111,7 @@ class Paths
 
 	inline static public function font(key:String)
 	{
-		var modFile:String = ModPaths.font(key);
-		var vanillaFile = 'assets/fonts/$key';
-
-		if (FileSystem.exists(modFile))
-			return modFile;
-		else
-			return vanillaFile;
+		return getPreloadPath('fonts/$key');
 	}
 
 	inline static public function video(key:String)

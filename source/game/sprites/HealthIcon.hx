@@ -1,5 +1,6 @@
 package game.sprites;
 
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -8,7 +9,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import openfl.utils.Assets as OpenFlAssets;
 import states.PlayState;
-import utils.CoolUtil;
 
 using StringTools;
 
@@ -77,8 +77,7 @@ class HealthIcon extends FlxSprite
 		this.curCharacter = curCharacter;
 		var path:String = 'characters/icons/${curCharacter}';
 
-		loadGraphic(CoolUtil.configGraphic(path));
-		loadGraphic(CoolUtil.configGraphic(path), true, 150, 150);
+		loadGraphic(Paths.image(path), true, 150, 150);
 
 		animation.add(curCharacter, [0], 0, false, isPlayer);
 		animation.add(curCharacter + "-losing", [1], 0, false, isPlayer);
