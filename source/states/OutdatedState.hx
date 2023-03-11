@@ -29,12 +29,13 @@ class OutdatedState extends MusicBeatState
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
-		var txt:FlxText = new FlxText(0, 0, FlxG.width, "", 32);
+		var txt:FlxText = new FlxText(0, -150, FlxG.width, "", 32);
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		txt.screenCenter();
 		add(txt);
 
-		txt.text = 'Your Null Engine Is Out of Date - Press [Enter] To Go To Website';
+		txt.text = 'Your Null Engine Is Out of Date | Press [Enter] To Go To Website';
+		txt.text += '\n';
 		txt.text += '\n- Null Engine [${version} • ${type}] -';
 		txt.text += '\nNew Features';
 
