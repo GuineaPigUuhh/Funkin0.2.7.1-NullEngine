@@ -7,38 +7,51 @@ import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.app.Application;
+import states.menus.MainMenuState;
 
 class OutdatedState extends MusicBeatState
 {
-	public static var leftState:Bool = false;
+	var version:String = "";
+	var type:String = "";
+	var newFeatures:Array<String>;
+
+	public function new(ver:String, ty:String, features:Array<String>)
+	{
+		super();
+		version = ver;
+		type = ty;
+		newFeatures = features;
+	}
 
 	override function create()
 	{
 		super.create();
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
-		var ver = "v" + Application.current.meta.get('version');
-		var txt:FlxText = new FlxText(0, 0, FlxG.width,
-			"HEY! You're running an outdated version of the game!\nCurrent version is "
-			+ ver
-			+ " while the most recent version is "
-			+ NGio.GAME_VER
-			+ "! Press Space to go to itch.io, or ESCAPE to ignore this!!",
-			32);
+
+		var txt:FlxText = new FlxText(0, 0, FlxG.width, "", 32);
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		txt.screenCenter();
 		add(txt);
+
+		txt.text = 'Your Null Engine Is Out of Date - Press [Enter] To Go To Website';
+		txt.text += '\n- Null Engine [${version} • ${type}] -';
+		txt.text += '\nNew Features';
+
+		for (f in newFeatures)
+		{
+			txt.text += '\n- $f';
+		}
 	}
 
 	override function update(elapsed:Float)
 	{
 		if (controls.ACCEPT)
 		{
-			FlxG.openURL("https://ninja-muffin24.itch.io/funkin");
+			FlxG.openURL("https://github.com/GuineaPigCode/FNF-NullEngine");
 		}
 		if (controls.BACK)
 		{
-			leftState = true;
 			FlxG.switchState(new MainMenuState());
 		}
 		super.update(elapsed);

@@ -4,7 +4,10 @@ package states;
 import game.DiscordClient;
 import sys.thread.Thread;
 #end
+import dependency.ClientPrefs;
+import dependency.Logs;
 import dependency.MusicBeatState;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -32,9 +35,8 @@ import game.PlayerSettings;
 import game.sprites.Alphabet;
 import lime.app.Application;
 import openfl.Assets;
+import states.OutdatedState;
 import states.menus.MainMenuState;
-import dependency.ClientPrefs;
-import dependency.Paths;
 import utils.CoolUtil;
 
 using StringTools;
@@ -58,6 +60,14 @@ class TitleState extends MusicBeatState
 
 	var wackyImage:FlxSprite;
 
+	public static var closedState:Bool = false;
+
+	var isOutdated:Bool = false;
+
+	var gitVersion:String = "";
+	var gitType:String = "";
+	var gitFeatures:Array<String> = [];
+
 	override public function create():Void
 	{
 		PlayerSettings.init();
@@ -75,16 +85,43 @@ class TitleState extends MusicBeatState
 		PlayerSettings.player1.controls.loadKeyBinds();
 		Highscore.load();
 
-		#if FREEPLAY
-		FlxG.switchState(new FreeplayState());
-		#elseif CHARTING
-		FlxG.switchState(new ChartingState());
-		#else
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
 			startIntro();
 		});
-		#end
+
+		if (!closedState)
+		{
+			var http = new haxe.Http("https://raw.githubusercontent.com/GuineaPigCode/FNF-NullEngine/main/github.json");
+			http.onData = function(data)
+			{
+				var json:{version:String, type:String, newFeatures:Array<String>} = haxe.Json.parse(data);
+
+				gitVersion = json.version;
+				gitType = json.type.toUpperCase();
+				gitFeatures = json.newFeatures;
+
+				var updateVersion = json.version.split('\n')[0].trim();
+
+				var curVersion:String = Main.nullVersion.trim();
+
+				if (updateVersion != curVersion)
+				{
+					isOutdated = true;
+				}
+				if (json.type != Main.nullType)
+				{
+					isOutdated = true;
+				}
+			}
+
+			http.onError = function(error)
+			{
+				Logs.error("Error on Get Engine Version");
+			}
+
+			http.request();
+		}
 
 		#if desktop
 		DiscordClient.initialize();
@@ -269,11 +306,15 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
-				// Check if version is outdated
-
-				var version:String = "v" + Application.current.meta.get('version');
-
-				FlxG.switchState(new MainMenuState());
+				if (isOutdated)
+				{
+					FlxG.switchState(new OutdatedState(gitVersion, gitType, gitFeatures));
+				}
+				else
+				{
+					FlxG.switchState(new MainMenuState());
+				}
+				closedState = true;
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}

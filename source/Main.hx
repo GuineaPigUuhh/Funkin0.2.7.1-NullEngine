@@ -23,7 +23,7 @@ class Main extends Sprite
 	};
 
 	public static var nullType:String = "beta";
-	public static var nullVersion:String = "0.3.1";
+	public static var nullVersion:String = "0.3.2";
 
 	public static var nullText:String = nullVersion + " " + "[" + nullType.toUpperCase() + "]";
 
