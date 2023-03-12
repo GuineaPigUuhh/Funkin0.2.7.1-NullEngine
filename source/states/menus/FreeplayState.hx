@@ -38,7 +38,6 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
 
-	var selector:FlxText;
 	var curSelected:Int = 0;
 	var curDifficulty:Int = 1;
 
@@ -48,6 +47,7 @@ class FreeplayState extends MusicBeatState
 	var intendedScore:Int = 0;
 
 	var bg:FlxSprite;
+	var scoreBG:FlxSprite;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
@@ -105,18 +105,18 @@ class FreeplayState extends MusicBeatState
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 		// scoreText.alignment = RIGHT;
 
-		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.35), 66, 0xFF000000);
+		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
-		diffText.font = scoreText.font;
+		diffText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER);
 		add(diffText);
 
 		add(scoreText);
 
 		var bottomBG = new FlxSprite(0, FlxG.height - 30).makeGraphic(FlxG.width, 30, 0xFF000000, true);
-		bottomBG.alpha = 0.6;
+		bottomBG.alpha = 0.55;
 		add(bottomBG);
 
 		var spaceInfo = new FlxText(0, 0, FlxG.width, '[Space] Listen to Selected Song.');
@@ -129,11 +129,6 @@ class FreeplayState extends MusicBeatState
 
 		// FlxG.sound.playMusic(Paths.music('title'), 0);
 		// FlxG.sound.music.fadeIn(2, 0, 0.8);
-		selector = new FlxText();
-
-		selector.size = 40;
-		selector.text = ">";
-		// add(selector);
 
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
@@ -222,6 +217,7 @@ class FreeplayState extends MusicBeatState
 
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
+		positionHighscore();
 	}
 
 	function changeDiff(change:Int = 0)
@@ -232,15 +228,8 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		#end
 
-		diffText.text = switch (CoolUtil.difficultyArray[curDifficulty].length)
-		{
-			case 0:
-				'';
-			case 1:
-				CoolUtil.difficultyArray[0];
-			case _:
-				'< ' + CoolUtil.difficultyArray[curDifficulty] + ' >';
-		}
+		updateDiff();
+		positionHighscore();
 	}
 
 	var colorTween:ColorTween;
@@ -259,12 +248,11 @@ class FreeplayState extends MusicBeatState
 			colorTween = FlxTween.color(bg, 0.4, bg.color, FlxColor.fromString("#" + songs[curSelected].songColor), {startDelay: 0.05});
 		}
 
-		// selector.y = (70 * curSelected) + 30;
-
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		// lerpScore = 0;
 		#end
+		updateDiff();
 
 		var bullShit:Int = 0;
 
@@ -289,6 +277,29 @@ class FreeplayState extends MusicBeatState
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
+	}
+
+	function updateDiff()
+	{
+		diffText.text = switch (CoolUtil.difficultyArray[curDifficulty].length)
+		{
+			case 0:
+				'';
+			case 1:
+				CoolUtil.difficultyArray[0];
+			case _:
+				'< ' + CoolUtil.difficultyArray[curDifficulty] + ' >';
+		}
+	}
+
+	function positionHighscore()
+	{
+		scoreText.x = FlxG.width - scoreText.width - 6;
+		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
+
+		diffText.x = Std.int(scoreBG.x + scoreBG.width / 2);
+		diffText.x -= (diffText.width / 2);
 	}
 }
 

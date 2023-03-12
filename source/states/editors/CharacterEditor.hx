@@ -1,11 +1,14 @@
 package states.editors;
 
+import data.CharacterData.CharacterINFO;
 import dependency.MusicBeatState;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.ui.FlxUITabMenu;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -28,7 +31,7 @@ class CharacterEditor extends MusicBeatState
 	var daAnim:String = 'dad';
 	var camFollow:FlxObject;
 
-	var exportJson:String = 'json amongus olololol';
+	var uiBox:FlxUITabMenu;
 
 	public function new(daAnim:String = 'dad', isDad:Bool)
 	{
@@ -42,9 +45,10 @@ class CharacterEditor extends MusicBeatState
 	{
 		FlxG.sound.music.stop();
 
-		var gridBG:FlxSprite = FlxGridOverlay.create(10, 10);
-		gridBG.scrollFactor.set(0.5, 0.5);
-		add(gridBG);
+		var menuBG:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image("menus/menuLineArt"));
+		menuBG.screenCenter();
+		menuBG.scrollFactor.set();
+		add(menuBG);
 
 		// ghost
 		ghost = new Character(0, 0, daAnim);
@@ -77,19 +81,18 @@ class CharacterEditor extends MusicBeatState
 		add(dumbTexts);
 
 		textAnim = new FlxText(300, 60);
-		textAnim.color = FlxColor.BLUE;
 		textAnim.size = 26;
 		textAnim.scrollFactor.set();
 		add(textAnim);
 
 		genBoyOffsets();
 
+		createUIBOX();
+
 		camFollow = new FlxObject(0, 0, 2, 2);
 		camFollow.screenCenter();
 		add(camFollow);
-
 		FlxG.camera.follow(camFollow);
-
 		super.create();
 	}
 
@@ -118,6 +121,17 @@ class CharacterEditor extends MusicBeatState
 			text.kill();
 			dumbTexts.remove(text, true);
 		});
+	}
+
+	function createUIBOX()
+	{
+		var tabs = [{name: "Character", label: 'Character'}];
+		uiBox = new FlxUITabMenu(null, tabs, true);
+		uiBox.resize(400, 200);
+		uiBox.x = FlxG.width - uiBox.width - 20;
+		uiBox.y = 20;
+		uiBox.scrollFactor.set();
+		add(uiBox);
 	}
 
 	override function update(elapsed:Float)
@@ -171,7 +185,7 @@ class CharacterEditor extends MusicBeatState
 
 		if (FlxG.keys.justPressed.S || FlxG.keys.justPressed.W || FlxG.keys.justPressed.SPACE)
 		{
-			char.playAnim(animList[curAnim]);
+			char.playAnim(animList[curAnim], true);
 
 			updateTexts();
 			genBoyOffsets(false);
