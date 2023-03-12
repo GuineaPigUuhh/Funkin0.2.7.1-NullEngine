@@ -37,8 +37,11 @@ class LatencyState extends FlxState
 		noteGrp = new FlxTypedGroup<Note>();
 		add(noteGrp);
 
-		for (i in 0...32)
+		var i:Int = 0;
+		while (true)
 		{
+			i++;
+
 			var note:Note = new Note(Conductor.crochet * i, 2, null, false, 0);
 			note.screenCenter(X);
 			noteGrp.add(note);

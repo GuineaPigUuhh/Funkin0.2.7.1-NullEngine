@@ -1,10 +1,10 @@
 package game.sprites;
 
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import haxe.Json;
 import haxe.format.JsonParser;
-import dependency.Paths;
 
 using StringTools;
 
@@ -15,7 +15,7 @@ import sys.io.File;
 
 typedef JsonData =
 {
-	var offsets:data.CharacterData.Point;
+	var offsets:jsonHelper.JsonExtra.Point;
 	var alpha:Float;
 	var setScale:Float;
 }

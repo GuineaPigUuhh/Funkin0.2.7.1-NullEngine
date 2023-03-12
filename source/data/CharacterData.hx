@@ -3,6 +3,7 @@ package data;
 import dependency.Paths;
 import haxe.Json;
 import haxe.format.JsonParser;
+import jsonHelper.JsonExtra.Point;
 
 using StringTools;
 
@@ -41,12 +42,6 @@ typedef Anims =
 	var fps:Int;
 	var indices:Array<Int>;
 	var offsets:Point;
-}
-
-typedef Point =
-{
-	var x:Float;
-	var y:Float;
 }
 
 class CharacterData

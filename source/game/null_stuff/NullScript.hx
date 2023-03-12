@@ -95,6 +95,7 @@ class NullScript extends Script
 		// set('PlayState', PlayState);
 		set('Paths', dependency.Paths);
 		set('ClientPrefs', dependency.ClientPrefs);
+
 		set('Logs', dependency.Logs);
 
 		set('createCustom', dependency.Logs.create);
