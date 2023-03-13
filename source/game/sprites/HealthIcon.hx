@@ -75,9 +75,12 @@ class HealthIcon extends FlxSprite
 	public function changeIcon(curCharacter:String = 'face')
 	{
 		this.curCharacter = curCharacter;
-		var path:String = 'characters/icons/${curCharacter}';
 
-		loadGraphic(Paths.image(path), true, 150, 150);
+		var path:String = Paths.characterPaths(curCharacter, "icon");
+		if (!FileSystem.exists(path))
+			path = Paths.image('characters/icons/${curCharacter}');
+
+		loadGraphic(path, true, 150, 150);
 
 		animation.add(curCharacter, [0], 0, false, isPlayer);
 		animation.add(curCharacter + "-losing", [1], 0, false, isPlayer);

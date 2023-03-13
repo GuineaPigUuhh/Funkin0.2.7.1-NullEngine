@@ -6,7 +6,7 @@ function onCreate()
 {
 	configureData(1.05, [770, 450], [100, 100], [400, 130]);
 
-	var hallowTex = Paths.getSparrowAtlas('stages/spooky/bg');
+	var hallowTex = stageSparrowAtlas('bg');
 
 	halloweenBG = new FlxSprite(-200, -100);
 	halloweenBG.frames = hallowTex;

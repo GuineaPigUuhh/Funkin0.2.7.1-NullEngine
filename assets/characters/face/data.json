@@ -57,8 +57,6 @@
         }
     ],
     "prefs":{
-        "spriteSheet":"face",
-        "icon":"face",
         "antialiasing":true,
         "singDuration":4,
         "isGF":false,

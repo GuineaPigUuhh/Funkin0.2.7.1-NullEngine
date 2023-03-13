@@ -1,8 +1,11 @@
 package game.sprites;
 
+import dependency.Paths;
+import flixel.graphics.frames.FlxAtlasFrames;
 import game.null_stuff.NullScript;
 import game.scripting.Script;
 import jsonHelper.JsonExtra.Point;
+import states.PlayState;
 
 class Stage
 {
@@ -30,11 +33,33 @@ class Stage
 
 	function executeScript()
 	{
-		stageScript = new NullScript(Script.getScriptPath('data/stages/${curStage}'));
+		stageScript = new NullScript(Script.getScriptPath('stages/${curStage}/${curStage}'));
 		set("configureData", configureData);
+		set("game", PlayState.instance);
+		set("songName", PlayState.SONG.song.toLowerCase());
+		set("daPixelZoom", PlayState.daPixelZoom);
+
+		set("stageImage", stageImage);
+		set("stageSparrowAtlas", stageSparrowAtlas);
+		set("stagePackerAtlas", stagePackerAtlas);
 		stageScript.load();
 
 		call("onCreate", []);
+	}
+
+	function stageImage(key:String)
+	{
+		return Paths.getPreloadPath('stages/$curStage/images/$key.png');
+	}
+
+	function stageSparrowAtlas(key:String)
+	{
+		return FlxAtlasFrames.fromSparrow(stageImage(key), Paths.getPreloadPath('stages/$curStage/images/$key.xml'));
+	}
+
+	function stagePackerAtlas(key:String)
+	{
+		return FlxAtlasFrames.fromSpriteSheetPacker(stageImage(key), Paths.getPreloadPath('stages/$curStage/images/$key.txt'));
 	}
 
 	public function configureData(zoomSet:Float, bfPosSet:Array<Float>, dadPosSet:Array<Float>, gfPosSet:Array<Float>)

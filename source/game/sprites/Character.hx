@@ -40,7 +40,6 @@ class Character extends FlxSprite
 	public var isGf:Bool = false;
 
 	public var healthBarColor:String = "A1A1A1";
-	public var healthIcon:String = "face";
 
 	var DEFAULT_CHARACTER:String = "face";
 	var vanillaCharsPath:String = "characters/spritesheets/";
@@ -111,29 +110,9 @@ class Character extends FlxSprite
 			"spooky" => "D57E00"
 		];
 
-		var charactersIcons:Map<String, String> = [
-			"bf-car" => "bf",
-			"bf-christmas" => "bf",
-			"bf-pixel" => "bf-pixel",
-			"dad" => "dad",
-			"gf" => "gf",
-			"mom" => "mom",
-			"mom-car" => "mom",
-			"monster" => "monster",
-			"monster-christmas" => "monster",
-			"parents-christmas" => "parents-christmas",
-			"pico" => "pico",
-			"senpai" => "senpai",
-			"senpai-angry" => "senpai",
-			"spirit" => "spirit",
-			"spooky" => "spooky"
-		];
-
 		// for hard code Characters
 		if (charactersColors.exists(curCharacter))
 			healthBarColor = charactersColors.get(curCharacter);
-		if (charactersIcons.exists(curCharacter))
-			healthIcon = charactersIcons.get(curCharacter);
 	}
 
 	public function getCamPos(gf:Bool = false) // IS SUS
@@ -191,7 +170,7 @@ class Character extends FlxSprite
 				animation.addByIndices('sad', 'gf sad', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "", 24, false);
 				animation.addByIndices('danceLeft', 'GF Dancing Beat', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 				animation.addByIndices('danceRight', 'GF Dancing Beat', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-				animation.addByIndices('hairBlow', "GF Dancing Beat Hair blowing", [0, 1, 2, 3], "", 24);
+				animation.addByPrefix('hairBlow', "GF Dancing Beat Hair blowing", 24, false);
 				animation.addByIndices('hairFall', "GF Dancing Beat Hair Landing", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "", 24, false);
 				animation.addByPrefix('scared', 'GF FEAR', 24);
 
@@ -245,10 +224,11 @@ class Character extends FlxSprite
 			case 'gf-car':
 				setTex(vanillaCharsPath + "gfCar", "XML");
 
-				animation.addByIndices('singUP', 'GF Dancing Beat Hair blowing CAR', [0], "", 24, false);
-				animation.addByIndices('danceLeft', 'GF Dancing Beat Hair blowing CAR', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-				animation.addByIndices('danceRight', 'GF Dancing Beat Hair blowing CAR', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24,
+				animation.addByIndices('singUP', 'GF Dancing Beat Hair blowing CAR FIX', [0], "", 24, false);
+				animation.addByIndices('danceLeft', 'GF Dancing Beat Hair blowing CAR FIX', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24,
 					false);
+				animation.addByIndices('danceRight', 'GF Dancing Beat Hair blowing CAR FIX', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "",
+					24, false);
 
 				addOffset('danceLeft', 0);
 				addOffset('danceRight', 0);
@@ -634,11 +614,7 @@ class Character extends FlxSprite
 	{
 		CharacterData.getJSON(char);
 
-		var funkinSprite = Paths.getSparrowAtlas("characters/spritesheets/" + CharacterData.prefs.spriteSheet);
-
-		var textFile = Paths.getPreloadPath("characters/spritesheets/" + CharacterData.prefs.spriteSheet + ".txt");
-		if (FileSystem.exists(textFile))
-			funkinSprite = Paths.getPackerAtlas("characters/spritesheets/" + CharacterData.prefs.spriteSheet);
+		var funkinSprite = Paths.characterPaths(char, "spriteSheet.xml");
 
 		frames = funkinSprite;
 
@@ -651,7 +627,6 @@ class Character extends FlxSprite
 		var getSingDuration = CharacterData.prefs.singDuration;
 		singDuration = getSingDuration;
 
-		healthIcon = CharacterData.prefs.icon;
 		healthBarColor = CharacterData.prefs.healthBarColor;
 
 		cameraPosition.x = CharacterData.prefs.cameraOffset.x;
@@ -733,7 +708,7 @@ class Character extends FlxSprite
 
 	public inline function getIcon()
 	{
-		var icon = ((healthIcon != null) ? healthIcon : curCharacter);
+		var icon = curCharacter;
 		return icon;
 	}
 

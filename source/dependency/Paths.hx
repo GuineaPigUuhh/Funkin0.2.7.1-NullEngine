@@ -128,4 +128,21 @@ class Paths
 	{
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
 	}
+
+	static public function characterPaths(char:String, aa:String):Any
+	{
+		switch (aa)
+		{
+			case "icon":
+				return getPreloadPath('characters/$char/icon.png');
+
+			case "spriteSheet.xml":
+				return FlxAtlasFrames.fromSparrow(getPreloadPath('characters/$char/spritesheet.png'), getPreloadPath('characters/$char/spritesheet.xml'));
+
+			case "spriteSheet.txt":
+				return FlxAtlasFrames.fromSpriteSheetPacker(getPreloadPath('characters/$char/spritesheet.png'),
+					getPreloadPath('characters/$char/spritesheet.txt'));
+		}
+		return null;
+	}
 }

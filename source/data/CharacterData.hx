@@ -23,10 +23,8 @@ typedef Prefs =
 {
 	var isGF:Bool;
 	var antialiasing:Bool;
-	var spriteSheet:String;
 	var flipX:Bool;
 	var healthBarColor:String;
-	var icon:String;
 	var singDuration:Float;
 	var setScale:Float;
 	// cam char wtf separator
@@ -51,7 +49,7 @@ class CharacterData
 
 	public static function getJSON(char:String)
 	{
-		var path:String = Paths.json('characters/${char}');
+		var path:String = Paths.getPreloadPath('characters/${char}/data.json');
 
 		var charJSON:CharacterINFO = Json.parse(File.getContent(path));
 
@@ -61,7 +59,7 @@ class CharacterData
 
 	public static function jsonPath(char:String)
 	{
-		var path:String = Paths.json('characters/${char}');
+		var path:String = Paths.getPreloadPath('characters/${char}/data.json');
 
 		return path;
 	}
