@@ -2,6 +2,7 @@ package states.menus;
 
 import dependency.MusicBeatState;
 import dependency.Paths;
+import flash.system.System;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -15,7 +16,9 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import flxanimate.FlxAnimate;
+import game.null_stuff.NullClickableSprite;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.app.Application;
@@ -44,6 +47,8 @@ class MainMenuState extends MusicBeatState
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
+
+	var backButton:NullClickableSprite;
 
 	override function create()
 	{
@@ -111,21 +116,41 @@ class MainMenuState extends MusicBeatState
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
 			var funkinLocal:String = 'menus/main/items/';
 
-			var file = Paths.getSparrowAtlas(funkinLocal + optionShit[i]);
-			var idleAnim:String = optionShit[i] + " basic";
-			var selectedAnim:String = optionShit[i] + " white";
-
-			menuItem.frames = file;
-			menuItem.animation.addByPrefix('idle', idleAnim, 24);
-			menuItem.animation.addByPrefix('selected', selectedAnim, 24);
+			menuItem.frames = Paths.getSparrowAtlas(funkinLocal + optionShit[i]);
+			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
+			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
-			menuItems.add(menuItem);
-			menuItem.scrollFactor.set(0, 0);
+			menuItem.scrollFactor.set(0, 1 / optionShit.length);
 			menuItem.antialiasing = FlxG.save.data.antialiasing;
+
+			menuItems.add(menuItem);
 		}
+
+		backButton = new NullClickableSprite(980, 600, function()
+		{
+			// nothing
+		});
+		backButton.frames = Paths.getSparrowAtlas("menus/main/exit");
+		backButton.animation.addByPrefix("buttonNormal", "backspace to exit", 0, true);
+		backButton.animation.addByPrefix("buttonPressed", "backspace PRESSED", 24, false);
+		backButton.animation.play("buttonNormal");
+		backButton.callBack = function()
+		{
+			selectedSomethin = true;
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+
+			backButton.animation.play("buttonPressed");
+			new FlxTimer().start(0.6, function(tmr:FlxTimer)
+			{
+				System.exit(0);
+			});
+		};
+
+		backButton.scrollFactor.set();
+		add(backButton);
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 

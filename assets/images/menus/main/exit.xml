@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="exit.png">
+	<!-- Created with Adobe Animate version 22.0.3.179 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="backspace PRESSED0000" x="0" y="0" width="290" height="160"/>
+	<SubTexture name="backspace PRESSED0001" x="0" y="0" width="290" height="160"/>
+	<SubTexture name="backspace PRESSED0002" x="0" y="160" width="284" height="156" frameX="-3" frameY="-2" frameWidth="290" frameHeight="160"/>
+	<SubTexture name="backspace PRESSED0003" x="0" y="160" width="284" height="156" frameX="-3" frameY="-2" frameWidth="290" frameHeight="160"/>
+	<SubTexture name="backspace to exit0000" x="0" y="316" width="280" height="106"/>
+</TextureAtlas>
