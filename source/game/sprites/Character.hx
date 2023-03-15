@@ -139,13 +139,13 @@ class Character extends FlxSprite
 		return point;
 	}
 
-	public function setCharacterPosition(ggff:Character)
+	public function setCharacterPosition(gf:game.sprites.Character)
 	{
 		if (isGf || curCharacter.startsWith('gf')) // if trans?
 		{
-			setPosition(PlayState.GF_POS[0], PlayState.GF_POS[1]);
+			setPosition(gf.x, gf.y);
 			scrollFactor.set(0.95, 0.95);
-			ggff.visible = false;
+			gf.visible = false;
 		}
 
 		x += charPosition.x;
@@ -646,13 +646,9 @@ class Character extends FlxSprite
 			for (charAnims in CharacterData.anims)
 			{
 				if (charAnims.indices != null && charAnims.indices.length > 0)
-				{
 					animation.addByIndices(charAnims.animName, charAnims.animPrefix, charAnims.indices, "", charAnims.fps, charAnims.loop);
-				}
 				else
-				{
 					animation.addByPrefix(charAnims.animName, charAnims.animPrefix, charAnims.fps, charAnims.loop);
-				}
 
 				if (charAnims.offsets != null)
 					addOffset(charAnims.animName, charAnims.offsets.x, charAnims.offsets.y);
@@ -704,12 +700,6 @@ class Character extends FlxSprite
 			}
 		}
 		super.update(elapsed);
-	}
-
-	public inline function getIcon()
-	{
-		var icon = curCharacter;
-		return icon;
 	}
 
 	public inline function getHealthColor()

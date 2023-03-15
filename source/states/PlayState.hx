@@ -96,6 +96,9 @@ class PlayState extends MusicBeatState
 
 	public var camFollow:FlxObject;
 
+	public var camGameTween:FlxTween;
+	public var camHUDTween:FlxTween;
+
 	public static var strumLineNotes:FlxTypedGroup<StaticNote>;
 	public static var playerStrums:FlxTypedGroup<StaticNote>;
 	public static var cpuStrums:FlxTypedGroup<StaticNote>;
@@ -160,15 +163,14 @@ class PlayState extends MusicBeatState
 	var detailsPausedText:String = "";
 	#end
 
-	public static var GF_POS:Array<Float> = [400, 130];
-	public static var DAD_POS:Array<Float> = [100, 100];
-	public static var BOYFRIEND_POS:Array<Float> = [770, 450];
+	public var GF_POS:Array<Float> = [400, 130];
+	public var DAD_POS:Array<Float> = [100, 100];
+	public var BOYFRIEND_POS:Array<Float> = [770, 450];
 
 	var frontItems:FlxTypedGroup<FlxSprite>;
 
 	var divider:String = " • ";
 	var defaultFont:String = Paths.font("vcr.ttf");
-	var defaultBorderSize:Float = 2;
 
 	var extNotes:Float = 45;
 
@@ -401,20 +403,20 @@ class PlayState extends MusicBeatState
 		updateScoreTxt(false);
 		scoreTxt.setFormat(defaultFont, 17, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
-		scoreTxt.borderSize = defaultBorderSize;
+		scoreTxt.borderSize = 2;
 
 		timeTxt = new FlxText(-20, FlxG.height * 0.9 + 34, FlxG.width, '0:00${divider}0:00', 26);
 		timeTxt.setFormat(defaultFont, 26, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
-		timeTxt.borderSize = defaultBorderSize;
+		timeTxt.borderSize = 2;
 
 		songTxt = new FlxText(-20, FlxG.height * 0.9 + 16, FlxG.width, curSong + divider + storyDifficultyText, 18);
 		songTxt.setFormat(defaultFont, 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		songTxt.scrollFactor.set();
-		songTxt.borderSize = defaultBorderSize;
+		songTxt.borderSize = 2;
 
-		iconP1 = new HealthIcon(boyfriend.getIcon(), true);
-		iconP2 = new HealthIcon(dad.getIcon(), false);
+		iconP1 = new HealthIcon(boyfriend.curCharacter, true);
+		iconP2 = new HealthIcon(dad.curCharacter, false);
 
 		/*
 			very cool icon system
@@ -542,6 +544,8 @@ class PlayState extends MusicBeatState
 
 				i.set("camGame", camGame);
 				i.set("camHUD", camHUD);
+
+				i.set("camBop", camBop);
 
 				i.set("songName", SONG.song.toLowerCase());
 
@@ -1248,12 +1252,6 @@ class PlayState extends MusicBeatState
 			{
 				changeFocus('boyfriend');
 			}
-		}
-
-		if (camZooming)
-		{
-			FlxG.camera.zoom = FlxMath.lerp(stageBuilder.stageData.zoom, FlxG.camera.zoom, 0.95);
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -2015,8 +2013,7 @@ class PlayState extends MusicBeatState
 
 		if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
 		{
-			FlxG.camera.zoom += 0.015;
-			camHUD.zoom += 0.03;
+			camBop(0.015, 0.02);
 		}
 
 		for (icon in iconsArray)
@@ -2041,5 +2038,20 @@ class PlayState extends MusicBeatState
 		globalScripts.call("onBeatHit", [curBeat]);
 		songScripts.call("onBeatHit", [curBeat]);
 		stageBuilder.call("onBeatHit", [curBeat]);
+	}
+
+	function camBop(gameZoom:Float, hudZoom:Float)
+	{
+		FlxG.camera.zoom = stageBuilder.stageData.zoom + gameZoom;
+		camHUD.zoom = 1 + hudZoom;
+
+		if (camGameTween != null && camHUDTween != null)
+		{
+			camHUDTween.cancel();
+			camGameTween.cancel();
+		}
+
+		camGameTween = FlxTween.tween(FlxG.camera, {zoom: stageBuilder.stageData.zoom}, 0.6, {ease: FlxEase.quadOut});
+		camHUDTween = FlxTween.tween(camHUD, {zoom: 1}, 0.6, {ease: FlxEase.quadOut});
 	}
 }

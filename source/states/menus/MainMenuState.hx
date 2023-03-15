@@ -48,8 +48,6 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	var backButton:NullClickableSprite;
-
 	override function create()
 	{
 		// CoolUtil.setMouseSprite(FlxG.mouse, "mouseSprite");
@@ -128,29 +126,6 @@ class MainMenuState extends MusicBeatState
 
 			menuItems.add(menuItem);
 		}
-
-		backButton = new NullClickableSprite(980, 600, function()
-		{
-			// nothing
-		});
-		backButton.frames = Paths.getSparrowAtlas("menus/main/exit");
-		backButton.animation.addByPrefix("buttonNormal", "backspace to exit", 0, true);
-		backButton.animation.addByPrefix("buttonPressed", "backspace PRESSED", 24, false);
-		backButton.animation.play("buttonNormal");
-		backButton.callBack = function()
-		{
-			selectedSomethin = true;
-			FlxG.sound.play(Paths.sound('confirmMenu'));
-
-			backButton.animation.play("buttonPressed");
-			new FlxTimer().start(0.6, function(tmr:FlxTimer)
-			{
-				System.exit(0);
-			});
-		};
-
-		backButton.scrollFactor.set();
-		add(backButton);
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
