@@ -89,6 +89,8 @@ class ChartingState extends MusicBeatState
 	var leftIcon:HealthIcon;
 	var rightIcon:HealthIcon;
 
+	var noteStuff:Array<String> = ["Normal Note", "Alt Animation", "Gf Note", "No Animation Note"];
+
 	override function create()
 	{
 		curSection = lastSection;

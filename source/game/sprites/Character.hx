@@ -65,7 +65,7 @@ class Character extends FlxSprite
 		createCharacter(curCharacter);
 	}
 
-	function createCharacter(char:String)
+	public function createCharacter(char:String)
 	{
 		this.curCharacter = char;
 
@@ -629,11 +629,11 @@ class Character extends FlxSprite
 
 		healthBarColor = CharacterData.prefs.healthBarColor;
 
-		cameraPosition.x = CharacterData.prefs.cameraOffset.x;
-		cameraPosition.y = CharacterData.prefs.cameraOffset.y;
+		cameraPosition.x = CharacterData.prefs.cameraOffset[0];
+		cameraPosition.y = CharacterData.prefs.cameraOffset[1];
 
-		charPosition.x = CharacterData.prefs.charOffset.x;
-		charPosition.y = CharacterData.prefs.charOffset.y;
+		charPosition.x = CharacterData.prefs.charOffset[0];
+		charPosition.y = CharacterData.prefs.charOffset[1];
 
 		if (CharacterData.prefs.setScale != 1)
 		{
@@ -650,8 +650,12 @@ class Character extends FlxSprite
 				else
 					animation.addByPrefix(charAnims.animName, charAnims.animPrefix, charAnims.fps, charAnims.loop);
 
-				if (charAnims.offsets != null)
+				if (charAnims.offsets == null)
+					addOffset(charAnims.animName, 0, 0);
+				else
+				{
 					addOffset(charAnims.animName, charAnims.offsets.x, charAnims.offsets.y);
+				}
 			}
 		}
 	}

@@ -1,0 +1,7 @@
+{
+    "camZoom":0.80,
+    "camSpeed":0.04,
+    "opponentPosition":[100, 100],
+    "spectatorPosition":[400, 130],
+    "playerPosition":[970, 450]
+}

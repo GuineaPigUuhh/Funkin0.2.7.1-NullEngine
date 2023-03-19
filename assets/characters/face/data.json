@@ -61,13 +61,7 @@
         "singDuration":4,
         "isGF":false,
         "setScale":1.2,
-        "cameraOffset":{
-            "x":0,
-            "y":0
-        },
-        "charOffset":{
-            "x":200,
-            "y":400
-        }
+        "cameraOffset":[0, 0],
+        "charOffset":[200,400]
     }
 }

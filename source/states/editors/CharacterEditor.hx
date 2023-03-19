@@ -8,6 +8,10 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUICheckBox;
+import flixel.addons.ui.FlxUIDropDownMenu;
+import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
@@ -33,6 +37,11 @@ class CharacterEditor extends MusicBeatState
 
 	var uiBox:FlxUITabMenu;
 
+	var curCharacter:String = "";
+
+	var checkAnti:FlxUICheckBox;
+	var checkIsPlayer:FlxUICheckBox;
+
 	public function new(daAnim:String = 'dad', isDad:Bool)
 	{
 		super();
@@ -44,6 +53,8 @@ class CharacterEditor extends MusicBeatState
 	override function create()
 	{
 		FlxG.sound.music.stop();
+
+		FlxG.mouse.visible = true;
 
 		var menuBG:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image("menus/menuLineArt"));
 		menuBG.screenCenter();
@@ -93,6 +104,10 @@ class CharacterEditor extends MusicBeatState
 		camFollow.screenCenter();
 		add(camFollow);
 		FlxG.camera.follow(camFollow);
+
+		createConfigsChar();
+		createChars();
+
 		super.create();
 	}
 
@@ -121,6 +136,70 @@ class CharacterEditor extends MusicBeatState
 			text.kill();
 			dumbTexts.remove(text, true);
 		});
+	}
+
+	function createChars()
+	{
+		data.ChartData.getJSON();
+
+		var chars:Array<String> = data.ChartData.opponents;
+		var charSelected = new FlxUIDropDownMenu(0, 230, FlxUIDropDownMenu.makeStrIdLabelArray(chars, true), function(character:String)
+		{
+			curCharacter = chars[Std.parseInt(character)];
+
+			ghost.animOffsets = [];
+			char.animOffsets = [];
+
+			animList = [];
+			updateTexts();
+
+			remove(ghost);
+			remove(char);
+
+			char.createCharacter(curCharacter);
+			ghost.createCharacter(curCharacter);
+
+			checkAnti.checked = char.antialiasing;
+
+			genBoyOffsets(true);
+
+			add(ghost);
+			add(char);
+		});
+		charSelected.scrollFactor.set();
+		charSelected.x = FlxG.width - charSelected.width - 25;
+		charSelected.selectedLabel = daAnim;
+		add(charSelected);
+	}
+
+	function createConfigsChar()
+	{
+		checkAnti = new FlxUICheckBox(0, 50, null, null, "Antialiasing", 100);
+		checkAnti.x = FlxG.width - checkAnti.width - 25;
+		checkAnti.name = 'checkAnti';
+		checkAnti.checked = char.antialiasing;
+		checkAnti.scrollFactor.set();
+
+		checkAnti.callback = function()
+		{
+			char.antialiasing = checkAnti.checked;
+			ghost.antialiasing = checkAnti.checked;
+		};
+
+		checkIsPlayer = new FlxUICheckBox(0, checkAnti.y + 25, null, null, "isPlayer", 100);
+		checkIsPlayer.x = FlxG.width - checkIsPlayer.width - 25;
+		checkIsPlayer.name = 'checkIsPlayer';
+		checkIsPlayer.checked = false;
+		checkIsPlayer.scrollFactor.set();
+
+		checkIsPlayer.callback = function()
+		{
+			char.flipX = checkIsPlayer.checked;
+			ghost.flipX = checkIsPlayer.checked;
+		};
+
+		add(checkIsPlayer);
+		add(checkAnti);
 	}
 
 	function createUIBOX()

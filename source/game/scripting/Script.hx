@@ -32,11 +32,7 @@ class Script
 	}
 
 	public function load()
-	{
-		#if ALLOWED_SCRIPTS
 		onLoad();
-		#end
-	}
 
 	public static function getScriptPath(path:String)
 	{

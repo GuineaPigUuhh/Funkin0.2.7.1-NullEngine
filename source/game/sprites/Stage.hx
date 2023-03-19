@@ -4,37 +4,37 @@ import dependency.Paths;
 import flixel.graphics.frames.FlxAtlasFrames;
 import game.null_stuff.NullScript;
 import game.scripting.Script;
+import haxe.Json;
+import haxe.format.JsonParser;
 import jsonHelper.JsonExtra.Point;
 import states.PlayState;
+
+using StringTools;
+
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 class Stage
 {
 	public var curStage:String = "";
-	public var stageData:
-		{
-			zoom:Float,
-			boyfriendPos:Array<Float>,
-			dadPos:Array<Float>,
-			gfPos:Array<Float>
-		} = {
-			zoom: 1.05,
-			boyfriendPos: [0, 0],
-			dadPos: [0, 0],
-			gfPos: [0, 0]
-		};
+
+	public var data:StageData;
 
 	var stageScript:NullScript;
 
 	public function new(curStage:String)
 	{
 		this.curStage = curStage;
+
 		executeScript();
+		getData(false);
 	}
 
 	function executeScript()
 	{
-		stageScript = new NullScript(Script.getScriptPath('stages/${curStage}/${curStage}'));
-		set("configureData", configureData);
+		stageScript = new NullScript(Script.getScriptPath('stages/${curStage}/assets'));
 		set("game", PlayState.instance);
 		set("songName", PlayState.SONG.song.toLowerCase());
 		set("daPixelZoom", PlayState.daPixelZoom);
@@ -45,6 +45,15 @@ class Stage
 		stageScript.load();
 
 		call("onCreate", []);
+	}
+
+	function getData(onlyDataFile:Bool = false)
+	{
+		var path:String = Paths.getPreloadPath('stages/${curStage}/data.json');
+		if (onlyDataFile == true)
+			path = Paths.getPreloadPath('stages/${curStage}.json');
+
+		data = Json.parse(File.getContent(path));
 	}
 
 	function stageImage(key:String)
@@ -62,16 +71,6 @@ class Stage
 		return FlxAtlasFrames.fromSpriteSheetPacker(stageImage(key), Paths.getPreloadPath('stages/$curStage/images/$key.txt'));
 	}
 
-	public function configureData(zoomSet:Float, bfPosSet:Array<Float>, dadPosSet:Array<Float>, gfPosSet:Array<Float>)
-	{
-		stageData = {
-			zoom: zoomSet,
-			boyfriendPos: bfPosSet,
-			dadPos: dadPosSet,
-			gfPos: gfPosSet
-		};
-	}
-
 	public function set(aa:String, di:Dynamic)
 	{
 		stageScript.set(aa, di);
@@ -81,4 +80,17 @@ class Stage
 	{
 		stageScript.call(aa, array);
 	}
+}
+
+/**
+ * haha funkin stage data system
+ */
+typedef StageData =
+{
+	var camZoom:Float;
+	var camSpeed:Float;
+	// cool separation
+	var playerPosition:Array<Float>;
+	var spectatorPosition:Array<Float>;
+	var opponentPosition:Array<Float>;
 }

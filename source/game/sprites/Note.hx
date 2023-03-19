@@ -28,11 +28,20 @@ class Note extends FlxSprite
 
 	public var noteScore:Float = 1;
 
+	public var noteType(default, set):String = null;
+
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var PURP_NOTE:Int = 0;
 	public static var GREEN_NOTE:Int = 2;
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
+
+	public var altAnim:Bool = false;
+	public var gfNote:Bool = false;
+	public var noAnim:Bool = false;
+	public var noMissAnim:Bool = false;
+
+	public var ignoreNote:Bool = false;
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, extNotes:Float)
 	{
@@ -199,5 +208,22 @@ class Note extends FlxSprite
 			if (alpha > 0.3)
 				alpha = 0.3;
 		}
+	}
+
+	function set_noteType(value:String):String
+	{
+		switch (value)
+		{
+			case "noAnim":
+				noAnim = true;
+				noMissAnim = true;
+
+			case "gfNote":
+				gfNote = true;
+
+			case "altNote":
+				altAnim = true;
+		}
+		return value;
 	}
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="bf.png">
+<TextureAtlas imagePath="spritesheet.png">
 	<!-- Created with Adobe Animate version 22.0.3.179 -->
 	<!-- http://www.adobe.com/products/animate.html -->
 	<SubTexture name="BF HEY!!0000" x="0" y="0" width="395" height="416" frameX="0" frameY="0" frameWidth="415" frameHeight="418"/>
@@ -187,8 +187,8 @@
 	<SubTexture name="BF idle dance0011" x="1629" y="862" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
 	<SubTexture name="BF idle dance0012" x="1629" y="862" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
 	<SubTexture name="BF idle dance0013" x="1629" y="862" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="BF idle shaking0000" x="2037" y="862" width="408" height="412" frameX="-1" frameY="-1" frameWidth="410" frameHeight="413"/>
-	<SubTexture name="BF idle shaking0001" x="2445" y="862" width="408" height="412" frameX="-2" frameY="-1" frameWidth="410" frameHeight="413"/>
-	<SubTexture name="BF idle shaking0002" x="2853" y="862" width="408" height="413" frameX="-1" frameY="0" frameWidth="410" frameHeight="413"/>
-	<SubTexture name="BF idle shaking0003" x="3261" y="862" width="410" height="413"/>
+	<SubTexture name="BF idle shaking0000" x="2037" y="862" width="408" height="412" frameX="-1" frameY="-1" frameWidth="410" frameHeight="414"/>
+	<SubTexture name="BF idle shaking0001" x="2445" y="862" width="408" height="412" frameX="-2" frameY="-1" frameWidth="410" frameHeight="414"/>
+	<SubTexture name="BF idle shaking0002" x="2853" y="862" width="408" height="413" frameX="-1" frameY="0" frameWidth="410" frameHeight="414"/>
+	<SubTexture name="BF idle shaking0003" x="3261" y="862" width="410" height="414"/>
 </TextureAtlas>

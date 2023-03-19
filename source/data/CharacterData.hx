@@ -28,8 +28,8 @@ typedef Prefs =
 	var singDuration:Float;
 	var setScale:Float;
 	// cam char wtf separator
-	var cameraOffset:Point;
-	var charOffset:Point;
+	var cameraOffset:Array<Float>;
+	var charOffset:Array<Float>;
 }
 
 typedef Anims =
