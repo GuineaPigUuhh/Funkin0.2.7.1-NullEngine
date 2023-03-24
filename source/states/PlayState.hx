@@ -222,15 +222,15 @@ class PlayState extends MusicBeatState
 		if (SONG == null)
 			SONG = Song.loadFromJson('tutorial');
 
-		songName = SONG.song.toLowerCase();
+		songName = SONG.song.toLowerCase().replace(" ", "-");
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
 		if (FileSystem.exists(Paths.getPreloadPath('songs/${songName}/dialogue.txt'))) // ele vai pegar o arquivo e vai fucionar looolololoollololool // anti crash bruh
-			dialogue = CoolUtil.coolTextFile(Paths.getPreloadPath('songs/${songName}/dialogue.txt'));
+			dialogue = CoolUtil.arrayTextFile(Paths.getPreloadPath('songs/${songName}/dialogue.txt'));
 
-		storyDifficultyText = CoolUtil.difficultyString();
+		storyDifficultyText = CoolUtil.difficultyArray[storyDifficulty];
 
 		#if desktop
 		// Making difficulty text for Discord Rich Presence.
@@ -272,10 +272,9 @@ class PlayState extends MusicBeatState
 			{
 				case 'bopeebo' | 'fresh' | 'dadbattle' | 'tutorial':
 					curStage = 'stage';
-
 				case 'spookeez' | 'south' | 'monster':
 					curStage = 'spooky';
-				case 'pico' | 'blammed' | 'philly':
+				case 'pico' | 'blammed' | 'philly-nice':
 					curStage = 'philly';
 				case 'milf' | 'satin-panties' | 'high':
 					curStage = 'limo';
@@ -680,14 +679,7 @@ class PlayState extends MusicBeatState
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
-			if (opponent.animation.curAnim != null && !opponent.animation.curAnim.name.startsWith('sing'))
-				opponent.dance();
-
-			if (spectator.animation.curAnim != null && !spectator.animation.curAnim.name.startsWith('sing'))
-				spectator.dance();
-
-			if (player.animation.curAnim != null && !player.animation.curAnim.name.startsWith('sing'))
-				player.dance();
+			charactersDance();
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ui/default/ready', "ui/default/set", "ui/default/go"]);
@@ -707,7 +699,6 @@ class PlayState extends MusicBeatState
 			}
 
 			switch (swagCounter)
-
 			{
 				case 0:
 					FlxG.sound.play(Paths.sound('intro3'), 0.6);
@@ -767,7 +758,6 @@ class PlayState extends MusicBeatState
 						}
 					});
 					FlxG.sound.play(Paths.sound('introGo'), 0.6);
-				case 4:
 			}
 
 			swagCounter += 1;
@@ -785,7 +775,7 @@ class PlayState extends MusicBeatState
 		previousFrameTime = FlxG.game.ticks;
 		lastReportedPlayheadPosition = 0;
 
-		FlxG.sound.playMusic(CoolUtil.getInst(SONG.song), 1, false);
+		FlxG.sound.playMusic(Paths.inst(songName), 1, false);
 
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
@@ -811,7 +801,7 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded(CoolUtil.getVocal(PlayState.SONG.song));
+			vocals = new FlxSound().loadEmbedded(Paths.voices(songName));
 		else
 			vocals = new FlxSound();
 
@@ -1135,6 +1125,21 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
+	function charactersDance()
+	{
+		if (opponent.animation.curAnim != null && !opponent.animation.curAnim.name.startsWith('sing'))
+			opponent.dance();
+
+		if (curBeat % gfSpeed == 0)
+		{
+			if (spectator.animation.curAnim != null && !spectator.animation.curAnim.name.startsWith('sing'))
+				spectator.dance();
+		}
+
+		if (player.animation.curAnim != null && !player.animation.curAnim.name.startsWith('sing'))
+			player.dance();
+	}
+
 	private var paused:Bool = false;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
@@ -1168,7 +1173,9 @@ class PlayState extends MusicBeatState
 		if (!isStoryMode) // anticheat BRUHHHH
 		{
 			if (FlxG.keys.justPressed.SEVEN)
+			{
 				openChartEditor();
+			}
 
 			if (FlxG.keys.justPressed.EIGHT)
 			{
@@ -1216,10 +1223,7 @@ class PlayState extends MusicBeatState
 				var curTime:Float = Conductor.songPosition;
 
 				if (curTime < 0)
-				{
-					timeTxt.text = '0:00${divider}0:00';
 					curTime = 0;
-				}
 
 				if (curTime > 0)
 				{
@@ -1922,21 +1926,7 @@ class PlayState extends MusicBeatState
 		for (icon in iconsArray)
 			icon.bop();
 
-		if (opponent.animation.curAnim != null && !opponent.animation.curAnim.name.startsWith('sing'))
-		{
-			opponent.dance();
-		}
-
-		if (curBeat % gfSpeed == 0)
-		{
-			if (spectator.animation.curAnim != null && !spectator.animation.curAnim.name.startsWith("sing"))
-				spectator.dance();
-		}
-
-		if (player.animation.curAnim != null && !player.animation.curAnim.name.startsWith("sing"))
-		{
-			player.playAnim('idle');
-		}
+		charactersDance();
 
 		globalScripts.call("onBeatHit", [curBeat]);
 		songScripts.call("onBeatHit", [curBeat]);

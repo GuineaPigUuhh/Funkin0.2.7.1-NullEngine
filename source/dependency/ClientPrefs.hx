@@ -20,7 +20,8 @@ class ClientPrefs
 		"freeplayCutscene" => false,
 		"noteSplash" => false,
 		"middleScroll" => false,
-		"isDownscroll" => false
+		"isDownscroll" => false,
+		"framerate" => 120
 	];
 
 	public static var controls:Map<String, Array<FlxKey>> = [
@@ -43,6 +44,16 @@ class ClientPrefs
 			{
 				Logs.create({message: "Saved " + name + " / " + Reflect.getProperty(FlxG.save.data, name), type: "SAVE", color: Logs.MAGENTA});
 			}
+		}
+		FlxG.save.flush();
+	}
+
+	public static function load()
+	{
+		if (FlxG.save.data.framerate != null)
+		{
+			FlxG.drawFramerate = FlxG.save.data.framerate;
+			FlxG.updateFramerate = FlxG.save.data.framerate;
 		}
 	}
 }

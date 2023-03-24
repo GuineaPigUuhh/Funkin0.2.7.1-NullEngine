@@ -1,0 +1,24 @@
+{
+    "songs":[
+        {
+            "name":"Senpai",
+            "icon":"senpai",
+            "color":"FFAA6F"
+        },
+        {
+            "name":"Roses",
+            "icon":"senpai-angry",
+            "color":"FFAA6F"
+        },
+        {
+            "name":"Thorns",
+            "icon":"spirit",
+            "color":"FFAA6F"
+        }
+    ],
+    "image":"week6",
+    "characters":["senpai", "bf", "gf"],
+    "title":"hating simulator ft. moawling",
+    "hideOnStoryMode":false,
+    "hideOnFreeplay":false
+}

@@ -3,7 +3,7 @@ package states.menus;
 #if desktop
 import game.DiscordClient;
 #end
-import data.WeekData;
+import data.WeeksData;
 import dependency.MusicBeatState;
 import dependency.Paths;
 import flash.text.TextField;
@@ -56,7 +56,13 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		WeekData.getJSON();
+		WeeksData.getFiles();
+
+		if (FlxG.sound.music != null)
+		{
+			if (!FlxG.sound.music.playing)
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		}
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -69,10 +75,23 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-		for (i in 0...WeekData.weeks.length)
+		for (i in 0...WeeksData.weekList.length)
 		{
-			if (WeekData.weeks[i].hideInFreePlay == false)
-				addWeek(WeekData.weeks[i].weekSongs, WeekData.weeks[i].songColor, i, WeekData.weeks[i].songIcons);
+			if (WeeksData.weekFiles.get(WeeksData.weekList[i]).hideOnFreeplay == false)
+			{
+				var songIcons:Array<String> = [];
+				var songNames:Array<String> = [];
+				var songColors:Array<String> = [];
+
+				for (e in WeeksData.weekFiles.get(WeeksData.weekList[i]).songs)
+				{
+					songNames.push(e.name);
+					songIcons.push(e.icon);
+					songColors.push(e.color);
+				}
+
+				addWeek(songNames, songColors, i, songIcons);
+			}
 		}
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menus/menuDesat'));
@@ -91,13 +110,8 @@ class FreeplayState extends MusicBeatState
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.sprTracker = songText;
 
-			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
 			add(icon);
-
-			// songText.x += 40;
-			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-			// songText.screenCenter(X);
 		}
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
@@ -140,18 +154,22 @@ class FreeplayState extends MusicBeatState
 		songs.push(new SongMetadata(songName, songColor, weekNum, songCharacter));
 	}
 
-	public function addWeek(songs:Array<String>, color:String, weekNum:Int, ?songCharacters:Array<String>)
+	public function addWeek(songs:Array<String>, songColors:Array<String>, weekNum:Int, ?songCharacters:Array<String>)
 	{
 		if (songCharacters == null)
 			songCharacters = ['bf'];
 
 		var icon:Int = 0;
+		var colors:Int = 0;
 		for (song in songs)
 		{
-			addSong(song, color, weekNum, songCharacters[icon]);
+			addSong(song, songColors[colors], weekNum, songCharacters[icon]);
 
 			if (songCharacters.length != 1)
 				icon++;
+
+			if (songColors.length != 1)
+				colors++;
 		}
 	}
 
@@ -196,7 +214,7 @@ class FreeplayState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.SPACE)
 		{
-			FlxG.sound.playMusic(CoolUtil.getInst(songs[curSelected].songName), 0);
+			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 		}
 
 		if (controls.BACK)

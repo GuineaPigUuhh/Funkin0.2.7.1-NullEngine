@@ -1,0 +1,24 @@
+{
+    "songs":[
+        {
+            "name":"Pico",
+            "icon":"pico",
+            "color":"B7D855"
+        },
+        {
+            "name":"Philly-Nice",
+            "icon":"pico",
+            "color":"B7D855"
+        },
+        {
+            "name":"Blammed",
+            "icon":"pico",
+            "color":"B7D855"
+        }
+    ],
+    "image":"week3",
+    "characters":["pico", "bf", "gf"],
+    "title":"V.S. PICO",
+    "hideOnStoryMode":false,
+    "hideOnFreeplay":false
+}

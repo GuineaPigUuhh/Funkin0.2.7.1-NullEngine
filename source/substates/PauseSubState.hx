@@ -27,12 +27,7 @@ class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = [
-		'Resume',
-		'Restart Song',
-		'Options',
-		PlayState.isStoryMode ? "Exit to Menu" : "Exit to Freeplay"
-	];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Options', "Exit to Menu"];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -65,7 +60,7 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelInfo);
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
-		levelDifficulty.text += CoolUtil.difficultyString();
+		levelDifficulty.text = CoolUtil.difficultyArray[PlayState.storyDifficulty];
 		levelDifficulty.scrollFactor.set();
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
 		levelDifficulty.updateHitbox();
@@ -136,10 +131,12 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.chartingMode = false;
 
 				case "Exit to Menu":
-					exit("storymode");
-
-				case "Exit to Freeplay":
-					exit("freeplay");
+					if (PlayState.isStoryMode)
+						exit("storymode");
+					else
+					{
+						exit("freeplay");
+					}
 			}
 		}
 	}

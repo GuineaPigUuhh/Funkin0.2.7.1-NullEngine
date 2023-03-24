@@ -614,9 +614,7 @@ class Character extends FlxSprite
 	{
 		CharacterData.getJSON(char);
 
-		var funkinSprite = Paths.characterPaths(char, "spriteSheet.xml");
-
-		frames = funkinSprite;
+		frames = Paths.characterPaths(char, "spriteSheet.xml");
 
 		var antiChar = CharacterData.prefs.antialiasing;
 		antialiasing = (antiChar ? FlxG.save.data.antialiasing : false);

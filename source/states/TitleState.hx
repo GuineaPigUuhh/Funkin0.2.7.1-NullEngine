@@ -81,6 +81,7 @@ class TitleState extends MusicBeatState
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		ClientPrefs.save();
+		ClientPrefs.load();
 
 		PlayerSettings.player1.controls.loadKeyBinds();
 		Highscore.load();

@@ -3,6 +3,7 @@ package states.editors;
 import data.ChartData;
 import dependency.MusicBeatState;
 import dependency.Paths;
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
@@ -410,10 +411,10 @@ class ChartingState extends MusicBeatState
 			// vocals.stop();
 		}
 
-		FlxG.sound.playMusic(CoolUtil.getInst(daSong), 0.6);
+		FlxG.sound.playMusic(Paths.inst(daSong), 0.6);
 
 		// WONT WORK FOR TUTORIAL OR TEST SONG!!! REDO LATER
-		vocals = new FlxSound().loadEmbedded(CoolUtil.getVocal(daSong));
+		vocals = new FlxSound().loadEmbedded(Paths.voices(daSong));
 		FlxG.sound.list.add(vocals);
 
 		FlxG.sound.music.pause();

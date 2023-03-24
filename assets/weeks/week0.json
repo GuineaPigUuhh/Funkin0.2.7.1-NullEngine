@@ -1,0 +1,14 @@
+{
+    "songs":[
+        {
+            "name":"Tutorial",
+            "icon":"gf",
+            "color":"A5004D"
+        }
+    ],
+    "image":"week0",
+    "characters":["", "bf", "gf"],
+    "title":"Tutorial",
+    "hideOnStoryMode":false,
+    "hideOnFreeplay":false
+}

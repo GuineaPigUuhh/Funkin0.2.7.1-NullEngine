@@ -1,5 +1,6 @@
 package dependency;
 
+import dependency.Logs;
 import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
@@ -16,30 +17,10 @@ class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 
-	static var currentLevel:String;
-
-	static public function setCurrentLevel(name:String)
-	{
-		currentLevel = name.toLowerCase();
-	}
-
 	static function getPath(file:String, type:AssetType, library:Null<String>)
 	{
 		if (library != null)
 			return getLibraryPath(file, library);
-
-		/*
-			if (currentLevel != null)
-			{
-				var levelPath = getLibraryPathForce(file, currentLevel);
-				if (OpenFlAssets.exists(levelPath, type))
-					return levelPath;
-
-				levelPath = getLibraryPathForce(file, "shared");
-				if (OpenFlAssets.exists(levelPath, type))
-					return levelPath;
-			}
-		 */
 
 		return getPreloadPath(file);
 	}
@@ -129,6 +110,11 @@ class Paths
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
 	}
 
+	inline static public function getJsonAtlas(key:String, ?library:String)
+	{
+		return FlxAtlasFrames.fromTexturePackerJson(image(key, library), file('images/$key.json', library));
+	}
+
 	static public function characterPaths(char:String, aa:String):Any
 	{
 		switch (aa)
@@ -142,6 +128,13 @@ class Paths
 			case "spriteSheet.txt":
 				return FlxAtlasFrames.fromSpriteSheetPacker(getPreloadPath('characters/$char/spritesheet.png'),
 					getPreloadPath('characters/$char/spritesheet.txt'));
+
+			case "spriteSheet.json":
+				return FlxAtlasFrames.fromTexturePackerJson(getPreloadPath('characters/$char/spritesheet.png'),
+					getPreloadPath('characters/$char/spritesheet.json'));
+
+			default:
+				Logs.error("THIS FORMAT DOESN'T EXIST");
 		}
 		return null;
 	}

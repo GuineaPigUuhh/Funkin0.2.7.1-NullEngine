@@ -1,0 +1,19 @@
+{
+    "songs":[
+        {
+            "name":"Spookeez",
+            "icon":"spooky",
+            "color":"D57E00"
+        },
+        {
+            "name":"South",
+            "icon":"spooky",
+            "color":"D57E00"
+        }
+    ],
+    "image":"week2",
+    "characters":["spooky", "bf", "gf"],
+    "title":"Spooky Month!",
+    "hideOnStoryMode":false,
+    "hideOnFreeplay":false
+}

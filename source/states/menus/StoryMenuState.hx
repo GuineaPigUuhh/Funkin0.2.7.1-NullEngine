@@ -3,7 +3,7 @@ package states.menus;
 #if desktop
 import game.DiscordClient;
 #end
-import data.WeekData;
+import data.WeeksData;
 import dependency.MusicBeatState;
 import dependency.Paths;
 import flixel.FlxG;
@@ -56,9 +56,25 @@ class StoryMenuState extends MusicBeatState
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
 
+	var daSongs:Array<Array<String>> = [];
+
 	override function create()
 	{
-		WeekData.getJSON();
+		WeeksData.getFiles();
+
+		// import
+		for (i in 0...WeeksData.weekList.length)
+		{
+			var songs:Array<String> = [];
+			for (s in WeeksData.weekFiles.get(WeeksData.weekList[i]).songs)
+			{
+				songs.push(s.name);
+			}
+
+			daSongs.push(songs);
+		}
+
+		//	trace(WeeksData.weekList);
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -103,11 +119,11 @@ class StoryMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		for (i in 0...WeekData.weeks.length)
+		for (i in 0...WeeksData.weekList.length)
 		{
-			if (WeekData.weeks[i].hideInStoryMode == false)
+			if (WeeksData.weekFiles.get(WeeksData.weekList[i]).hideOnStoryMode == false)
 			{
-				var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, WeekData.weeks[i].weekPath);
+				var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, WeeksData.weekFiles.get(WeeksData.weekList[i]).image);
 				weekThing.y += ((weekThing.height + 20) * i);
 				weekThing.targetY = i;
 				weekThing.screenCenter(X);
@@ -119,7 +135,8 @@ class StoryMenuState extends MusicBeatState
 
 		for (char in 0...3)
 		{
-			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, WeekData.weeks[curWeek].weekCharacters[char]);
+			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150,
+				WeeksData.weekFiles.get(WeeksData.weekList[curWeek]).characters[char]);
 			weekCharacterThing.y += 70;
 			weekCharacterThing.antialiasing = true;
 
@@ -242,7 +259,7 @@ class StoryMenuState extends MusicBeatState
 			stopspamming = true;
 		}
 
-		PlayState.storyPlaylist = WeekData.weeks[curWeek].weekSongs;
+		PlayState.storyPlaylist = daSongs[curWeek];
 		PlayState.isStoryMode = true;
 		selectedWeek = true;
 
@@ -287,7 +304,7 @@ class StoryMenuState extends MusicBeatState
 
 	function changeWeek(change:Int = 0):Void
 	{
-		curWeek = FlxMath.wrap(curWeek + change, 0, WeekData.weeks.length - 1);
+		curWeek = FlxMath.wrap(curWeek + change, 0, WeeksData.weekList.length - 1);
 
 		var bullShit:Int = 0;
 
@@ -307,14 +324,17 @@ class StoryMenuState extends MusicBeatState
 	function updateText()
 	{
 		for (loop in 0...3)
-			grpWeekCharacters.members[loop].changeMenuCharacter(WeekData.weeks[curWeek].weekCharacters[loop]);
+		{
+			grpWeekCharacters.members[loop].changeMenuCharacter(WeeksData.weekFiles.get(WeeksData.weekList[curWeek]).characters[loop]);
+		}
 
 		scoreText.text = "WEEK SCORE:" + lerpScore;
-		txtWeekTitle.text = WeekData.weeks[curWeek].weekTitle;
+		txtWeekTitle.text = WeeksData.weekFiles.get(WeeksData.weekList[curWeek]).title;
+		txtWeekTitle.updateHitbox();
 
 		txtTracklist.text = "Tracks\n";
 
-		var stringThing:Array<String> = WeekData.weeks[curWeek].weekSongs;
+		var stringThing:Array<String> = daSongs[curWeek];
 
 		for (i in stringThing)
 		{

@@ -1,0 +1,24 @@
+{
+    "songs":[
+        {
+            "name":"Bopeebo",
+            "icon":"dad",
+            "color":"AF66CE"
+        },
+        {
+            "name":"Fresh",
+            "icon":"dad",
+            "color":"AF66CE"
+        },
+        {
+            "name":"DadBattle",
+            "icon":"dad",
+            "color":"AF66CE"
+        }
+    ],
+    "image":"week1",
+    "characters":["dad", "bf", "gf"],
+    "title":"V.S. Daddy Dearest",
+    "hideOnStoryMode":false,
+    "hideOnFreeplay":false
+}
