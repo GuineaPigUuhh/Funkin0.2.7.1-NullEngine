@@ -132,7 +132,6 @@ class PlayState extends MusicBeatState
 	public var camGame:FlxCamera;
 
 	public var camGameTween:FlxTween;
-	public var camHUDTween:FlxTween;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
@@ -1440,45 +1439,39 @@ class PlayState extends MusicBeatState
 		switch (charFocus)
 		{
 			case "dad":
-				{
-					camFollow.setPosition(opponent.getCamPos().x, opponent.getCamPos().y);
+				camFollow.setPosition(opponent.getCamPos().x, opponent.getCamPos().y);
 
-					switch (opponent.curCharacter)
-					{
-						case 'mom':
-							camFollow.y = opponent.getMidpoint().y;
-						case 'senpai':
-							camFollow.y = opponent.getMidpoint().y - 430;
-							camFollow.x = opponent.getMidpoint().x - 100;
-						case 'senpai-angry':
-							camFollow.y = opponent.getMidpoint().y - 430;
-							camFollow.x = opponent.getMidpoint().x - 100;
-					}
+				switch (opponent.curCharacter)
+				{
+					case 'mom':
+						camFollow.y = opponent.getMidpoint().y;
+					case 'senpai':
+						camFollow.y = opponent.getMidpoint().y - 430;
+						camFollow.x = opponent.getMidpoint().x - 100;
+					case 'senpai-angry':
+						camFollow.y = opponent.getMidpoint().y - 430;
+						camFollow.x = opponent.getMidpoint().x - 100;
 				}
 
 			case "boyfriend":
-				{
-					camFollow.setPosition(player.getCamPos().x, player.getCamPos().y);
+				camFollow.setPosition(player.getCamPos().x, player.getCamPos().y);
 
-					switch (curStage)
-					{
-						case 'limo':
-							camFollow.x = player.getMidpoint().x - 300;
-						case 'mall':
-							camFollow.y = player.getMidpoint().y - 200;
-						case 'school':
-							camFollow.x = player.getMidpoint().x - 200;
-							camFollow.y = player.getMidpoint().y - 200;
-						case 'schoolEvil':
-							camFollow.x = player.getMidpoint().x - 200;
-							camFollow.y = player.getMidpoint().y - 200;
-					}
+				switch (curStage)
+				{
+					case 'limo':
+						camFollow.x = player.getMidpoint().x - 300;
+					case 'mall':
+						camFollow.y = player.getMidpoint().y - 200;
+					case 'school':
+						camFollow.x = player.getMidpoint().x - 200;
+						camFollow.y = player.getMidpoint().y - 200;
+					case 'schoolEvil':
+						camFollow.x = player.getMidpoint().x - 200;
+						camFollow.y = player.getMidpoint().y - 200;
 				}
 
 			case "gf":
-				{
-					camFollow.setPosition(spectator.getCamPos(true).x, spectator.getCamPos(true).y);
-				}
+				camFollow.setPosition(spectator.getCamPos(true).x, spectator.getCamPos(true).y);
 		}
 	}
 
@@ -1920,7 +1913,7 @@ class PlayState extends MusicBeatState
 
 		if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
 		{
-			camBop(0.015, 0.02);
+			camBop(0.015);
 		}
 
 		for (icon in iconsArray)
@@ -1933,19 +1926,16 @@ class PlayState extends MusicBeatState
 		stageBuilder.call("onBeatHit", [curBeat]);
 	}
 
-	function camBop(gameZoom:Float, hudZoom:Float)
+	function camBop(gameZoom:Float)
 	{
 		FlxG.camera.zoom = stageBuilder.data.camZoom + gameZoom;
-		camHUD.zoom = 1 + hudZoom;
 
-		if (camGameTween != null && camHUDTween != null)
+		if (camGameTween != null)
 		{
-			camHUDTween.cancel();
 			camGameTween.cancel();
 		}
 
 		camGameTween = FlxTween.tween(FlxG.camera, {zoom: stageBuilder.data.camZoom}, 0.6, {ease: FlxEase.quadOut});
-		camHUDTween = FlxTween.tween(camHUD, {zoom: 1}, 0.6, {ease: FlxEase.quadOut});
 	}
 }
 
