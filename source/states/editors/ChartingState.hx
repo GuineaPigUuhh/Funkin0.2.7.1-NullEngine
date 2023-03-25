@@ -99,7 +99,7 @@ class ChartingState extends MusicBeatState
 		ChartData.getJSON();
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuDesat'));
-		bg.color = 0xFF4D4D4D;
+		bg.color = 0xFF272626;
 		bg.scrollFactor.set();
 		add(bg);
 
@@ -200,7 +200,6 @@ class ChartingState extends MusicBeatState
 		check_voices.callback = function()
 		{
 			_song.needsVoices = check_voices.checked;
-			trace('CHECKED!');
 		};
 
 		var saveButton:FlxButton = new FlxButton(110, 8, "Save", function()
@@ -541,10 +540,6 @@ class ChartingState extends MusicBeatState
 
 		if (curBeat % 4 == 0 && curStep >= 16 * (curSection + 1))
 		{
-			trace(curStep);
-			trace((_song.notes[curSection].lengthInSteps) * (curSection + 1));
-			trace('DUMBSHIT');
-
 			if (_song.notes[curSection + 1] == null)
 			{
 				addSection();
@@ -572,7 +567,6 @@ class ChartingState extends MusicBeatState
 						}
 						else
 						{
-							trace('tryin to delete note...');
 							deleteNote(note);
 						}
 					}
@@ -727,7 +721,7 @@ class ChartingState extends MusicBeatState
 		if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A)
 			changeSection(curSection - shiftThing);
 
-		bpmTxt.text = bpmTxt.text = Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2))
+		bpmTxt.text = Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2))
 			+ " / "
 			+ Std.string(FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 2))
 			+ "\nSection: "
@@ -799,8 +793,6 @@ class ChartingState extends MusicBeatState
 
 	function changeSection(sec:Int = 0, ?updateMusic:Bool = true):Void
 	{
-		trace('changing section' + sec);
-
 		if (_song.notes[sec] != null)
 		{
 			curSection = sec;
@@ -920,7 +912,6 @@ class ChartingState extends MusicBeatState
 				{
 					if (_song.notes[sec].sectionNotes[notesse][2] == null)
 					{
-						trace('SUS NULL');
 						_song.notes[sec].sectionNotes[notesse][2] = 0;
 					}
 				}
@@ -1031,9 +1022,6 @@ class ChartingState extends MusicBeatState
 			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus]);
 		}
 
-		trace(noteStrum);
-		trace(curSection);
-
 		updateGrid();
 		updateNoteUI();
 
@@ -1051,33 +1039,32 @@ class ChartingState extends MusicBeatState
 	}
 
 	/*
-		function calculateSectionLengths(?sec:SwagSection):Int
-		{
-			var daLength:Int = 0;
-
-			for (i in _song.notes)
+			function calculateSectionLengths(?sec:SwagSection):Int
 			{
-				var swagLength = i.lengthInSteps;
+				var daLength:Int = 0;
 
-				if (i.typeOfSection == Section.COPYCAT)
-					swagLength * 2;
-
-				daLength += swagLength;
-
-				if (sec != null && sec == i)
+				for (i in _song.notes)
 				{
-					trace('swag loop??');
-					break;
-				}
-			}
+					var swagLength = i.lengthInSteps;
 
-			return daLength;
+					if (i.typeOfSection == Section.COPYCAT)
+						swagLength * 2;
+
+					daLength += swagLength;
+
+					if (sec != null && sec == i)
+					{
+
+						break;
+					}
+				}
+
+				return daLength;
 	}*/
 	private var daSpacing:Float = 0.3;
 
 	function loadLevel():Void
 	{
-		trace(_song.notes);
 	}
 
 	function getNotes():Array<Dynamic>
