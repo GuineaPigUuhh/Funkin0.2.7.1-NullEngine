@@ -14,10 +14,13 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import game.sprites.Alphabet;
 import game.sprites.OptionTab;
 import lime.utils.Assets;
+import states.menus.tabs.*;
 
 using StringTools;
 
@@ -36,59 +39,51 @@ class OptionsState extends MusicBeatState
 
 	var optionsCool:Alphabet;
 
-	public static var isPlayStated:Bool = false;
-
 	private var grpOptions:FlxTypedGroup<OptionTab>;
 
 	var options:Array<Tab> = [];
 
 	var stopSpam:Bool = false;
-	var camFollow:FlxObject;
+
+	var menuBG:FlxSprite;
 
 	override function create()
 	{
+		persistentUpdate = persistentDraw = true;
+
 		super.create();
 
 		// stopSpam = false;
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuNullEngine'));
+		menuBG = new FlxSprite().loadGraphic(Paths.image('menus/options/menuBGoptions'));
 		menuBG.scrollFactor.set();
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		add(menuBG);
 
-		camFollow = new FlxObject(0, 0, 1, 1);
-		add(camFollow);
-
 		grpOptions = new FlxTypedGroup<OptionTab>();
 		add(grpOptions);
 
-		options = [
-			{
-				name: "gameplay",
-				desc: "Change the settings to your preferences, like downscroll, middlescroll",
-				onSelected: function()
-				{
-					openSubState(new substates.options.GameplayTab());
-				}
-			},
-			{
-				name: "customize",
-				desc: "Change visuals and hud",
-				onSelected: function()
-				{
-					openSubState(new substates.options.CustomizeTab());
-				}
-			},
-			{
-				name: "graphics",
-				desc: "Change graphics settings for better performance",
-				onSelected: function()
-				{
-					openSubState(new substates.options.GraphicsTab());
-				}
-			}
-		];
+		addTab("keybinds", "Change the controls.", function()
+		{
+			exit();
+			Logs.error("this setting has not been configured");
+		});
+
+		addTab("gameplay", "Change the settings to your preferences, like downscroll, middlescroll.", function()
+		{
+			FlxG.switchState(new GameplayTab());
+		});
+
+		addTab("customize", "Change visuals and hud.", function()
+		{
+			FlxG.switchState(new CustomizeTab());
+		});
+
+		addTab("graphics", "Change graphics settings for better performance.", function()
+		{
+			FlxG.switchState(new GraphicsTab());
+		});
 
 		for (i in 0...options.length)
 		{
@@ -103,7 +98,6 @@ class OptionsState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		FlxG.camera.follow(camFollow, null, 0.06);
 		if (!stopSpam)
 		{
 			if (controls.DOWN_P)
@@ -128,14 +122,17 @@ class OptionsState extends MusicBeatState
 			{
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 
+				stopSpam = true;
 				FlxFlicker.flicker(grpOptions.members[curSelected], 1, 0.06, true, false, function(flick:FlxFlicker)
 				{
-					// stopSpam = true;
 					for (e in options)
 					{
 						if (options[curSelected].name == e.name)
 						{
 							e.onSelected();
+
+							persistentUpdate = false;
+							persistentDraw = false;
 						}
 					}
 				});
@@ -143,23 +140,31 @@ class OptionsState extends MusicBeatState
 		}
 	}
 
+	function addTab(tabName:String, tabDesc:String, tabCallBack:() -> Void)
+	{
+		options.push({name: tabName, desc: tabDesc, onSelected: tabCallBack});
+	}
+
 	function exit()
 	{
-		if (isPlayStated == false)
-			FlxG.switchState(new states.menus.MainMenuState());
-		else
-			FlxG.switchState(new PlayState());
+		FlxG.switchState(new states.menus.MainMenuState());
 	}
 
 	function changeSelection(change:Int = 0)
 	{
 		curSelected = FlxMath.wrap(curSelected + change, 0, grpOptions.length - 1);
 
+		var bullShit:Int = 0;
 		for (item in grpOptions.members)
 		{
-			item.updateAlpha(curSelected);
-		}
+			item.optionText.targetY = bullShit - curSelected;
+			bullShit++;
 
-		camFollow.setPosition(grpOptions.members[curSelected].optionText.x + 550, grpOptions.members[curSelected].optionText.y);
+			item.alpha = 0.8;
+			if (item.optionText.targetY == 0)
+			{
+				item.alpha = 1;
+			}
+		}
 	}
 }

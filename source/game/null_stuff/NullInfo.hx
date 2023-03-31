@@ -1,5 +1,6 @@
 package game.null_stuff;
 
+import flixel.FlxG;
 import flixel.math.FlxMath;
 import haxe.Timer;
 import openfl.Lib;
@@ -51,6 +52,7 @@ class NullInfo extends TextField
 		multiline = true;
 		alpha = 0.8;
 		text = "";
+		visible = true;
 
 		cacheCount = 0;
 		currentTime = 0;
@@ -77,28 +79,35 @@ class NullInfo extends TextField
 			times.shift();
 		}
 
-		var currentCount = times.length;
-		currentFPS = Math.round((currentCount + cacheCount) / 2);
-
-		if (currentCount != cacheCount && visible)
+		if (visible)
 		{
 			updateText();
 		}
+
+		var currentCount = times.length;
+		currentFPS = Math.round((currentCount + cacheCount) / 2);
 
 		cacheCount = currentCount;
 	}
 
 	function updateText()
 	{
-		var memoryMegas:Float = 0;
-		memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
+		var mem:Float = 0;
+		mem = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
 
-		text = "FPS: " + currentFPS + "\n";
+		var memPeak:Float = 0;
+		memPeak = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
 
-		text += "RAM: " + memoryMegas + " MB\n";
+		if (mem > memPeak)
+			memPeak = mem;
 
-		text += "Null Engine v" + Main.nullText;
+		text = "";
+		if (FlxG.save.data.fpsVisible)
+			text += currentFPS + " FPS\n";
 
-		text += "\n";
+		if (FlxG.save.data.memVisible)
+			text += mem + " MB" + " • " + memPeak + " MB\n";
+		if (FlxG.save.data.watermark)
+			text += Main.nullText + "\n";
 	}
 }

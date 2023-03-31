@@ -1,8 +1,5 @@
 {
-    "offsets":{
-        "x":60,
-        "y":60
-    },
+    "offsets":[60, 60],
     "alpha":0.75,
     "setScale":0.65
 }

@@ -17,28 +17,9 @@ class Logs
 	public static var CYAN:Int = 36;
 	public static var WHITE:Int = 37;
 
-	public static function create(shit:{message:String, type:String, color:Int})
+	public static function custom(message:String, title:String, color:Int)
 	{
-		var messageee = "is sus";
-		var typed = "trace";
-		var colored = WHITE;
-
-		switch (shit.type)
-		{
-			case "warning":
-				typed = "warning";
-				colored = YELLOW;
-
-			case "error":
-				typed = "error";
-				colored = RED;
-
-			default:
-				typed = shit.type;
-				colored = shit.color;
-		}
-
-		createMessage(shit.message, typed, colored);
+		createMessage(message, title, color);
 	}
 
 	public static function log(message:Dynamic, color:Int = 32)

@@ -6,7 +6,6 @@ import game.null_stuff.NullScript;
 import game.scripting.Script;
 import haxe.Json;
 import haxe.format.JsonParser;
-import jsonHelper.JsonExtra.Point;
 import states.PlayState;
 
 using StringTools;

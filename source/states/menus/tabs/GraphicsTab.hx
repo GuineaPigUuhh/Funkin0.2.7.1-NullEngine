@@ -1,17 +1,23 @@
-package substates.options;
+package states.menus.tabs;
 
 import flixel.FlxG;
-import substates.options.Base;
+import states.menus.tabs.Base;
 
 class GraphicsTab extends Base
 {
 	public override function updatePrefs()
 	{
 		options = [
-			{name: "Antialiasing", value: "antialiasing", type: "Bool"},
+			{
+				name: "Antialiasing",
+				value: "antialiasing",
+				desc: "will make the sprites anti-aliased.",
+				type: "Bool"
+			},
 			{
 				name: "Framerate",
 				value: "framerate",
+				desc: "it will change the FPS limit, warning if you use a high FPS limit it may happen that when you run a function it runs twice.",
 				type: "Int",
 				onChange: function()
 				{

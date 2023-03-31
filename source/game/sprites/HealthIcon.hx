@@ -43,7 +43,9 @@ class HealthIcon extends FlxSprite
 		super.update(elapsed);
 
 		if (sprTracker != null)
+		{
 			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
+		}
 	}
 
 	public function updateAnim(health:Float)
@@ -86,8 +88,6 @@ class HealthIcon extends FlxSprite
 		animation.add(curCharacter + "-losing", [1], 0, false, isPlayer);
 
 		animation.play(curCharacter);
-
-		antialiasing = checkAntialiasing();
 	}
 
 	function checkAntialiasing()

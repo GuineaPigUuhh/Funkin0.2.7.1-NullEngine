@@ -70,21 +70,11 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		PlayerSettings.init();
-
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT
 
 		super.create();
-
-		FlxG.save.bind('funkin', 'ninjamuffin99');
-
-		ClientPrefs.save();
-		ClientPrefs.load();
-
-		PlayerSettings.player1.controls.loadKeyBinds();
-		Highscore.load();
 
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
@@ -124,14 +114,6 @@ class TitleState extends MusicBeatState
 
 			http.request();
 		}
-		#end
-
-		#if desktop
-		DiscordClient.initialize();
-		Application.current.onExit.add(function(exitCode)
-		{
-			DiscordClient.shutdown();
-		});
 		#end
 	}
 
@@ -300,7 +282,10 @@ class TitleState extends MusicBeatState
 		{
 			titleText.animation.play('press');
 
-			FlxG.camera.flash(FlxColor.WHITE, 1);
+			if (FlxG.save.data.flashing)
+			{
+				FlxG.camera.flash(FlxColor.WHITE, 1);
+			}
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
 			transitioning = true;
@@ -433,7 +418,9 @@ class TitleState extends MusicBeatState
 		{
 			remove(ngSpr);
 
-			FlxG.camera.flash(FlxColor.WHITE, 4);
+			if (FlxG.save.data.flashing)
+				FlxG.camera.flash(FlxColor.WHITE, 4);
+
 			remove(credGroup);
 
 			skippedIntro = true;

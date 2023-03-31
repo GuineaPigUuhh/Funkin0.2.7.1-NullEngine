@@ -98,7 +98,7 @@ class NullScript extends Script
 
 		set('Logs', dependency.Logs);
 
-		set('createCustom', dependency.Logs.create);
+		set('createCustomLog', dependency.Logs.custom);
 
 		set('createLog', dependency.Logs.log);
 		set('createError', dependency.Logs.error);

@@ -27,7 +27,7 @@ class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Options', "Exit to Menu"];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', "Exit to Menu"];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -122,10 +122,6 @@ class PauseSubState extends MusicBeatSubstate
 				case "Restart Song":
 					restartSong();
 
-				case "Options":
-					FlxG.switchState(new OptionsState());
-					OptionsState.isPlayStated = true;
-
 				case "Exit Charting Mode":
 					restartSong();
 					PlayState.chartingMode = false;
@@ -158,12 +154,13 @@ class PauseSubState extends MusicBeatSubstate
 		if (state == "freeplay")
 			FlxG.switchState(new FreeplayState());
 		else if (state == "storymode")
+		{
 			FlxG.switchState(new StoryMenuState());
+		}
 		else
 			FlxG.switchState(new MainMenuState());
 
 		PlayState.chartingMode = false;
-		OptionsState.isPlayStated = false;
 	}
 
 	function changeSelection(change:Int = 0):Void

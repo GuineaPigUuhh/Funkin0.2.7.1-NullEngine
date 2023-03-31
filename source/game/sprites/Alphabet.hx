@@ -249,8 +249,8 @@ class AlphaCharacter extends FlxSprite
 	public function new(x:Float, y:Float)
 	{
 		super(x, y);
-		var tex = Paths.getSparrowAtlas('ui/alphabet');
-		frames = tex;
+
+		frames = Paths.getSparrowAtlas('ui/alphabet');
 
 		antialiasing = FlxG.save.data.antialiasing;
 	}

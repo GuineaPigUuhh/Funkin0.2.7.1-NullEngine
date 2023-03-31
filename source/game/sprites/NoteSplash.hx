@@ -15,7 +15,7 @@ import sys.io.File;
 
 typedef JsonData =
 {
-	var offsets:jsonHelper.JsonExtra.Point;
+	var offsets:Array<Float>;
 	var alpha:Float;
 	var setScale:Float;
 }
@@ -49,7 +49,7 @@ class NoteSplash extends FlxSprite
 		}
 
 		updateHitbox();
-		offset.set(json.offsets.x, json.offsets.y);
+		offset.set(json.offsets[0], json.offsets[1]);
 
 		animation.play(notes[data], true);
 	}

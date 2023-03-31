@@ -1,5 +1,4 @@
 # FNF': Null Engine
-![logo](art/nullengine/NullEngine.png)
 
 ### What is Null Engine?
 the Null Engine is an Alternative Engine for those who are tired of using the same engine.

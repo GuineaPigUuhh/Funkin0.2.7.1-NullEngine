@@ -1,6 +1,5 @@
 package game.sprites;
 
-import data.CharacterData;
 import dependency.ClientPrefs;
 import dependency.Paths;
 import flixel.FlxG;
@@ -12,6 +11,7 @@ import flixel.util.FlxColor;
 import haxe.Exception;
 import haxe.Json;
 import haxe.format.JsonParser;
+import haxe.macro.Type.AnonType;
 import haxe.xml.Access;
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
@@ -24,6 +24,28 @@ using StringTools;
 import sys.FileSystem;
 import sys.io.File;
 #end
+
+typedef CharacterData =
+{
+	var flipX:Bool;
+	var antialiasing:Bool;
+	var cameraPosition:Array<Float>;
+	var charPosition:Array<Float>;
+	var singDuration:Float;
+	var isGf:Bool;
+	var charColor:String;
+	var animations:AnonType;
+	var scale:Float;
+}
+
+typedef AnimData =
+{
+	var prefix:String;
+	var indices:Array<Int>;
+	var framerate:Int;
+	var loop:Bool;
+	var offsets:Array<Float>;
+}
 
 class Character extends FlxSprite
 {
@@ -52,6 +74,8 @@ class Character extends FlxSprite
 
 	public var isGameOver:Bool = false;
 
+	var data:CharacterData;
+
 	public function new(xPOS:Float, yPOS:Float, curCharacter:String, ?isPlayer:Bool = false)
 	{
 		this.xPOS = xPOS;
@@ -71,8 +95,7 @@ class Character extends FlxSprite
 
 		antialiasing = FlxG.save.data.antialiasing;
 
-		var fileSys = FileSystem.exists(CharacterData.jsonPath(char));
-		if (fileSys)
+		if (FileSystem.exists(Paths.getPreloadPath('characters/${char}/data.json')))
 		{
 			generateJSONcharacter(char);
 		}
@@ -84,9 +107,7 @@ class Character extends FlxSprite
 		dance();
 
 		if (isPlayer)
-		{
 			flipX = !flipX;
-		}
 	}
 
 	function getMAP()
@@ -612,47 +633,44 @@ class Character extends FlxSprite
 
 	function generateJSONcharacter(char:String)
 	{
-		CharacterData.getJSON(char);
-
+		data = Json.parse(File.getContent(Paths.getPreloadPath('characters/${char}/data.json')));
 		frames = Paths.characterPaths(char, "spriteSheet.xml");
 
-		var antiChar = CharacterData.prefs.antialiasing;
-		antialiasing = (antiChar ? FlxG.save.data.antialiasing : false);
+		antialiasing = (data.antialiasing ? FlxG.save.data.antialiasing : false);
 
-		isGf = CharacterData.prefs.isGF;
-		flipX = (CharacterData.prefs.flipX == true);
+		isGf = data.isGf;
+		flipX = data.flipX;
 
-		var getSingDuration = CharacterData.prefs.singDuration;
-		singDuration = getSingDuration;
+		singDuration = data.singDuration;
 
-		healthBarColor = CharacterData.prefs.healthBarColor;
+		healthBarColor = data.charColor;
 
-		cameraPosition.x = CharacterData.prefs.cameraOffset[0];
-		cameraPosition.y = CharacterData.prefs.cameraOffset[1];
+		cameraPosition.x = data.cameraPosition[0];
+		cameraPosition.y = data.cameraPosition[1];
 
-		charPosition.x = CharacterData.prefs.charOffset[0];
-		charPosition.y = CharacterData.prefs.charOffset[1];
+		charPosition.x = data.charPosition[0];
+		charPosition.y = data.charPosition[1];
 
-		if (CharacterData.prefs.setScale != 1)
+		if (data.scale != 1)
 		{
-			scale.set(CharacterData.prefs.setScale, CharacterData.prefs.setScale);
+			scale.set(data.scale, data.scale);
 			updateHitbox();
 		}
 
-		if (CharacterData.anims != null && CharacterData.anims.length > 0)
+		for (curAnim in Reflect.fields(data.animations))
 		{
-			for (charAnims in CharacterData.anims)
-			{
-				if (charAnims.indices != null && charAnims.indices.length > 0)
-					animation.addByIndices(charAnims.animName, charAnims.animPrefix, charAnims.indices, "", charAnims.fps, charAnims.loop);
-				else
-					animation.addByPrefix(charAnims.animName, charAnims.animPrefix, charAnims.fps, charAnims.loop);
+			var anim:AnimData = Reflect.field(data.animations, curAnim);
 
-				if (charAnims.offsets == null)
-					addOffset(charAnims.animName, 0, 0);
+			if (anim.prefix != null && anim.prefix != "")
+			{
+				if (anim.indices != null)
+					animation.addByIndices(curAnim, anim.prefix, anim.indices, "", anim.framerate, anim.loop);
 				else
+					animation.addByPrefix(curAnim, anim.prefix, anim.framerate, anim.loop);
+
+				if (anim.offsets != null)
 				{
-					addOffset(charAnims.animName, charAnims.offsets.x, charAnims.offsets.y);
+					addOffset(curAnim, anim.offsets[0], anim.offsets[1]);
 				}
 			}
 		}

@@ -23,6 +23,7 @@ import haxe.Json;
 import haxe.format.JsonParser;
 import lime.app.Application;
 import lime.utils.Assets;
+import states.menus.CreditsState;
 import states.menus.FreeplayState;
 import states.menus.OptionsState;
 import states.menus.StoryMenuState;
@@ -101,7 +102,12 @@ class MainMenuState extends MusicBeatState
 
 		createOption("kickstarter", function()
 		{
-			selectedDonate();
+			FlxG.openURL('https://www.kickstarter.com/projects/funkin/friday-night-funkin-the-full-ass-game/');
+		});
+
+		createOption("credits", function()
+		{
+			FlxG.switchState(new CreditsState());
 		});
 
 		createOption("options", function()
@@ -121,7 +127,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
-			menuItem.scrollFactor.set(0, 1 / optionShit.length);
+			menuItem.scrollFactor.set(0, 1);
 			menuItem.antialiasing = FlxG.save.data.antialiasing;
 
 			menuItems.add(menuItem);
@@ -223,11 +229,6 @@ class MainMenuState extends MusicBeatState
 				callbackOptions[i]();
 			}
 		}
-	}
-
-	function selectedDonate()
-	{
-		FlxG.openURL('https://www.kickstarter.com/projects/funkin/friday-night-funkin-the-full-ass-game/');
 	}
 
 	function changeItem(huh:Int = 0)

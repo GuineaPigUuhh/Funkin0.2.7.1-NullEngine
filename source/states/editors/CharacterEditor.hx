@@ -1,6 +1,5 @@
 package states.editors;
 
-import data.CharacterData.CharacterINFO;
 import dependency.MusicBeatState;
 import dependency.Paths;
 import flixel.FlxG;
@@ -19,12 +18,11 @@ import flixel.util.FlxColor;
 import game.sprites.Character;
 
 /**
-	*DEBUG MODE
+	*DEBUG MODE OR SEXY MODE, HAGAGHAAAHAHAHA FUNY
  */
 class CharacterEditor extends MusicBeatState
 {
 	var char:Character;
-
 	var ghost:Character;
 
 	var textAnim:FlxText;
@@ -38,9 +36,6 @@ class CharacterEditor extends MusicBeatState
 	var uiBox:FlxUITabMenu;
 
 	var curCharacter:String = "";
-
-	var checkAnti:FlxUICheckBox;
-	var checkIsPlayer:FlxUICheckBox;
 
 	public function new(daAnim:String = 'dad', isDad:Bool)
 	{
@@ -57,6 +52,7 @@ class CharacterEditor extends MusicBeatState
 		FlxG.mouse.visible = true;
 
 		var menuBG:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image("menus/menuLineArt"));
+		menuBG.color = 0x8a2f76;
 		menuBG.screenCenter();
 		menuBG.scrollFactor.set();
 		add(menuBG);
@@ -106,7 +102,6 @@ class CharacterEditor extends MusicBeatState
 		FlxG.camera.follow(camFollow);
 
 		createConfigsChar();
-		createChars();
 
 		super.create();
 	}
@@ -119,7 +114,7 @@ class CharacterEditor extends MusicBeatState
 		{
 			var text:FlxText = new FlxText(10, 20 + (18 * daLoop), 0, anim + ": " + offsets, 15);
 			text.scrollFactor.set();
-			text.color = FlxColor.BLUE;
+			text.color = FlxColor.WHITE;
 			dumbTexts.add(text);
 
 			if (pushList)
@@ -138,39 +133,8 @@ class CharacterEditor extends MusicBeatState
 		});
 	}
 
-	function createChars()
-	{
-		data.ChartData.getJSON();
-
-		var chars:Array<String> = data.ChartData.opponents;
-		var charSelected = new FlxUIDropDownMenu(0, 230, FlxUIDropDownMenu.makeStrIdLabelArray(chars, true), function(character:String)
-		{
-			curCharacter = chars[Std.parseInt(character)];
-
-			ghost.animOffsets = [];
-			char.animOffsets = [];
-
-			animList = [];
-			updateTexts();
-
-			remove(ghost);
-			remove(char);
-
-			char.createCharacter(curCharacter);
-			ghost.createCharacter(curCharacter);
-
-			checkAnti.checked = char.antialiasing;
-
-			genBoyOffsets(true);
-
-			add(ghost);
-			add(char);
-		});
-		charSelected.scrollFactor.set();
-		charSelected.x = FlxG.width - charSelected.width - 25;
-		charSelected.selectedLabel = daAnim;
-		add(charSelected);
-	}
+	var checkAnti:FlxUICheckBox;
+	var checkIsPlayer:FlxUICheckBox;
 
 	function createConfigsChar()
 	{
@@ -189,7 +153,7 @@ class CharacterEditor extends MusicBeatState
 		checkIsPlayer = new FlxUICheckBox(0, checkAnti.y + 25, null, null, "isPlayer", 100);
 		checkIsPlayer.x = FlxG.width - checkIsPlayer.width - 25;
 		checkIsPlayer.name = 'checkIsPlayer';
-		checkIsPlayer.checked = false;
+		checkIsPlayer.checked = isDad == false;
 		checkIsPlayer.scrollFactor.set();
 
 		checkIsPlayer.callback = function()
