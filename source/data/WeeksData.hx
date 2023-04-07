@@ -38,20 +38,17 @@ class WeeksData
 	{
 		weekFiles = new Map<String, Week>();
 
-		if (FileSystem.exists(Paths.getPreloadPath("weeks/weekList.txt")))
-			weekList = File.getContent(Paths.getPreloadPath("weeks/weekList.txt")).split('\n');
+		if (FileSystem.exists(Paths.getObjectsPath("weeks/weekList.txt")))
+			weekList = File.getContent(Paths.getObjectsPath("weeks/weekList.txt")).split('\n');
 		else
 		{
 			weekList = 'week0, week1, week2, week3, week4, week5, week6'.split(', ');
 		}
 
-		for (file in FileSystem.readDirectory(Paths.getPreloadPath("weeks/")))
+		for (name in FileSystem.readDirectory(Paths.getObjectsPath("weeks/")))
 		{
-			if (file.endsWith(".json"))
-			{
-				var weekData:Week = Json.parse(File.getContent(Paths.getPreloadPath("weeks/" + file)));
-				weekFiles.set(file.replace(".json", ""), weekData);
-			}
+			var weekData:Week = Json.parse(File.getContent(Paths.getObjectsPath("weeks/" + name + '/data.json')));
+			weekFiles.set(name, weekData);
 		}
 	}
 }

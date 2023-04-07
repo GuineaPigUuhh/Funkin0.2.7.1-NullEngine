@@ -1,6 +1,7 @@
 package flixel.system.ui;
 
 #if FLX_SOUND_SYSTEM
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.system.FlxAssets;
 import flixel.util.FlxColor;
@@ -45,10 +46,10 @@ class FlxSoundTray extends Sprite
 	var _defaultScale:Float = 2.0;
 
 	/**The sound used when increasing the volume.**/
-	public var volumeUpSound:String = "assets/sounds/pixelText";
+	public var volumeUpSound:String = Paths.sound("pixelText");
 
 	/**The sound used when decreasing the volume.**/
-	public var volumeDownSound:String = 'assets/sounds/pixelText';
+	public var volumeDownSound:String = Paths.sound('pixelText');
 
 	/**Whether or not changing the volume should make noise.**/
 	public var silent:Bool = false;
@@ -82,7 +83,7 @@ class FlxSoundTray extends Sprite
 		#else
 		#end
 
-		var dtf:TextFormat = new TextFormat(openfl.utils.Assets.getFont("assets/fonts/vcr.ttf").fontName, 10, 0xffffff);
+		var dtf:TextFormat = new TextFormat(openfl.utils.Assets.getFont(Paths.font("vcr.ttf")).fontName, 10, 0xffffff);
 		dtf.align = TextFormatAlign.CENTER;
 		dtf.bold = true;
 

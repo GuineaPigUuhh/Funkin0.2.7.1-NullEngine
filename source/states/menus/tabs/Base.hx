@@ -32,14 +32,22 @@ typedef Setting =
 	var value:String;
 	var type:String;
 	@:optional var desc:String;
-
 	@:optional var onChange:() -> Void;
-	@:optional var misc:
+
+	@:optional var stringConfig:{array:Array<String>, scrollSpeed:Float};
+	@:optional var floatConfig:
 		{
-			?min:Dynamic,
-			?max:Dynamic,
-			?addNumber:Dynamic,
-			?scrollSpeed:Float
+			min:Float,
+			max:Float,
+			addNumber:Float,
+			scrollSpeed:Float
+		};
+	@:optional var intConfig:
+		{
+			min:Int,
+			max:Int,
+			addNumber:Int,
+			scrollSpeed:Float
 		};
 }
 
@@ -69,7 +77,7 @@ class Base extends MusicBeatState
 
 		super.create();
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/options/menuBGoptions'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menu_engine_1'));
 		menuBG.scrollFactor.set();
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
@@ -153,6 +161,7 @@ class Base extends MusicBeatState
 	}
 
 	var dontChange:Bool = false;
+	var stringNumber:Int = 0;
 
 	function changePrefs(type:String)
 	{
@@ -191,17 +200,17 @@ class Base extends MusicBeatState
 							{
 								var value:Int = Reflect.getProperty(FlxG.save.data, a.value);
 
-								value -= Std.int(a.misc.addNumber);
+								value -= Std.int(a.intConfig.addNumber);
 
-								if (value < Std.int(a.misc.min))
+								if (value < Std.int(a.intConfig.min))
 								{
-									value = Std.int(a.misc.min);
+									value = Std.int(a.intConfig.min);
 								}
 
 								Reflect.setProperty(FlxG.save.data, a.value, value);
 								dontChange = true;
 
-								new FlxTimer().start(a.misc.scrollSpeed, function(tmr:FlxTimer)
+								new FlxTimer().start(a.intConfig.scrollSpeed, function(tmr:FlxTimer)
 								{
 									dontChange = false;
 								});
@@ -225,17 +234,17 @@ class Base extends MusicBeatState
 							{
 								var value:Int = Reflect.getProperty(FlxG.save.data, a.value);
 
-								value += Std.int(a.misc.addNumber);
+								value += Std.int(a.intConfig.addNumber);
 
-								if (value > Std.int(a.misc.max))
+								if (value > Std.int(a.intConfig.max))
 								{
-									value = Std.int(a.misc.max);
+									value = Std.int(a.intConfig.max);
 								}
 
 								Reflect.setProperty(FlxG.save.data, a.value, value);
 								dontChange = true;
 
-								new FlxTimer().start(a.misc.scrollSpeed, function(tmr:FlxTimer)
+								new FlxTimer().start(a.intConfig.scrollSpeed, function(tmr:FlxTimer)
 								{
 									dontChange = false;
 								});
@@ -263,17 +272,17 @@ class Base extends MusicBeatState
 							{
 								var value:Float = Reflect.getProperty(FlxG.save.data, a.value);
 
-								value -= a.misc.addNumber;
+								value -= a.floatConfig.addNumber;
 
-								if (value < a.misc.min)
+								if (value < a.floatConfig.min)
 								{
-									value = a.misc.min;
+									value = a.floatConfig.min;
 								}
 
 								Reflect.setProperty(FlxG.save.data, a.value, value);
 								dontChange = true;
 
-								new FlxTimer().start(a.misc.scrollSpeed, function(tmr:FlxTimer)
+								new FlxTimer().start(a.floatConfig.scrollSpeed, function(tmr:FlxTimer)
 								{
 									dontChange = false;
 								});
@@ -297,17 +306,17 @@ class Base extends MusicBeatState
 							{
 								var value:Float = Reflect.getProperty(FlxG.save.data, a.value);
 
-								value += a.misc.addNumber;
+								value += a.floatConfig.addNumber;
 
-								if (value > a.misc.max)
+								if (value > a.floatConfig.max)
 								{
-									value = a.misc.max;
+									value = a.floatConfig.max;
 								}
 
 								Reflect.setProperty(FlxG.save.data, a.value, value);
 								dontChange = true;
 
-								new FlxTimer().start(a.misc.scrollSpeed, function(tmr:FlxTimer)
+								new FlxTimer().start(a.floatConfig.scrollSpeed, function(tmr:FlxTimer)
 								{
 									dontChange = false;
 								});
@@ -335,10 +344,18 @@ class Base extends MusicBeatState
 							{
 								var value:String = Reflect.getProperty(FlxG.save.data, a.value);
 
+								stringNumber -= 1;
+								if (stringNumber < 0)
+								{
+									stringNumber = 0;
+								}
+								value = a.stringConfig.array[stringNumber];
+
 								Reflect.setProperty(FlxG.save.data, a.value, value);
+
 								dontChange = true;
 
-								new FlxTimer().start(a.misc.scrollSpeed, function(tmr:FlxTimer)
+								new FlxTimer().start(a.stringConfig.scrollSpeed, function(tmr:FlxTimer)
 								{
 									dontChange = false;
 								});
@@ -362,10 +379,19 @@ class Base extends MusicBeatState
 							{
 								var value:String = Reflect.getProperty(FlxG.save.data, a.value);
 
+								stringNumber += 1;
+
+								if (stringNumber > a.stringConfig.array[curSelected].length - 1)
+								{
+									stringNumber = a.stringConfig.array[curSelected].length - 1;
+								}
+
+								value = a.stringConfig.array[stringNumber];
+
 								Reflect.setProperty(FlxG.save.data, a.value, value);
 								dontChange = true;
 
-								new FlxTimer().start(a.misc.scrollSpeed, function(tmr:FlxTimer)
+								new FlxTimer().start(a.stringConfig.scrollSpeed, function(tmr:FlxTimer)
 								{
 									dontChange = false;
 								});

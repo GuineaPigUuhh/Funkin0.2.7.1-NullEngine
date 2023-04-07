@@ -226,8 +226,8 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
-		if (FileSystem.exists(Paths.getPreloadPath('songs/${songName}/dialogue.txt'))) // ele vai pegar o arquivo e vai fucionar looolololoollololool // anti crash bruh
-			dialogue = CoolUtil.arrayTextFile(Paths.getPreloadPath('songs/${songName}/dialogue.txt'));
+		if (FileSystem.exists(Paths.getFunkinPath('songs/${songName}/dialogue.txt'))) // ele vai pegar o arquivo e vai fucionar looolololoollololool // anti crash bruh
+			dialogue = CoolUtil.arrayTextFile(Paths.getFunkinPath('songs/${songName}/dialogue.txt'));
 
 		storyDifficultyText = CoolUtil.difficultyArray[storyDifficulty];
 
@@ -259,8 +259,8 @@ class PlayState extends MusicBeatState
 
 		curStage = SONG.stage;
 
-		songScripts = new ScriptPack(Paths.getPreloadPath('songs/${songName}/scripts/'));
-		globalScripts = new ScriptPack(Paths.getPreloadPath('global_scripts/'));
+		songScripts = new ScriptPack(Paths.getFunkinPath('songs/${songName}/scripts/'));
+		globalScripts = new ScriptPack(Paths.getFunkinPath('global_scripts/'));
 
 		globalScripts.call("onCreate", []);
 		songScripts.call("onCreate", []);
@@ -375,7 +375,7 @@ class PlayState extends MusicBeatState
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(grpNoteSplashes);
 
-		var splash:NoteSplash = new NoteSplash(100, 100, 0);
+		var splash:NoteSplash = new NoteSplash(100, 100, 0, curStage == 'school' || curStage == 'schoolEvil' ? "pixel" : "default");
 		splash.alpha = 0.0;
 		grpNoteSplashes.add(splash);
 
@@ -1481,8 +1481,6 @@ class PlayState extends MusicBeatState
 		{
 			var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
 			splash.execute(x, y, data);
-			if (curStage == 'school' || curStage == 'schoolEvil')
-				splash.skin = "pixel";
 			grpNoteSplashes.add(splash);
 		}
 	}
@@ -1617,7 +1615,9 @@ class PlayState extends MusicBeatState
 			var babyArrow:StaticNote = new StaticNote(extNotes, PlayState.strumLine.y, i, player);
 
 			if (!PlayState.isStoryMode)
+			{
 				babyArrow.noteTween(i, FlxG.save.data.isDownscroll);
+			}
 
 			if (player == 0 && FlxG.save.data.middleScroll)
 				babyArrow.visible = false;
@@ -1651,7 +1651,6 @@ class PlayState extends MusicBeatState
 		// HOLDING
 		var holdArray:Array<Bool> = [controls.LEFT, controls.DOWN, controls.UP, controls.RIGHT];
 		var pressArray:Array<Bool> = [controls.LEFT_P, controls.DOWN_P, controls.UP_P, controls.RIGHT_P];
-		var releaseArray:Array<Bool> = [controls.LEFT_R, controls.DOWN_R, controls.UP_R, controls.RIGHT_R];
 
 		if (pressArray.contains(true) && generatedMusic)
 		{

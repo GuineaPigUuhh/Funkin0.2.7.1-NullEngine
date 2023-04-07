@@ -55,7 +55,7 @@ class OptionsState extends MusicBeatState
 
 		// stopSpam = false;
 
-		menuBG = new FlxSprite().loadGraphic(Paths.image('menus/options/menuBGoptions'));
+		menuBG = new FlxSprite().loadGraphic(Paths.image('menus/menu_engine_1'));
 		menuBG.scrollFactor.set();
 		menuBG.updateHitbox();
 		menuBG.screenCenter();

@@ -5,8 +5,6 @@ import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
 import haxe.format.JsonParser;
-import lime.utils.Assets;
-import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 #if sys
 import sys.FileSystem;
@@ -17,52 +15,58 @@ class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 
-	static function getPath(file:String, type:AssetType, library:Null<String>)
+	static function getPath(file:String, library:Null<String>)
 	{
 		if (library != null)
 			return getLibraryPath(file, library);
 
-		return getPreloadPath(file);
+		return getFunkinPath(file);
 	}
 
 	static public function getLibraryPath(file:String, library = "preload")
 	{
-		return if (library == "preload" || library == "default") getPreloadPath(file); else getLibraryPathForce(file, library);
+		return if (library == "preload" || library == "default") getFunkinPath(file); else if (library == "objects") getObjectsPath(file); else
+			getLibraryPathForce(file, library);
 	}
 
 	inline static function getLibraryPathForce(file:String, library:String)
 	{
-		return '$library/$file';
+		return 'assets/$library/$file';
 	}
 
-	inline static public function getPreloadPath(file:String)
+	inline static public function getFunkinPath(file:String)
 	{
-		return 'assets/$file';
+		return 'assets/funkin/$file';
 	}
 
-	inline static public function file(file:String, type:AssetType = TEXT, ?library:String)
+	inline static public function getObjectsPath(file:String)
 	{
-		return getPath(file, type, library);
+		return 'assets/objects/$file';
+	}
+
+	inline static public function file(file:String, ?library:String)
+	{
+		return getPath(file, library);
 	}
 
 	inline static public function txt(key:String, ?library:String)
 	{
-		return getPath('data/$key.txt', TEXT, library);
+		return getPath('$key.txt', library);
 	}
 
 	inline static public function xml(key:String, ?library:String)
 	{
-		return getPath('data/$key.xml', TEXT, library);
+		return getPath('$key.xml', library);
 	}
 
 	inline static public function json(key:String, ?library:String)
 	{
-		return getPath('data/$key.json', TEXT, library);
+		return getPath('data/$key.json', library);
 	}
 
 	static public function sound(key:String, ?library:String)
 	{
-		return getPath('sounds/$key.$SOUND_EXT', SOUND, library);
+		return getPath('sounds/$key.$SOUND_EXT', library);
 	}
 
 	inline static public function soundRandom(key:String, min:Int, max:Int, ?library:String)
@@ -72,27 +76,27 @@ class Paths
 
 	inline static public function music(key:String, ?library:String)
 	{
-		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
+		return getPath('music/$key.$SOUND_EXT', library);
 	}
 
 	inline static public function voices(song:String)
 	{
-		return getPreloadPath('songs/${song.toLowerCase()}/audio/Voices.$SOUND_EXT');
+		return getFunkinPath('songs/${song.toLowerCase()}/audio/Voices.$SOUND_EXT');
 	}
 
 	inline static public function inst(song:String)
 	{
-		return getPreloadPath('songs/${song.toLowerCase()}/audio/Inst.$SOUND_EXT');
+		return getFunkinPath('songs/${song.toLowerCase()}/audio/Inst.$SOUND_EXT');
 	}
 
 	inline static public function image(key:String, ?library:String)
 	{
-		return getPath('images/$key.png', IMAGE, library);
+		return getPath('images/$key.png', library);
 	}
 
 	inline static public function font(key:String)
 	{
-		return getPreloadPath('fonts/$key');
+		return getLibraryPathForce('fonts/$key', "core");
 	}
 
 	inline static public function video(key:String)
@@ -108,34 +112,5 @@ class Paths
 	inline static public function getPackerAtlas(key:String, ?library:String)
 	{
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
-	}
-
-	inline static public function getJsonAtlas(key:String, ?library:String)
-	{
-		return FlxAtlasFrames.fromTexturePackerJson(image(key, library), file('images/$key.json', library));
-	}
-
-	static public function characterPaths(char:String, aa:String):Any
-	{
-		switch (aa)
-		{
-			case "icon":
-				return getPreloadPath('characters/$char/icon.png');
-
-			case "spriteSheet.xml":
-				return FlxAtlasFrames.fromSparrow(getPreloadPath('characters/$char/spritesheet.png'), getPreloadPath('characters/$char/spritesheet.xml'));
-
-			case "spriteSheet.txt":
-				return FlxAtlasFrames.fromSpriteSheetPacker(getPreloadPath('characters/$char/spritesheet.png'),
-					getPreloadPath('characters/$char/spritesheet.txt'));
-
-			case "spriteSheet.json":
-				return FlxAtlasFrames.fromTexturePackerJson(getPreloadPath('characters/$char/spritesheet.png'),
-					getPreloadPath('characters/$char/spritesheet.json'));
-
-			default:
-				Logs.error("THIS FORMAT DOESN'T EXIST");
-		}
-		return null;
 	}
 }

@@ -1,6 +1,5 @@
 package states.editors;
 
-import data.ChartData;
 import dependency.MusicBeatState;
 import dependency.Paths;
 import dependency.Paths;
@@ -42,6 +41,11 @@ import openfl.utils.ByteArray;
 import utils.CoolUtil;
 
 using StringTools;
+
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 class ChartingState extends MusicBeatState
 {
@@ -95,8 +99,6 @@ class ChartingState extends MusicBeatState
 	override function create()
 	{
 		curSection = lastSection;
-
-		ChartData.getJSON();
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuDesat'));
 		bg.color = 0xFF272626;
@@ -227,16 +229,14 @@ class ChartingState extends MusicBeatState
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
 
-		var characters:Array<String> = ChartData.opponents;
-		var boyfriends:Array<String> = ChartData.boyfriends;
-		var girlfriends:Array<String> = ChartData.girlfriends;
-		var stages:Array<String> = ChartData.stages;
+		var characters:Array<String> = FileSystem.readDirectory(Paths.getObjectsPath("characters/"));
+		var stages:Array<String> = FileSystem.readDirectory(Paths.getObjectsPath("stages/"));
 
 		var extGroupsPlayers:Int = 125;
 
-		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(boyfriends, true), function(character:String)
+		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
-			_song.player1 = boyfriends[Std.parseInt(character)];
+			_song.player1 = characters[Std.parseInt(character)];
 		});
 		player1DropDown.selectedLabel = _song.player1;
 
@@ -247,10 +247,10 @@ class ChartingState extends MusicBeatState
 		});
 		player2DropDown.selectedLabel = _song.player2;
 
-		var player3DropDown = new FlxUIDropDownMenu(player1DropDown.x, player2DropDown.y + 30, FlxUIDropDownMenu.makeStrIdLabelArray(girlfriends, true),
+		var player3DropDown = new FlxUIDropDownMenu(player1DropDown.x, player2DropDown.y + 30, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true),
 			function(character:String)
 			{
-				_song.player3 = girlfriends[Std.parseInt(character)];
+				_song.player3 = characters[Std.parseInt(character)];
 			});
 		player3DropDown.selectedLabel = _song.player3;
 
@@ -859,23 +859,6 @@ class ChartingState extends MusicBeatState
 		}
 	}
 
-	/*
-		function getHealthIcon(curBalls:String)
-		{
-			var baller:String = curBalls;
-
-			var checkJSON = ModPaths.json('characters/${baller}');
-			if (!FileSystem.exists(checkJSON))
-			{
-				vanillaPath = true;
-				checkJSON = Paths.json('characters/${baller}');
-			}
-
-			var file:CharacterFile = Json.parse(File.getContent(checkJSON));
-
-			return file.healthIcon;
-		}
-	 */
 	function updateGrid():Void
 	{
 		while (curRenderedNotes.members.length > 0)
@@ -1039,27 +1022,27 @@ class ChartingState extends MusicBeatState
 	}
 
 	/*
-			function calculateSectionLengths(?sec:SwagSection):Int
+		function calculateSectionLengths(?sec:SwagSection):Int
+		{
+			var daLength:Int = 0;
+
+			for (i in _song.notes)
 			{
-				var daLength:Int = 0;
+				var swagLength = i.lengthInSteps;
 
-				for (i in _song.notes)
+				if (i.typeOfSection == Section.COPYCAT)
+					swagLength * 2;
+
+				daLength += swagLength;
+
+				if (sec != null && sec == i)
 				{
-					var swagLength = i.lengthInSteps;
 
-					if (i.typeOfSection == Section.COPYCAT)
-						swagLength * 2;
-
-					daLength += swagLength;
-
-					if (sec != null && sec == i)
-					{
-
-						break;
-					}
+					break;
 				}
+			}
 
-				return daLength;
+			return daLength;
 	}*/
 	private var daSpacing:Float = 0.3;
 

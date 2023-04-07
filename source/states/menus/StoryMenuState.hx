@@ -123,7 +123,7 @@ class StoryMenuState extends MusicBeatState
 		{
 			if (WeeksData.weekFiles.get(WeeksData.weekList[i]).hideOnStoryMode == false)
 			{
-				var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, WeeksData.weekFiles.get(WeeksData.weekList[i]).image);
+				var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, WeeksData.weekList[i]);
 				weekThing.y += ((weekThing.height + 20) * i);
 				weekThing.targetY = i;
 				weekThing.screenCenter(X);

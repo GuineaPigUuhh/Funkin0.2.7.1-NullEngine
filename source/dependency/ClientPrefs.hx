@@ -20,8 +20,8 @@ class Settings
 class ClientPrefs
 {
 	public static var saveMap:Map<String, Dynamic> = [
-		"ghostTapping" => true, "flashing" => true, "antialiasing" => true, "freeplayCutscene" => false, "noteSplash" => false, "middleScroll" => false,
-		"isDownscroll" => false, "framerate" => 120, "fpsVisible" => true, "memVisible" => true, "watermark" => true
+		 "ghostTapping" => true, "flashing" => true, "antialiasing" => true, "freeplayCutscene" => false, "noteSplash" => false, "middleScroll" => false,
+		"isDownscroll" => false, "framerate" => 120,   "fpsVisible" => true,        "memVisible" => true,   "watermark" => true,   "stringTest" => "low"
 	];
 
 	public static var controls:Map<String, Array<FlxKey>> = [

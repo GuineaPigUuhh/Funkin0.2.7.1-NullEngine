@@ -33,6 +33,7 @@ import game.Conductor;
 import game.Highscore;
 import game.PlayerSettings;
 import game.sprites.Alphabet;
+import game.sprites.AttachedSprite;
 import lime.app.Application;
 import openfl.Assets;
 import states.OutdatedState;
@@ -160,10 +161,6 @@ class TitleState extends MusicBeatState
 		// bg.updateHitbox();
 		add(bg);
 
-		var backdrop:FlxBackdrop = new FlxBackdrop(Paths.image('menus/titleScreen/titleBackdrop'), XY, 0, 0);
-		backdrop.velocity.set(40, 40);
-		add(backdrop);
-
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('menus/titleScreen/logoBumpin');
 		logoBl.antialiasing = true;
@@ -227,7 +224,7 @@ class TitleState extends MusicBeatState
 
 	function getIntroTextShit():Array<Array<String>>
 	{
-		var fullText:String = Assets.getText(Paths.txt('textFiles/introText'));
+		var fullText:String = Assets.getText(Paths.getObjectsPath('introText.txt'));
 
 		var firstArray:Array<String> = fullText.split('\n');
 		var swagGoodArray:Array<Array<String>> = [];
@@ -347,6 +344,12 @@ class TitleState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
+
+		if (curBeat % 2 == 0)
+		{
+			FlxG.camera.zoom += 0.015;
+			FlxTween.tween(FlxG.camera, {zoom: 1}, 0.6, {ease: FlxEase.quadOut});
+		}
 
 		logoBl.animation.play('bump');
 		danceLeft = !danceLeft;

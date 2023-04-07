@@ -1,0 +1,44 @@
+{
+    "users":[
+        {
+            "name":"Null Engine Creators",
+            "isCategory":true,
+            "color":"7100e3"
+        },
+        {
+            "name":"CapybaraCoding",
+            "color":"00e3cb",
+            "desc":"Coder",
+            "icon":"capycode"
+        },
+        {
+            "name":"Sloow",
+            "color":"4f4f4f",
+            "desc":"Coder",
+            "icon":"sloow"
+        },
+        {
+            "name":"Utha",
+            "color":"ff4200",
+            "desc":"Artist",
+            "icon":"utha"
+        },
+        {
+            "name":"Special Thanks!",
+            "isCategory":true,
+            "color":"ffe000"
+        },
+        {
+            "name":"Rozebud",
+            "color":"00a2ff",
+            "desc":"Controls code",
+            "icon":"rozebud"
+        },
+        {
+            "name":"Polybiusproxy",
+            "color":"ffc500",
+            "desc":"HxCodec",
+            "icon":"proxy"
+        }
+    ]
+}

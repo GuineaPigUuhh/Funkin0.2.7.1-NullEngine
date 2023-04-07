@@ -8,66 +8,95 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.tweens.misc.ColorTween;
+import flixel.util.FlxColor;
 import game.sprites.Alphabet;
+import game.sprites.AttachedSprite;
+import haxe.Json;
+import haxe.format.JsonParser;
+import haxe.macro.Type.AnonType;
 import states.TitleState;
 import states.menus.MainMenuState;
 
-typedef CreditStuff =
+using StringTools;
+
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
+typedef CreditsStuff =
+{
+	var users:Array<UserStuff>;
+}
+
+typedef UserStuff =
 {
 	var name:String;
-	var desc:String;
-	var icon:String;
+	var color:String;
+	@:optional var desc:String;
+	@:optional var icon:String;
+	@:optional var isCategory:Bool;
 }
 
 class CreditsState extends MusicBeatState
 {
-	var creditStuff:Array<CreditStuff> = [
-		{
-			name: "CapybaraCoding",
-			desc: "Coder",
-			icon: "capycode"
-		},
-		{
-			name: "Sloow",
-			desc: "Coder",
-			icon: "sloow"
-		}
-	];
+	var creditStuff:CreditsStuff;
 
-	var camFollow:FlxObject;
 	var grpCredits:Array<Alphabet> = [];
+
+	var menuBG:FlxSprite;
 
 	var curSelected:Int = 0;
 	var selectedSomethin:Bool = false;
 
 	override public function create()
 	{
-		trace(creditStuff);
+		creditStuff = Json.parse(File.getContent(Paths.getObjectsPath('creditsStuff.json')));
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuNullEngine'));
+		menuBG = new FlxSprite().loadGraphic(Paths.image('menus/menu_engine_1_desat'));
 		menuBG.scrollFactor.set();
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		add(menuBG);
 
-		camFollow = new FlxObject(0, 0, 1, 1);
-		add(camFollow);
-
-		for (i in 0...creditStuff.length)
+		for (i in 0...creditStuff.users.length)
 		{
-			var creditText:Alphabet = new Alphabet(0, (i * 125), creditStuff[i].name, false, false);
-			add(creditText);
+			var categoryMODE:Bool = false;
+			if (creditStuff.users[i].isCategory == true)
+				categoryMODE = true;
 
-			var creditIcon:FlxSprite = new FlxSprite(creditText.x + creditText.width + 20, creditText.y + 10);
-			creditIcon.loadGraphic(Paths.image('menus/credits/' + creditStuff[i].icon));
-			creditIcon.antialiasing = FlxG.save.data.antialiasing;
-			creditIcon.scale.set(0.8, 0.8);
-			add(creditIcon);
+			if (categoryMODE == false)
+			{
+				var creditText:Alphabet = new Alphabet(0, (i * 125), creditStuff.users[i].name, false, false);
+				creditText.isMenuItem = true;
+				creditText.targetY = i;
+				add(creditText);
+				grpCredits.push(creditText);
 
-			grpCredits.push(creditText);
+				if (creditStuff.users[i].icon != null || creditStuff.users[i].icon != '')
+				{
+					var creditIcon:AttachedSprite = new AttachedSprite(creditText);
+					creditIcon.loadGraphic(Paths.image('menus/credits/' + creditStuff.users[i].icon));
+					creditIcon.antialiasing = true;
+					creditIcon.copyAlpha = true;
+					creditIcon.addX = creditText.width + 15;
+					add(creditIcon);
+				}
+			}
+			else
+			{
+				var category:Alphabet = new Alphabet(0, (i * 125), creditStuff.users[i].name, true, false);
+				category.isMenuItem = true;
+				category.xAdd = 20;
+				category.yAdd = 80;
+				category.targetY = i;
+				add(category);
+				grpCredits.push(category);
+			}
 		}
-
-		FlxG.camera.follow(camFollow, null, 0.06);
 
 		changeSelection();
 
@@ -99,10 +128,28 @@ class CreditsState extends MusicBeatState
 		super.update(elapsed);
 	}
 
+	var colorTween:ColorTween = null;
+
 	function changeSelection(change:Int = 0)
 	{
 		curSelected = FlxMath.wrap(curSelected + change, 0, grpCredits.length - 1);
 
-		camFollow.setPosition(grpCredits[curSelected].x + 550, grpCredits[curSelected].y);
+		if (colorTween != null)
+			colorTween.cancel();
+		colorTween = FlxTween.color(menuBG, 0.4, menuBG.color, FlxColor.fromString("#" + creditStuff.users[curSelected].color), {startDelay: 0.05});
+
+		var bullShit:Int = 0;
+
+		for (item in grpCredits)
+		{
+			item.targetY = bullShit - curSelected;
+			bullShit++;
+
+			item.alpha = 0.8;
+			if (item.targetY == 0)
+			{
+				item.alpha = 1;
+			}
+		}
 	}
 }

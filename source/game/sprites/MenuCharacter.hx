@@ -57,20 +57,21 @@ class MenuCharacter extends FlxSprite
 				visible = false;
 
 			default:
-				var path = 'images/menus/storyMode/characters/${character}.json';
+				var path = 'menu_characters/${character}.json';
 
-				var checkJSON = Paths.getPreloadPath(path);
+				var checkJSON = Paths.getObjectsPath(path);
 
-				var char:MenuCharacterInfo = Json.parse(Assets.getText(checkJSON));
+				var char:MenuCharacterInfo = Json.parse(File.getContent(checkJSON));
 
 				restartOptions();
 
-				frames = Paths.getSparrowAtlas("menus/storyMode/characters/images/" + char.path);
+				frames = FlxAtlasFrames.fromSparrow(Paths.getObjectsPath("menu_characters/images/" + char.path + ".png"),
+					Paths.getObjectsPath("menu_characters/images/" + char.path + ".xml"));
 
 				animation.addByPrefix(character + "-idle", char.idleAnim, 24);
 
 				if (char.confirmAnim != null || char.confirmAnim.length > 0)
-					animation.addByPrefix(character + "-confirm", char.confirmAnim, 24);
+					animation.addByPrefix(character + "-confirm", char.confirmAnim, 24, false);
 
 				flipX = (char.flipX == true);
 

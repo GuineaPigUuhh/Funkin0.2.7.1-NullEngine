@@ -36,7 +36,7 @@ class Script
 
 	public static function getScriptPath(path:String)
 	{
-		var shit = Paths.getPreloadPath('$path.hx');
+		var shit = Paths.getFunkinPath('$path.hx');
 		return shit;
 	}
 

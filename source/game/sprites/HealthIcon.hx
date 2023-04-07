@@ -78,9 +78,7 @@ class HealthIcon extends FlxSprite
 	{
 		this.curCharacter = curCharacter;
 
-		var path:String = Paths.characterPaths(curCharacter, "icon");
-		if (!FileSystem.exists(path))
-			path = Paths.image('characters/icons/${curCharacter}');
+		var path:String = Paths.getObjectsPath('characters/$curCharacter/icon.png');
 
 		loadGraphic(path, true, 150, 150);
 

@@ -3,6 +3,7 @@ package game.sprites;
 import dependency.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
 import haxe.format.JsonParser;
 
@@ -56,9 +57,10 @@ class NoteSplash extends FlxSprite
 
 	function loadAssets(asset:String)
 	{
-		json = Json.parse(File.getContent(Paths.json('noteSplashes/${asset}')));
+		json = Json.parse(File.getContent(Paths.getObjectsPath('splashes/${asset}/data.json')));
 
-		frames = Paths.getSparrowAtlas('ui/${asset}/splash');
+		frames = FlxAtlasFrames.fromSparrow(Paths.getObjectsPath("splashes/" + asset + "/image.png"),
+			Paths.getObjectsPath("splashes/" + asset + "/image.xml"));
 
 		for (i in 0...notes.length)
 		{

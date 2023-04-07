@@ -163,12 +163,6 @@ class MainMenuState extends MusicBeatState
 				changeItem(1);
 			}
 
-			if (controls.BACK)
-			{
-				selectedSomethin = true;
-				FlxG.switchState(new TitleState());
-			}
-
 			if (controls.ACCEPT)
 			{
 				if (optionShit[curSelected] != "kickstarter")

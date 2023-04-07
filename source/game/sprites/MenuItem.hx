@@ -24,9 +24,9 @@ class MenuItem extends FlxSpriteGroup
 	{
 		super(x, y);
 		week = new FlxSprite();
-		var path:String = 'menus/storyMode/weeks/' + weekName;
+		var path:String = 'weeks/' + weekName + '/image.png';
 
-		week.loadGraphic(Paths.image(path));
+		week.loadGraphic(Paths.getObjectsPath(path));
 
 		add(week);
 	}

@@ -33,7 +33,7 @@ class Stage
 
 	function executeScript()
 	{
-		stageScript = new NullScript(Script.getScriptPath('stages/${curStage}/assets'));
+		stageScript = new NullScript(Paths.getObjectsPath('stages/${curStage}/assets.hx'));
 		set("game", PlayState.instance);
 		set("songName", PlayState.SONG.song.toLowerCase());
 		set("daPixelZoom", PlayState.daPixelZoom);
@@ -48,26 +48,26 @@ class Stage
 
 	function getData(onlyDataFile:Bool = false)
 	{
-		var path:String = Paths.getPreloadPath('stages/${curStage}/data.json');
+		var path:String = Paths.getObjectsPath('stages/${curStage}/data.json');
 		if (onlyDataFile == true)
-			path = Paths.getPreloadPath('stages/${curStage}.json');
+			path = Paths.getObjectsPath('stages/${curStage}.json');
 
 		data = Json.parse(File.getContent(path));
 	}
 
 	function stageImage(key:String)
 	{
-		return Paths.getPreloadPath('stages/$curStage/images/$key.png');
+		return Paths.getObjectsPath('stages/$curStage/images/$key.png');
 	}
 
 	function stageSparrowAtlas(key:String)
 	{
-		return FlxAtlasFrames.fromSparrow(stageImage(key), Paths.getPreloadPath('stages/$curStage/images/$key.xml'));
+		return FlxAtlasFrames.fromSparrow(stageImage(key), Paths.getObjectsPath('stages/$curStage/images/$key.xml'));
 	}
 
 	function stagePackerAtlas(key:String)
 	{
-		return FlxAtlasFrames.fromSpriteSheetPacker(stageImage(key), Paths.getPreloadPath('stages/$curStage/images/$key.txt'));
+		return FlxAtlasFrames.fromSpriteSheetPacker(stageImage(key), Paths.getObjectsPath('stages/$curStage/images/$key.txt'));
 	}
 
 	public function set(aa:String, di:Dynamic)

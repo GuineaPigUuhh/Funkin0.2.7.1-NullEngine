@@ -51,7 +51,7 @@ class Song
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var path:String = Paths.getPreloadPath("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase() + ".json");
+		var path:String = Paths.getFunkinPath("songs/" + folder.toLowerCase() + '/chart/' + jsonInput.toLowerCase() + ".json");
 
 		var getJSON = File.getContent(path).trim();
 		var rawJson = getJSON;

@@ -1,0 +1,24 @@
+{
+    "songs":[
+        {
+            "name":"Cocoa",
+            "icon":"parents-christmas",
+            "color":"CD599E"
+        },
+        {
+            "name":"Eggnog",
+            "icon":"parents-christmas",
+            "color":"CD599E"
+        },
+        {
+            "name":"Winter-Horrorland",
+            "icon":"monster-christmas",
+            "color":"CD599E"
+        }
+    ],
+    "image":"week5",
+    "characters":["parents", "bf", "gf"],
+    "title":"Red Snow",
+    "hideOnStoryMode":false,
+    "hideOnFreeplay":false
+}

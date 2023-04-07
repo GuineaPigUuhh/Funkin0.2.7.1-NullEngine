@@ -1,5 +1,6 @@
 package game.null_stuff;
 
+import dependency.Paths;
 import flixel.FlxG;
 import flixel.math.FlxMath;
 import haxe.Timer;
@@ -47,7 +48,7 @@ class NullInfo extends TextField
 		currentFPS = 0;
 		selectable = false;
 		mouseEnabled = false;
-		defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont("assets/fonts/vcr.ttf").fontName, 14, 0xFFFFFFFF, true);
+		defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont(Paths.font("vcr.ttf")).fontName, 14, 0xFFFFFFFF, true);
 		autoSize = LEFT;
 		multiline = true;
 		alpha = 0.8;

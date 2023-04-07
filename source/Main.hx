@@ -24,9 +24,9 @@ class Main extends Sprite
 	var gameOptions = {
 		width: 1280,
 		height: 720,
-		zoom: -1.0
+		zoom: -1.0,
+		framerate: 60
 	};
-	var gameFramerate:Int = 60;
 
 	public static var nullType:String = "beta";
 	public static var nullVersion:String = "0.3.5";
@@ -57,12 +57,9 @@ class Main extends Sprite
 	private function init(?E:Event):Void
 	{
 		if (hasEventListener(Event.ADDED_TO_STAGE))
-		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
-		}
 
 		setupGame();
-		configGame();
 	}
 
 	private function setupGame():Void
@@ -81,16 +78,17 @@ class Main extends Sprite
 			gameOptions.height = Math.ceil(stageHeight / gameOptions.zoom);
 		}
 
-		addChild(new game.null_stuff.NullGm(gameOptions.width, gameOptions.height, null, #if (flixel < "5.0.0") gameOptions.zoom, #end gameFramerate,
-			gameFramerate, true, false));
+		addChild(new game.null_stuff.NullGm(gameOptions.width, gameOptions.height, null, #if (flixel < "5.0.0") gameOptions.zoom, #end gameOptions.framerate,
+			gameOptions.framerate, true, false));
 		FlxG.switchState(new TitleState());
 
 		#if !mobile
 		addChild(new game.null_stuff.NullInfo(10, 3));
 		#end
+		initGameConfigs();
 	}
 
-	public function configGame()
+	public function initGameConfigs()
 	{
 		PlayerSettings.init();
 		FlxG.save.bind('settings', 'FNF-NullEngine');

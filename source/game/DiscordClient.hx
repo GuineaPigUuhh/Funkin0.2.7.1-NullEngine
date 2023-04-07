@@ -9,7 +9,7 @@ using StringTools;
 class DiscordClient
 {
 	static var _id:String = "1061291748988571709";
-	static var _largeText:String = "FNF' Null Engine!";
+	static var _largeText:String = "FNF'- Null Engine";
 	static var _largeImage:String = "icon";
 
 	static var logColor:Int = Logs.CYAN;
